@@ -20,25 +20,25 @@ export class HeaderComponent {
     ) {}
 
     // logout auth
-    // logout() {
-    //     this.onSignOutClick();
-    // }
+    logout() {
+        this.onSignOutClick();
+    }
     // signout of google
-    // onSignOutClick() {
-    //     const confirmation = confirm("Do You want to log out?");
-    //     if (confirmation) {
-    //         localStorage.removeItem("role");
-    //         this.angularAuth
-    //             .signOut()
-    //             .then(() => {
-    //                 console.log("sign out successfully");
-    //                 this.router.navigate(["/login"]);
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error);
-    //             });
-    //     }
-    // }
+    onSignOutClick() {
+        const confirmation = confirm("Do You want to log out?");
+        if (confirmation) {
+            localStorage.removeItem("role");
+            this.angularAuth
+                .signOut()
+                .then(() => {
+                    console.log("sign out successfully");
+                    this.router.navigate(["/login"]);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
 
     @ViewChild("userMenuWrapper")
     userMenuWrapper!: ElementRef;
