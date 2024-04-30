@@ -1,4 +1,6 @@
+// external dependencies
 import * as XLSX from "xlsx";
+import { weekNumber} from "weeknumber";
 
 // internal dependencies
 import { GENERAL } from "../shared/constants/general";
@@ -20,7 +22,10 @@ import { SnackBarService } from "../shared/service/snack-bar/snack-bar.service";
 import { DialogService } from "../shared/service/dialog/dialog.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { DescriptionComponent } from "./_components/description/description.component";
+
+// components
 import { DeleteConfirmationModalComponent } from "./_components/delete-confirmation-modal/delete-confirmation-modal.component";
+
 
 @Component({
     selector: "app-timesheet",
@@ -31,6 +36,7 @@ export class TimesheetComponent {
     readonly GENERAL = GENERAL;
     user_id: number[] = [];
     dialogRef: any = MatDialogRef<any>;
+    weekNumber: any[] = [];
 
     // material ui table variables
     columnCount: number = 0;
@@ -89,13 +95,18 @@ export class TimesheetComponent {
         );
         // this.loadTimesheet();
         // console.log(localStorage.getItem("id"));
-
         this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(""),
             map((value) => this._filter(value || "")),
         );
         this.loadProjects();
     }
+
+    // calculateDayOfYear(startDate: string): number {
+    //     const startDateObject = new Date(startDate);
+    //     return weekNumber(startDateObject);
+    // }
+
 
     loadTimesheet() {
         const timesheetIdString = localStorage.getItem("id");
@@ -353,13 +364,17 @@ export class TimesheetComponent {
         const filteringDate = new Date(this.start_date_data);
         const latestDate = new Date(this.latest_start_date);
 
+        
         let valueDate: any;
+        let weekNum: any;
 
         if (filteringDate instanceof Date && !isNaN(filteringDate.getTime())) {
             valueDate = filteringDate;
+            weekNum = weekNumber(filteringDate);
         } else if (latestDate instanceof Date && !isNaN(latestDate.getTime())) {
             const latestDateWithPHTime = this.datePipe.transform(latestDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
             valueDate = latestDateWithPHTime;
+            weekNum = weekNumber(latestDate);
         } else {
             console.error("Both filteringDate and latestDate are not valid Date objects.");
         }
@@ -371,7 +386,7 @@ export class TimesheetComponent {
             actual_hours: 0,
             is_ot: false,
             is_nd: false,
-            week_id: 1,
+            week_number: weekNum,
         };
 
         this.timesheetService.postProject(dataParams).subscribe({

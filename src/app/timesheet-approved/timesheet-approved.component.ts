@@ -48,6 +48,7 @@ export class TimesheetApprovedComponent {
     }
     calculateDayOfYear(startDate: string): number {
         const startDateObject = new Date(startDate);
+        console.log(weekNumber(startDateObject))
         return weekNumber(startDateObject);
     }
     // loadWeekNumbers() {
