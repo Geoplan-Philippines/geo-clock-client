@@ -64,19 +64,19 @@ const routes: Routes = [
     {
         path: "dashboard",
         component: DashboardComponent,
-        canActivate: [AngularFireAuthGuard , RoleAuthGuard],
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: "admin"
+            role: "admin",
         },
     },
     {
         path: "employee",
         component: EmployeeComponent,
-        canActivate: [AngularFireAuthGuard , RoleAuthGuard],
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: "admin"
+            role: "admin",
         },
     },
     {

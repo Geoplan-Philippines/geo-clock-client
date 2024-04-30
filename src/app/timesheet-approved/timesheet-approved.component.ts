@@ -36,7 +36,7 @@ export class TimesheetApprovedComponent {
     // Function to calculate the day of the year
     ngOnInit() {
         this.loadTimesheet();
-        this.loadWeekNumbers();
+        // this.loadWeekNumbers();
     }
     loadTimesheet() {
         this.TimesheetApprovedService.getAllTimesheetData().subscribe((res: any) => {
@@ -50,13 +50,13 @@ export class TimesheetApprovedComponent {
         const startDateObject = new Date(startDate);
         return weekNumber(startDateObject);
     }
-    loadWeekNumbers() {
-        this.TimesheetApprovedService.WeekNumberService().subscribe((res: any) => {
-            const ds = res.data;
-            this.weekNumber = ds;
-            // this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(ds);
-        });
-    }
+    // loadWeekNumbers() {
+    //     this.TimesheetApprovedService.WeekNumberService().subscribe((res: any) => {
+    //         const ds = res.data;
+    //         this.weekNumber = ds;
+    //         // this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(ds);
+    //     });
+    // }
 
     displayedColumns: any[] = ["week_no", "employee", "approved", "start_date", "end_date"];
 
