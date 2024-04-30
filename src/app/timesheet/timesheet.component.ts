@@ -207,7 +207,7 @@ export class TimesheetComponent {
     loadFilterTimesheet(startDate: any, endDate: any) {
         const timesheetIdString = localStorage.getItem("id");
 
-        this.start_date_data= startDate;
+        this.start_date_data = startDate;
 
         if (timesheetIdString !== null) {
             const timesheetId = +timesheetIdString;
@@ -410,33 +410,37 @@ export class TimesheetComponent {
         return timesheetEntries.reduce((total, entry) => total + entry.actual_hours, 0);
     }
 
-    saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any) {
-        const entry = timesheetEntries.find((entry) => {
-            const date = new Date(this.dynamicHeaderName[index]);
-            return this.formatDate(date) === this.dynamicHeaderName[index];
-        });
+    saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {
+        console.log(event.type)
+        if (event.key === "Enter" || event.type === "blur") {
+            const entry = timesheetEntries.find((entry) => {
+                const date = new Date(this.dynamicHeaderName[index]);
+                return this.formatDate(date) === this.dynamicHeaderName[index];
+            });
 
-        const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
-        formattedDateToISO.setFullYear(this.selectedStartDateYear);
-        const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
+            const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
+            formattedDateToISO.setFullYear(this.selectedStartDateYear);
+            const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
-        console.log(timesheetEntries);
+            console.log(timesheetEntries);
 
-        const postParams = {
-            date: selectedDate,
-            actual_hours: +value,
-            is_ot: false,
-            is_nd: false,
-            user_id: entryBy,
-            project_id: project_id,
-            week_id: 1,
-        };
+            const postParams = {
+                date: selectedDate,
+                actual_hours: +value,
+                is_ot: false,
+                is_nd: false,
+                user_id: entryBy,
+                project_id: project_id,
+                week_id: 1,
+            };
 
-        const editParams = {
-            actual_hours: +value,
-        };
+            const editParams = {
+                actual_hours: +value,
+            };
 
-        this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+            this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+        }
+
     }
 
     postTimesheetEntry(params: any) {

@@ -10,20 +10,19 @@ import { HeadsupDialogComponent } from "src/app/shared/ui/headsup-dialog/headsup
     styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent {
-    userMenuOpen: boolean = false;
     mobileMenuOpen: boolean = false;
 
     constructor(
         private router: Router,
         private angularAuth: AngularFireAuth,
         public dialog: MatDialog,
-    ) {}
+    ) { }
 
     // logout auth
     // logout() {
     //     this.onSignOutClick();
     // }
-    // signout of google
+    // signout of googlex
     // onSignOutClick() {
     //     const confirmation = confirm("Do You want to log out?");
     //     if (confirmation) {
@@ -45,29 +44,10 @@ export class HeaderComponent {
     @ViewChild("sidemenu")
     menuside!: ElementRef;
 
-    toggleUserMenu() {
-        this.userMenuOpen = !this.userMenuOpen;
-    }
-
     toggleMobileMenu() {
         this.mobileMenuOpen = !this.mobileMenuOpen;
     }
 
-    // Close the menu if the user clicks outside of it
-    @HostListener("document:click", ["$event"])
-    onClick(event: MouseEvent) {
-        const clickedInsideMenu = this.userMenuWrapper.nativeElement.contains(event.target);
-        const clickedInsideMenu2 = this.menuside.nativeElement.contains(event.target);
-
-        if (!clickedInsideMenu) {
-            if (!clickedInsideMenu2) {
-                this.userMenuOpen = false;
-                this.mobileMenuOpen = false;
-            } else {
-                this.userMenuOpen = false;
-            }
-        }
-    }
     openDialog() {
         const dialogRef = this.dialog.open(HeadsupDialogComponent, {
             data: { key: "Are you sure you want to log out?" }, // Replace key, value with your actual data

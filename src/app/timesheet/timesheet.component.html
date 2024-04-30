@@ -72,7 +72,7 @@
                 <ng-container matColumnDef="project_name">
                     <th mat-header-cell *matHeaderCellDef>{{ GENERAL.TABLE_HEADER_NAME.PROJECT }}</th>
                     <td mat-cell *matCellDef="let element" class="cursor-pointer">
-                        <div *ngIf="this.hasValue(element.project.project_name)">
+                        <div *ngIf="this.hasValue(element.project.project_name) || element.project.project_name === ''">
                             <input
                                 type="text"
                                 class="projectInput"
@@ -82,17 +82,6 @@
                                 placeholder="Select Project"
                                 (focusout)="postProjects($event)"
                                 disabled
-                            />
-                        </div>
-                        <div *ngIf="element.project.project_name === ''">
-                            <input
-                                type="text"
-                                class="projectInput"
-                                list="browsers"
-                                name="browser"
-                                [value]="element.project.project_name"
-                                placeholder="Select Project"
-                                (focusout)="postProjects($event)"
                             />
                         </div>
 
@@ -110,13 +99,24 @@
                                 type="number"
                                 [value]="getHoursForDate(element.project.timesheetEntries, i)"
                                 #inputField
-                                (focusout)="
+                                (blur)="
                                     saveEntries(
                                         inputField.value,
                                         element.user_id,
                                         element.project.timesheetEntries,
                                         element.project.id,
-                                        i
+                                        i,
+                                        $event
+                                    )
+                                "
+                                (keydown)="
+                                    saveEntries(
+                                        inputField.value,
+                                        element.user_id,
+                                        element.project.timesheetEntries,
+                                        element.project.id,
+                                        i,
+                                        $event
                                     )
                                 "
                             />
