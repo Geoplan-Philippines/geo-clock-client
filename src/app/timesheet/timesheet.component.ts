@@ -207,6 +207,8 @@ export class TimesheetComponent {
     loadFilterTimesheet(startDate: any, endDate: any) {
         const timesheetIdString = localStorage.getItem("id");
 
+        this.start_date_data= startDate;
+
         if (timesheetIdString !== null) {
             const timesheetId = +timesheetIdString;
             this.timesheetService
@@ -502,8 +504,7 @@ export class TimesheetComponent {
         }
     }
 
-    openDialog(date: any, description: string, timesheetEntries: any, index: any) {
-
+    openTimesheetEntryDescription(date: any, timesheetEntries: any, index: any) {
         const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
         formattedDateToISO.setFullYear(this.selectedStartDateYear);
         const transformDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
@@ -511,22 +512,8 @@ export class TimesheetComponent {
         const matchEntry = timesheetEntries.find((entry: any) => entry.date == transformDate)
 
         console.log(date)
-        const dialogRef = this.dialog.open(DescriptionComponent, {
-            data: {
-                id: matchEntry.id,
-                description: description
-            }
-        });
-
-        console.log(matchEntry.id)
-        // dialogRef.afterClosed().subscribe((result) => {
-        //     console.log(`Dialog result: ${result}`);
-        // });
+        this.dialogService.openTimesheetEntryDescription(matchEntry.id, matchEntry.description).subscribe((result) => {
+            console.log(`Dialog result: ${result}`)
+        })
     }
-
-    // openTimesheetEntryDescription() {
-    //     this.dialogService.openTimesheetEntryDescription().subscribe((result) => {
-    //         console.log(`Dialog result: ${result}`)
-    //     })
-    // }
 }

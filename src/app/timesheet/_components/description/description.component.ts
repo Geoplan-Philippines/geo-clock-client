@@ -25,6 +25,8 @@ export class DescriptionComponent implements OnInit {
 
     ngOnInit(): void {
         this.createForm(); // Initialize the form
+        // console.log(this.data.id)
+        // console.log(this.data.description)
     }
 
     createForm(): void {

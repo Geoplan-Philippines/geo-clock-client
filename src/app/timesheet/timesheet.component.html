@@ -121,8 +121,7 @@
                                 "
                             />
                             <div class="descriptionIcon" *ngIf="getHoursForDate(element.project.timesheetEntries, i) !== 0">
-                                <mat-icon class="text-2xl text-black" (click)="openDialog(dynamicHeaderName[i], element.description, element.project.timesheetEntries, i )">more_vert</mat-icon>
-                                <p>{{ i }}</p>
+                                <mat-icon class="text-2xl text-black" (click)="openTimesheetEntryDescription(dynamicHeaderName[i], element.project.timesheetEntries, i )">more_vert</mat-icon>
                             </div>
                             <div class="descriptionIcon" *ngIf="getHoursForDate(element.project.timesheetEntries, i) === 0">
                                 <mat-icon class="text-2xl text-gray-300">more_vert</mat-icon>
