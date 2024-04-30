@@ -10,8 +10,13 @@ export class DialogService {
 
   constructor(private dialog: MatDialog) { }
 
-  openTimesheetEntryDescription() {
-    const dialogRef = this.dialog.open(DescriptionComponent);
+  openTimesheetEntryDescription(id: any, description: any) {
+    const dialogRef = this.dialog.open(DescriptionComponent,{
+      data: {
+        id: id,
+        description:description
+    }
+    });
     return dialogRef.afterClosed();
   }
 
