@@ -1,0 +1,18 @@
+<!-- <h2 mat-dialog-title>Heads up!</h2>
+<mat-dialog-content class="mat-typography">
+    <h2>{{ data.key }}</h2>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" (click)="onSignOutClick()">Yes</button>
+</mat-dialog-content> -->
+<div class="w-[300px] sm:w-[500px]">
+    <div class="sm:text-3x1 border-b-2 py-7 pl-4 text-xl text-gray-700">
+        <p>HEADS UP!</p>
+    </div>
+    <div class="flex justify-center border-b-2 py-7 text-sm sm:text-xl">
+        <h1>{{ data.key }}</h1>
+    </div>
+    <div class="py-3 pr-4 text-right">
+        <button class="px-7 py-3">CANCEL</button>
+        <button class="bg-red-500 px-7 py-3 text-white" (click)="onSignOutClick()">YES</button>
+    </div>
+</div>

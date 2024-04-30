@@ -1,0 +1,26 @@
+:host ::ng-deep {
+    .formContainer {
+        display: block;
+        .example-full-width {
+            width: 100%;
+        }
+    }
+    .submitBtn {
+        background-color: #0a54a0;
+        color: white;
+        width: 100%;
+        font-weight: bold;
+    }
+
+    .mat-accent {
+        --mdc-checkbox-selected-focus-icon-color: #0a54a0;
+        --mdc-checkbox-selected-hover-icon-color: #0a54a0;
+        --mdc-checkbox-selected-icon-color: #0a54a0;
+        --mdc-checkbox-selected-pressed-icon-color: #0a54a0;
+        --mdc-checkbox-unselected-focus-icon-color: #0a54a0;
+        --mdc-checkbox-unselected-hover-icon-color: #0a54a0;
+        --mdc-checkbox-selected-focus-state-layer-color: #0a54a0;
+        --mdc-checkbox-selected-hover-state-layer-color: #0a54a0;
+        --mdc-checkbox-selected-pressed-state-layer-color: #0a54a0;
+    }
+}

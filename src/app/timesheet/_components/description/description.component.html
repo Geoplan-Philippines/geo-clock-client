@@ -1,0 +1,15 @@
+<div class="descriptionContainer">
+    <form [formGroup]="formData" (ngSubmit)="submitForm()">
+    <h2 mat-dialog-title>Input Description</h2>
+    <mat-dialog-content class="mat-typography">
+        <mat-form-field class="example-full-width w-[100%] sm:w-[550px]">
+            <mat-label>Description</mat-label>
+            <textarea matInput class="matTextarea" placeholder="Ex. task for the day" formControlName="description"></textarea>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+    </mat-dialog-actions>
+</form>
+</div>

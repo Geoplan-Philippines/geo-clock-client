@@ -1,0 +1,61 @@
+<aside id="default-sidebar" class="hidden h-screen w-64 shadow-lg sm:block" aria-label="Sidebar">
+    <div class="bg-whitesmoke fixed h-max w-64 overflow-y-auto px-3 py-4">
+        <ul  *ngFor="let data of sideCategory"class="space-y-[-1] font-medium">
+            <p  class="font-bold text-gray-400">{{data.category_name}}</p>
+            <!-- <li [ngClass]="{ active: isActive('/timesheet-approved') }">
+                <a [routerLink]="['/timesheet-approved']">
+                    <mat-icon class="font-extrabold">schedule</mat-icon>
+                    <span class="ms-3"
+                        >Timesheet <span class="rounded-sm bg-gray-500 p-0.5 px-2 text-[0.75rem]">summary</span></span
+                    >
+                </a>
+            </li> -->
+            <!-- <li [ngClass]="{ active: isActive('/timesheet') }">
+                <a [routerLink]="['/timesheet']">
+                    <mat-icon class="font-extrabold">schedule</mat-icon>
+                    <span class="ms-3">Timesheet</span>
+                </a>
+            </li> -->
+
+            <li *ngFor="let sidebarLink of data.sidebarLinks" [ngClass]="{ active: isActive(sidebarLink.router_link) }">
+                <a [routerLink]="sidebarLink.router_link">
+                    <mat-icon class="font-extrabold">{{ sidebarLink.icon }}</mat-icon>
+                    <span class="ms-3">{{ sidebarLink.name }}</span>
+                </a>
+            </li>
+
+            <!-- <p class="font-bold text-gray-400">LINK</p> -->
+            <!-- <li  [ngClass]="{ active: isActive('/dashboard') }">
+                <a [routerLink]="['/dashboard']">
+                    <mat-icon class="font-extrabold">equalizer</mat-icon>
+                    <span class="ms-3 flex-1 whitespace-nowrap">Dashboard</span>
+                </a>
+            </li> -->
+            <!-- <li>
+                <a href="#">
+                    <mat-icon class="font-extrabold">import_contacts</mat-icon>
+                    <span class="ms-3 flex-1 whitespace-nowrap">Summary</span>
+                </a>
+            </li>
+            <li [ngClass]="{ active: isActive('/training') }">
+                <a [routerLink]="['/training']">
+                    <mat-icon class="font-extrabold">manage_accounts</mat-icon>
+                    <span class="ms-3 flex-1 whitespace-nowrap">Training</span>
+                </a>
+            </li>
+            <p class="font-bold text-gray-400">MAINTENANCE</p>
+            <li [ngClass]="{ active: isActive('/projects') }">
+                <a [routerLink]="['/projects']">
+                    <mat-icon class="font-extrabold">topic</mat-icon>
+                    <span class="ms-3 flex-1 whitespace-nowrap">Projects</span>
+                </a>
+            </li> -->
+            <!-- <li [ngClass]="{ active: isActive('/employee') }">
+                <a [routerLink]="['/employee']">
+                    <mat-icon class="font-extrabold">person_search</mat-icon>
+                    <span class="ms-3 flex-1 whitespace-nowrap">Employees</span>
+                </a>
+            </li> -->
+        </ul>
+    </div>
+</aside>

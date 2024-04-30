@@ -1,0 +1,25 @@
+:host ::ng-deep {
+    .custom_menu {
+        right: 1000px;
+    }
+
+    .active {
+        background-color: #0a54a0;
+        color: white;
+        border-radius: 8px;
+    }
+
+    a {
+        display: flex;
+        font-weight: bold;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        align-items: center;
+        margin-bottom: 0.2rem;
+    }
+
+    a:hover {
+        background-color: #0a54a0;
+        color: white;
+    }
+}

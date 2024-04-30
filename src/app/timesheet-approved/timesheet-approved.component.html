@@ -1,0 +1,80 @@
+<app-header></app-header>
+<div class="flex">
+    <div>
+        <app-aside></app-aside>
+    </div>
+    <div class="static z-0 mt-10 h-screen flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:p-10 sm:pt-10">
+        <div class="block justify-between sm:flex">
+            <mat-form-field>
+                <mat-label>Filter</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input class="custom-input" />
+            </mat-form-field>
+            <div class="block w-[700px] sm:flex sm:justify-between">
+                <div class="w-max">
+                    <mat-form-field class="w-[170%] sm:w-auto">
+                        <mat-label>Employees</mat-label>
+                        <mat-select (valueChange)="eventSelection($event)">
+                            <mat-option *ngFor="let data of employeeEntry" [value]="data.name">
+                                {{ data.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <!-- <div>
+                    <mat-form-field>
+                        <mat-label>Week no.</mat-label>
+                        <mat-select (valueChange)="eventSelectionWeekly($event)">
+                            <mat-option *ngFor="let data of employeeEntry" [value]="data.week_no">
+                                {{ data.week_no }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div> -->
+                <div>
+                    <mat-form-field>
+                        <mat-label>Week no. API</mat-label>
+                        <mat-select (valueChange)="eventSelectionWeeklyAPI($event)">
+                            <mat-option *ngFor="let data of weekNumber" [value]="data.value">
+                                {{ data.wk_name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <!-- <h1>{{ selectedEmployee }}</h1> -->
+        <div class="static overflow-auto">
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="filteredDataSource">
+                    <ng-container matColumnDef="week_no">
+                        <th mat-header-cell *matHeaderCellDef>WEEK NO.</th>
+                        <td mat-cell *matCellDef="let element" (click)="openDialog()">
+                            {{ calculateDayOfYear(element.start_date) }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="employee">
+                        <th mat-header-cell *matHeaderCellDef>EMPLOYEE</th>
+                        <td mat-cell *matCellDef="let element" (click)="openDialog()">{{ element.name }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="approved">
+                        <th mat-header-cell *matHeaderCellDef>APRROVED</th>
+                        <td mat-cell *matCellDef="let element" (click)="openDialog()">Partially Approved</td>
+                    </ng-container>
+                    <ng-container matColumnDef="start_date">
+                        <th mat-header-cell *matHeaderCellDef>START DATE</th>
+                        <td mat-cell *matCellDef="let element" (click)="openDialog()">{{ element.start_date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="end_date">
+                        <th mat-header-cell *matHeaderCellDef>END DATE</th>
+                        <td mat-cell *matCellDef="let element" (click)="openDialog()">{{ element.end_date }}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 6, 7]" showFirstLastButtons aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>

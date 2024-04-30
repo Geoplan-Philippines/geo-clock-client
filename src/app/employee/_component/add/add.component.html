@@ -1,0 +1,49 @@
+<p class="ml-5 mt-5 text-center text-2xl font-bold text-[#0a54a0]">Add Employee</p>
+<mat-dialog-content class="mat-typography">
+    <div>
+        <form [formGroup]="formData" class="formContainer" (ngSubmit)="submitForm()">
+            <!-- <div class="mb-4">
+                <input type="file" name="file" id="file" />
+            </div> -->
+            <div class="secondFormContainer w-[100%] sm:w-80">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Employee Code</mat-label>
+                    <input matInput formControlName="employee_code" placeholder="Enter Employee Code" />
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>First Name</mat-label>
+                    <input matInput formControlName="first_name" placeholder="Enter Type" />
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput formControlName="last_name" placeholder="Enter Cover" />
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" placeholder="Enter Date" />
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Password</mat-label>
+                    <input matInput formControlName="password" placeholder="Enter Duration" />
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Role</mat-label>
+                    <input matInput formControlName="role" placeholder="Enter District Partner" />
+                </mat-form-field>
+
+                <div class="mt-4">
+                    <button mat-stroked-button class="submitBtn" [disabled]="!formData.valid">Submit</button>
+                    <!-- Disable button if form is invalid -->
+                </div>
+            </div>
+        </form>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

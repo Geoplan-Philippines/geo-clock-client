@@ -1,0 +1,21 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "wk_name": "Week 1",
+            "value": 1
+        },
+        {
+            "wk_name": "Week 2",
+            "value": 2
+        },
+        {
+            "wk_name": "Week 3",
+            "value": 3
+        },
+        {
+            "wk_name": "Week 52",
+            "value": 52
+        }
+    ]
+}

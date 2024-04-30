@@ -1,0 +1,54 @@
+<p class="ml-5 mt-5 text-2xl font-bold text-[#0a54a0]">Edit Employee</p>
+
+<mat-dialog-content class="mat-typography">
+    <div>
+        <form [formGroup]="formData" (ngSubmit)="submitForm()" class="formContainer">
+            <div class="secondFormContainer w-[100%] sm:w-80">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Employee Code</mat-label>
+                    <input matInput formControlName="employee_code" />
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                    <mat-label>First Name</mat-label>
+                    <input matInput formControlName="first_name" />
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput formControlName="last_name" />
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" />
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                    <mat-label>Password</mat-label>
+                    <input matInput formControlName="password" />
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>role</mat-label>
+                    <input matInput formControlName="role" />
+                </mat-form-field>
+
+                <!-- <mat-form-field class="example-full-width">
+                <mat-label>role</mat-label>
+                <input matInput formControlName="role" />
+            </mat-form-field> -->
+
+                <div class="flex justify-center">
+                    <mat-checkbox class="example-margin" formControlName="is_active">Is Active</mat-checkbox>
+                </div>
+
+                <div class="mt-4">
+                    <button mat-stroked-button class="submitBtn" [disabled]="!formData.valid">Submit</button>
+                    <!-- Disable button if form is invalid -->
+                </div>
+            </div>
+        </form>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

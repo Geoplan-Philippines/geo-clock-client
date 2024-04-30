@@ -1,0 +1,16 @@
+{    
+
+    "status": "success",
+    "data": [
+        {
+            "id": 1,
+            "name": "dashsdasdadsboard",
+            "icon": "dashboard"
+        },
+        {
+            "id": 2,
+            "name": "timesasdasdheet",
+            "icon": "schedule"
+        }
+    ]
+}

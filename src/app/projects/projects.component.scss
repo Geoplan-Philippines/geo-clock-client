@@ -1,0 +1,18 @@
+:host ::ng-deep {
+    .mat-elevation-z8 {
+        overflow: scroll;
+    }
+    .mat-elevation-z8 th {
+        background-color: #0a54a0;
+        color: white;
+        white-space: nowrap;
+        overflow: hidden;
+        font-weight: bold;
+        top: 0;
+        position: sticky;
+    }
+    .mat-elevation-z8 td {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}

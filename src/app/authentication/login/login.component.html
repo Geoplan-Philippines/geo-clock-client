@@ -1,0 +1,31 @@
+<!-- <ng-container *ngIf="user$|async as user">
+    <ng-container *ngIf="(user.user !== null); else NotSignedIn">
+        <button (click)="onSignOutClick()">signout</button>
+    </ng-container>
+</ng-container>
+
+<ng-template #NotSignedIn>
+</ng-template> -->
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img class="mx-auto h-20 w-auto" src="../../assets/images/geo-logo.png" alt="Your Company" />
+        <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+    </div>
+    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form class="space-y-6" #myForm="ngForm">
+            <hr class="flex-grow border-t border-gray-300" />
+            <button
+                (click)="googleSignIn()"
+                class="flex h-12 w-[100%] justify-center rounded-lg bg-[#0a54a0] p-2 hover:shadow-2xl"
+            >
+                <img src="../../../assets/images/google.png" alt="google logo" class="mr-5 h-8 w-auto" />
+                <p class="p-1 font-semibold text-white">Sign in with Google</p>
+            </button>
+            <hr class="flex-grow border-t border-gray-300" />
+        </form>
+    </div>
+</div>
+
+<div *ngIf="errorMessage">
+    {{ errorMessage }}
+</div>

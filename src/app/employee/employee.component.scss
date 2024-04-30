@@ -1,0 +1,47 @@
+:host ::ng-deep {
+    .mat-elevation-z8 {
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+        th {
+            font-size: 16px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            background-color: #0a54a0;
+        }
+        td {
+            border-top: 2px black;
+            font-size: 16px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        td:last-child {
+            text-align: center;
+        }
+        th:nth-child(1) {
+            border-top-left-radius: 8px;
+            text-align: left;
+        }
+        th:last-child {
+            border-top-right-radius: 8px;
+            text-align: center;
+        }
+    }
+
+    .circle {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .add_Btn {
+        margin-left: 5px;
+        margin-top: 12px;
+        font-weight: bold;
+        color: white !important;
+        background-color: #0a54a0 !important;
+    }
+}
