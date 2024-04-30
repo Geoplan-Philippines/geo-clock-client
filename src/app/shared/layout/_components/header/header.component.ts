@@ -18,27 +18,6 @@ export class HeaderComponent {
         public dialog: MatDialog,
     ) { }
 
-    // logout auth
-    // logout() {
-    //     this.onSignOutClick();
-    // }
-    // signout of googlex
-    // onSignOutClick() {
-    //     const confirmation = confirm("Do You want to log out?");
-    //     if (confirmation) {
-    //         localStorage.removeItem("role");
-    //         this.angularAuth
-    //             .signOut()
-    //             .then(() => {
-    //                 console.log("sign out successfully");
-    //                 this.router.navigate(["/login"]);
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error);
-    //             });
-    //     }
-    // }
-
     @ViewChild("userMenuWrapper")
     userMenuWrapper!: ElementRef;
     @ViewChild("sidemenu")

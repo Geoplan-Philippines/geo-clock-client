@@ -1,5 +1,6 @@
-
+// external dependencies
 import * as XLSX from "xlsx";
+import { weekNumber} from "weeknumber";
 
 // internal dependencies
 import { GENERAL } from "../shared/constants/general";
@@ -19,8 +20,12 @@ import { MatPaginator } from "@angular/material/paginator";
 import { TimesheetService } from "./_service/timesheet.service";
 import { SnackBarService } from "../shared/service/snack-bar/snack-bar.service";
 import { DialogService } from "../shared/service/dialog/dialog.service";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { DescriptionComponent } from "./_components/description/description.component";
+
+// components
+import { DeleteConfirmationModalComponent } from "./_components/delete-confirmation-modal/delete-confirmation-modal.component";
+
 
 @Component({
     selector: "app-timesheet",
@@ -30,6 +35,8 @@ import { DescriptionComponent } from "./_components/description/description.comp
 export class TimesheetComponent {
     readonly GENERAL = GENERAL;
     user_id: number[] = [];
+    dialogRef: any = MatDialogRef<any>;
+    weekNumber: any[] = [];
 
     // material ui table variables
     columnCount: number = 0;
@@ -54,6 +61,7 @@ export class TimesheetComponent {
     latest_start_date: string = "";
 
     dateFromFilter!: Date;
+
     hasValue(value: any): boolean {
         return value !== undefined && value !== null && value !== "";
     }
@@ -63,8 +71,9 @@ export class TimesheetComponent {
         private _snackBarService: SnackBarService,
         private datePipe: DatePipe,
         private dialogService: DialogService,
-        private dialog: MatDialog
-    ) { }
+        private dialog: MatDialog,
+        // private dialog: MatDialog,
+    ) {}
 
     ngOnInit() {
         const today = new Date();
@@ -86,13 +95,18 @@ export class TimesheetComponent {
         );
         // this.loadTimesheet();
         // console.log(localStorage.getItem("id"));
-
         this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(""),
             map((value) => this._filter(value || "")),
         );
         this.loadProjects();
     }
+
+    // calculateDayOfYear(startDate: string): number {
+    //     const startDateObject = new Date(startDate);
+    //     return weekNumber(startDateObject);
+    // }
+
 
     loadTimesheet() {
         const timesheetIdString = localStorage.getItem("id");
@@ -189,7 +203,7 @@ export class TimesheetComponent {
     onStartDateChange(event: { value: Date }): void {
         const startDate: Date = event.value;
         this.dateFromFilter = startDate;
-        console.log(startDate);
+        console.log(this.dateFromFilter);
         if (startDate) {
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 6); // Add 5 days to the start date
@@ -211,14 +225,12 @@ export class TimesheetComponent {
 
         if (timesheetIdString !== null) {
             const timesheetId = +timesheetIdString;
-            this.timesheetService
-                .getalltimesheetbydate(timesheetId, startDate, endDate)
-                .subscribe((res: any) => {
-                    const ds = res;
-                    // console.log(ds[1].project[1].actual_hours[1]); // Log the response to inspect its structure
+            this.timesheetService.getalltimesheetbydate(timesheetId, startDate, endDate).subscribe((res: any) => {
+                const ds = res;
+                // console.log(ds[1].project[1].actual_hours[1]); // Log the response to inspect its structure
 
-                    this.dataSource = new MatTableDataSource<any>(ds);
-                });
+                this.dataSource = new MatTableDataSource<any>(ds);
+            });
         } else {
             console.error("Timesheet ID is not available in localStorage");
         }
@@ -352,13 +364,17 @@ export class TimesheetComponent {
         const filteringDate = new Date(this.start_date_data);
         const latestDate = new Date(this.latest_start_date);
 
+        
         let valueDate: any;
+        let weekNum: any;
 
         if (filteringDate instanceof Date && !isNaN(filteringDate.getTime())) {
             valueDate = filteringDate;
+            weekNum = weekNumber(filteringDate);
         } else if (latestDate instanceof Date && !isNaN(latestDate.getTime())) {
             const latestDateWithPHTime = this.datePipe.transform(latestDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
             valueDate = latestDateWithPHTime;
+            weekNum = weekNumber(latestDate);
         } else {
             console.error("Both filteringDate and latestDate are not valid Date objects.");
         }
@@ -370,16 +386,25 @@ export class TimesheetComponent {
             actual_hours: 0,
             is_ot: false,
             is_nd: false,
-            week_id: 1,
+            week_number: weekNum,
         };
-
 
         this.timesheetService.postProject(dataParams).subscribe({
             next: (response: any) => {
                 console.log("Successfully created:", response);
 
-                this.loadTimesheetByDate(userId, valueDate);
+                // this.loadTimesheetByDate(userId, valueDate);
+
                 this._snackBarService.openSnackBar("Project name has been created", "okay");
+                ///
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                }
             },
             error: (error) => {
                 console.log("lagyan mo nang validation dito");
@@ -476,6 +501,15 @@ export class TimesheetComponent {
             next: (response) => {
                 console.log("Edit successfully:", response);
                 this._snackBarService.openSnackBar("Succesfully updated 1 time entries", "okay");
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                }
             },
             error: (error) => {
                 console.error("Error creating entry:", error);
@@ -487,23 +521,41 @@ export class TimesheetComponent {
         console.log(timesheetEntries);
         console.log(date);
 
-        const matchingEntry = timesheetEntries.find(entry => entry.date === date);
+        const matchingEntry = timesheetEntries.find((entry) => entry.date === date);
 
         if (matchingEntry) {
             if (editParams.actual_hours === 0) {
-                console.log(matchingEntry.id)
-                this.dialogService.openDeleteConfirmation(matchingEntry.id)
+                console.log(matchingEntry.id);
+
+                this.dialogRef = this.dialog.open(DeleteConfirmationModalComponent, {
+                    data: {
+                        id: matchingEntry.id,
+                    },
+                });
+                this.dialogRef.afterClosed().subscribe((result: any) => {
+                    if (this.dateFromFilter !== undefined) {
+                        // Variable is defined
+                        this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                        this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                    } else {
+                        // Variable is undefined
+                        const latestStartDate = new Date(this.latest_start_date);
+                        this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                        this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                    }
+                    // this.loadTimesheet();
+                });
             } else if (editParams.actual_hours === matchingEntry.actual_hours) {
-                console.log('no edit changes')
+                console.log("no edit changes");
             } else {
-                this.editTimesheetEntry(matchingEntry.id, editParams)
+                this.editTimesheetEntry(matchingEntry.id, editParams);
             }
         } else {
-            console.log(matchingEntry)
+            console.log(matchingEntry);
             if (postParams.actual_hours === 0) {
-                console.log('no change')
+                console.log("no change");
             } else {
-                this.postTimesheetEntry(postParams)
+                this.postTimesheetEntry(postParams);
             }
         }
     }
@@ -513,11 +565,20 @@ export class TimesheetComponent {
         formattedDateToISO.setFullYear(this.selectedStartDateYear);
         const transformDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
-        const matchEntry = timesheetEntries.find((entry: any) => entry.date == transformDate)
+        const matchEntry = timesheetEntries.find((entry: any) => entry.date == transformDate);
 
-        console.log(date)
+        console.log(date);
         this.dialogService.openTimesheetEntryDescription(matchEntry.id, matchEntry.description).subscribe((result) => {
-            console.log(`Dialog result: ${result}`)
-        })
+            console.log(`Dialog result: ${result}`);
+            if (this.dateFromFilter !== undefined) {
+                // Variable is defined
+                this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+            } else {
+                // Variable is undefined
+                const latestStartDate = new Date(this.latest_start_date);
+                this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+            }
+        });
     }
 }
