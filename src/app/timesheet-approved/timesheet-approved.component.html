@@ -49,28 +49,28 @@
                 <table mat-table [dataSource]="dataSource">
                     <ng-container matColumnDef="week_no">
                         <th mat-header-cell *matHeaderCellDef>WEEK NO.</th>
-                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.week_no , element.user.id , element.start_date, element.end_date)">
+                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.id, element.week_no , element.user.id , element.start_date, element.end_date)">
                             {{ calculateDayOfYear(element.start_date) }}
                             <!-- {{ element.start_date }} -->
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="employee">
                         <th mat-header-cell *matHeaderCellDef>EMPLOYEE</th>
-                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.week_no, element.user.id, element.start_date, element.end_date)">
+                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.id, element.week_no, element.user.id, element.start_date, element.end_date)">
                             {{ element.user?.first_name }} {{ element.user?.last_name }}
                           </td>
                     </ng-container>
                     <ng-container matColumnDef="approved">
                         <th mat-header-cell *matHeaderCellDef>APRROVED</th>
-                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.week_no , element.user.id, element.start_date, element.end_date)">{{ element.approved }}</td>
+                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.id,element.week_no , element.user.id, element.start_date, element.end_date)">{{ element.approved }}</td>
                     </ng-container>
                     <ng-container matColumnDef="start_date">
                         <th mat-header-cell *matHeaderCellDef>START DATE</th>
-                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.week_no , element.user.id, element.start_date, element.end_date)">{{ element.start_date }}</td>
+                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.id,element.week_no , element.user.id, element.start_date, element.end_date)">{{ element.start_date }}</td>
                     </ng-container>
                     <ng-container matColumnDef="end_date">
                         <th mat-header-cell *matHeaderCellDef>END DATE</th>
-                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.week_no , element.user.id, element.start_date, element.end_date)">{{ element.end_date }}</td>
+                        <td mat-cell *matCellDef="let element" (click)="openDialog(element.id,element.week_no , element.user.id, element.start_date, element.end_date)">{{ element.end_date }}</td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
