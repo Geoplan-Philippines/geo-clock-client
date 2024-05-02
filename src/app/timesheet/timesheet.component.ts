@@ -1,6 +1,6 @@
 // external dependencies
 import * as XLSX from "xlsx";
-import { weekNumber} from "weeknumber";
+import { weekNumber } from "weeknumber";
 
 // internal dependencies
 import { GENERAL } from "../shared/constants/general";
@@ -26,7 +26,6 @@ import { DescriptionComponent } from "./_components/description/description.comp
 // components
 import { DeleteConfirmationModalComponent } from "./_components/delete-confirmation-modal/delete-confirmation-modal.component";
 
-
 @Component({
     selector: "app-timesheet",
     templateUrl: "./timesheet.component.html",
@@ -49,7 +48,7 @@ export class TimesheetComponent {
 
     fileName = "ExcelSheet.xlsx";
     project: any[] = []; //dropdown filter
-    projects: string[] = []; //for menu
+    projects: any[] = []; //for menu
     selectedProject: any = "";
 
     selectedStartDateYear: any = "";
@@ -107,7 +106,6 @@ export class TimesheetComponent {
     //     return weekNumber(startDateObject);
     // }
 
-
     loadTimesheet() {
         const timesheetIdString = localStorage.getItem("id");
         if (timesheetIdString !== null) {
@@ -131,10 +129,7 @@ export class TimesheetComponent {
         this.timesheetService.getAllProjectData().subscribe((res: any) => {
             const ds = res.response;
             this.project = ds;
-            this.projects = ds.map((item: any) => item.project_name);
-            // console.log(this.projects);
-            // const ds = res;
-            // this.project = ds;
+            this.projects = ds;
         });
     }
 
@@ -322,49 +317,61 @@ export class TimesheetComponent {
             // console.log("pogi walang laman"); //snackbar jv
             this._snackBarService.openSnackBar("Creating Project Failed", "okay");
         } else {
-            this.timesheetService.getProjectName().subscribe((res: any) => {
-                const existingProjects = res;
-                const existingProject = existingProjects.find((project: any) => project.project_name === projectNameValue);
-
-                if (existingProject) {
-                    console.log("Project already exists.");
-
-                    const projectId = existingProject.id;
-                    const projectName = existingProject.project_name;
-                    // this.dataSource.data[currentIndex].project.id = projectId
-                    // this.dataSource.data[currentIndex].project.project_name = projectName
-                    const userId = Number(localStorage.getItem("id"));
-                    // localStorage.setItem('projectId', projectId)
-                    // console.log(this.dataSource.data[currentIndex])
-
-                    this.postData(projectId, userId);
-                } else {
-                    // Post the project name if it doesn't exist
-                    this.timesheetService.postProjectName(projectNameValue).subscribe({
-                        next: (response: any) => {
-                            console.log("Successfully created:", response);
-
-                            // Assuming project.id is available in the response
-                            const projectId = response.id; // Make sure response contains the id
-                            const userId = Number(localStorage.getItem("id"));
-                            // localStorage.setItem('projectId', projectId)
-
-                            this.postData(projectId, userId);
-                        },
-                        error: (error: any) => {
-                            console.log("Error creating project:", error);
-                        },
-                    });
-                }
-            });
+            this.validateProjectInput(projectNameValue);
         }
+    }
+    validateProjectInput(projectNameValue: string) {
+        this.timesheetService.getAllProjectData().subscribe((res: any) => {
+            const existingProjects = res.response;
+            const existingProject = existingProjects.find((project: any) => project.project_name === projectNameValue);
+            if (existingProject) {
+                console.log("go");
+                this.timesheetService.getProjectName().subscribe((res: any) => {
+                    const existingProjects = res;
+                    const existingProject = existingProjects.find((project: any) => project.project_name === projectNameValue);
+
+                    if (existingProject) {
+                        console.log("Project already exists.");
+
+                        const projectId = existingProject.id;
+                        const projectName = existingProject.project_name;
+                        // this.dataSource.data[currentIndex].project.id = projectId
+                        // this.dataSource.data[currentIndex].project.project_name = projectName
+                        const userId = Number(localStorage.getItem("id"));
+                        // localStorage.setItem('projectId', projectId)
+                        // console.log(this.dataSource.data[currentIndex])
+
+                        this.postData(projectId, userId);
+                    } else {
+                        // Post the project name if it doesn't exist
+                        this.timesheetService.postProjectName(projectNameValue).subscribe({
+                            next: (response: any) => {
+                                console.log("Successfully created:", response);
+
+                                // Assuming project.id is available in the response
+                                const projectId = response.id; // Make sure response contains the id
+                                const userId = Number(localStorage.getItem("id"));
+                                // localStorage.setItem('projectId', projectId)
+
+                                this.postData(projectId, userId);
+                            },
+                            error: (error: any) => {
+                                console.log("Error creating project:", error);
+                            },
+                        });
+                    }
+                });
+            } else {
+                console.log("bawal mema dito");
+                this._snackBarService.openSnackBar("The project name is not whitelisted", "okay");
+            }
+        });
     }
 
     postData(projectId: number, userId: number) {
         const filteringDate = new Date(this.start_date_data);
         const latestDate = new Date(this.latest_start_date);
 
-        
         let valueDate: any;
         let weekNum: any;
 
@@ -411,6 +418,15 @@ export class TimesheetComponent {
             },
             error: (error) => {
                 console.log("lagyan mo nang validation dito");
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                }
+                this._snackBarService.openSnackBar("Project name exist", "okay");
             },
         });
     }
@@ -439,38 +455,45 @@ export class TimesheetComponent {
     }
 
     saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {
-        console.log(event.type)
+        console.log(event.type);
         if (event.key === "Enter" || event.type === "blur") {
             const entry = timesheetEntries.find((entry) => {
                 const date = new Date(this.dynamicHeaderName[index]);
                 return this.formatDate(date) === this.dynamicHeaderName[index];
             });
-
             const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
-            console.log(timesheetEntries);
+            console.log(value);
+            if (value <= 20) {
+                const weekNum = weekNumber(formattedDateToISO);
+                const postParams = {
+                    date: selectedDate,
+                    actual_hours: +value,
+                    is_ot: false,
+                    is_nd: false,
+                    user_id: entryBy,
+                    project_id: project_id,
+                    week_number: weekNum,
+                };
+                const editParams = {
+                    actual_hours: +value,
+                };
 
-            const weekNum = weekNumber(formattedDateToISO);
-            const postParams = {
-                date: selectedDate,
-                actual_hours: +value,
-                is_ot: false,
-                is_nd: false,
-                user_id: entryBy,
-                project_id: project_id,
-                week_number: weekNum,
-            };
-
-
-            const editParams = {
-                actual_hours: +value,
-            };
-
-            this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+                this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+            } else {
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                }
+                this._snackBarService.openSnackBar("20 Hours is the limit entry", "okay");
+            }
         }
-
     }
 
     postTimesheetEntry(params: any) {

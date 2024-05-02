@@ -16,7 +16,7 @@ export class HeaderComponent {
         private router: Router,
         private angularAuth: AngularFireAuth,
         public dialog: MatDialog,
-    ) { }
+    ) {}
 
     @ViewChild("userMenuWrapper")
     userMenuWrapper!: ElementRef;

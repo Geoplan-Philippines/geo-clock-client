@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 @Component({
     selector: "app-headsup-dialog",
@@ -12,6 +12,7 @@ export class HeadsupDialogComponent {
         private angularAuth: AngularFireAuth,
         private router: Router,
         @Inject(MAT_DIALOG_DATA) public data: any,
+        private dialogRef: MatDialogRef<HeadsupDialogComponent>,
     ) {}
     onSignOutClick() {
         localStorage.removeItem("role");
@@ -20,6 +21,7 @@ export class HeadsupDialogComponent {
             .signOut()
             .then(() => {
                 console.log("sign out successfully");
+                this.dialogRef.close();
                 this.router.navigate(["/login"]);
             })
             .catch((error) => {
