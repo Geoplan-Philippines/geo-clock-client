@@ -598,15 +598,20 @@ export class TimesheetComponent {
         var dayOfWeek = startDate.getDay();
         startDate.setDate(startDate.getDate() - dayOfWeek);
         startDate.setDate(startDate.getDate() + (weekNumber - 1) * 7);
-    
+
         // Set time components of startDate to 00:00:00
         startDate.setHours(0, 0, 0, 0);
-    
+
         const endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + 6);
-    
+
         // Set time components of endDate to 00:00:00
         endDate.setHours(0, 0, 0, 0);
+
+        // Convert start date and end date to string representation in "YYYY-MM-DD" format
+        const startDateString = startDate.toISOString().split('T')[0] + 'T00:00:00Z';
+        const endDateString = endDate.toISOString().split('T')[0] + 'T00:00:00Z';
+
     
         const userId = Number(localStorage.getItem("id"));
     
@@ -627,8 +632,8 @@ export class TimesheetComponent {
                     week_no: weekNumber,
                     user_id: userId,
                     approved: '',
-                    start_date: startDate,
-                    end_date: endDate,
+                    start_date: startDateString,
+                    end_date: endDateString,
                 }
                 this.postTimesheetApproved(ApprovedData);
             }

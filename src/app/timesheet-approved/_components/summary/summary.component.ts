@@ -17,12 +17,34 @@ export interface DialogData{
     styleUrls: ["./summary.component.scss"],
 })
 export class SummaryComponent implements OnInit{
+submitForm() {
+throw new Error('Method not implemented.');
+}
     dataSource = new MatTableDataSource<SummaryModel>();
     employeeEntry: any;
+
+    admin_name: any;
+    timesheetId: any;
+
+    
     constructor(private SummaryService: SummaryService, @Inject(MAT_DIALOG_DATA) public data: DialogData,) {}
     ngOnInit() {
         this.loadTimesheet();
+        this.loadUser();
     }
+
+
+    loadUser() {
+        const userId = Number(localStorage.getItem('id'));
+        this.SummaryService.getAllDataUsers(userId).subscribe((res:any) =>{
+            const ds = res;
+            this.admin_name = ds.first_name +' '+ ds.last_name;
+            console.log(ds);
+            console.log(this.admin_name); 
+        });
+    }
+
+
 
     loadTimesheet() {
 
@@ -35,12 +57,11 @@ export class SummaryComponent implements OnInit{
             const ds = res;
             this.employeeEntry = ds;
         
-            // Extract timesheetEntries array
             const timesheetEntries = ds[0]?.timesheetEntries || [];
-        
-            // Assuming timesheetEntries is the array you want to loop through
+            this.timesheetId = timesheetEntries.id;
+
+
             timesheetEntries.forEach((entry: any) => {
-                // Do something with each entry here
                 console.log(entry);
             });
         
@@ -49,6 +70,12 @@ export class SummaryComponent implements OnInit{
             console.log(this.dataSource);
         });
     }
+
+    updateTimesheetEntry(){
+            console.log(this.admin_name)
+            console.log(this.timesheetId)
+    }
+
 
     displayedColumns: any[] = [
         "project_name",
