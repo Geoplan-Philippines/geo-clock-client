@@ -51,4 +51,12 @@ export class TimesheetService {
         return this._http.get(`http://localhost:3000/timesheets/refresh/${userId}/${inputDate}`);
     }
 
+    //timesheetApproved
+    getAllTimesheetApprovedData(){
+        return this._http.get(`http://localhost:3000/timesheet-approved`)
+    }
+
+    postAlltimesheetApproved(data: any): Observable<any>{
+        return this._http.post(`http://localhost:3000/timesheet-approved`,data);
+    }
 }

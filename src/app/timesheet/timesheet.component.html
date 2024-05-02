@@ -52,6 +52,7 @@
                 <ng-container matColumnDef="project_name">
                     <th mat-header-cell *matHeaderCellDef>{{ GENERAL.TABLE_HEADER_NAME.PROJECT }}</th>
                     <td mat-cell *matCellDef="let element" class="cursor-pointer">
+
                         <div *ngIf="this.hasValue(element.project.project_name)">
                             <input
                                 type="text"
@@ -75,6 +76,7 @@
                                 (focusout)="postProjects($event)"
                             />
                         </div>
+
 
                         <!-- *ngIf="timesheet_entries && timesheet_entries.length != 0" -->
                         <datalist id="browsers">

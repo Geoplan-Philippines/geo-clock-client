@@ -393,12 +393,15 @@ export class TimesheetComponent {
             actual_hours: 0,
             is_ot: false,
             is_nd: false,
+            approved_by: '',
             week_number: weekNum,
         };
 
         this.timesheetService.postProject(dataParams).subscribe({
             next: (response: any) => {
                 console.log("Successfully created:", response);
+                
+                this.getTimesheetApproved(weekNum, valueDate);
 
                 // this.loadTimesheetByDate(userId, valueDate);
 
@@ -428,15 +431,15 @@ export class TimesheetComponent {
         });
     }
 
-    loadTimesheetByDate(userId: number, inputDate: Date) {
-        this.timesheetService.getAlltimesheetDataByDate(userId, inputDate).subscribe((res: any) => {
-            const ds = res;
-            this.dataSource = new MatTableDataSource<any>(ds);
-            this.dataSource.paginator = this.paginator;
-            this.timesheet_entries = ds;
-            console.log(ds);
-        });
-    }
+    // loadTimesheetByDate(userId: number, inputDate: Date) {
+    //     this.timesheetService.getAlltimesheetDataByDate(userId, inputDate).subscribe((res: any) => {
+    //         const ds = res;
+    //         this.dataSource = new MatTableDataSource<any>(ds);
+    //         this.dataSource.paginator = this.paginator;
+    //         this.timesheet_entries = ds;
+    //         console.log(ds);
+    //     });
+    // }
 
     //renan pogi on process end
     getHoursForDate(timesheetEntries: any[], index: any) {
@@ -509,6 +512,8 @@ export class TimesheetComponent {
                 const trimmedDate = this.formatDateRee(valueDate);
                 console.log(trimmedDate); // Output: 2024-04-11
                 this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                this.getTimesheetApproved(params.week_number, valueDate);
+                
             },
             error: (error) => {
                 console.error("Error creating entry:", error);
@@ -605,5 +610,72 @@ export class TimesheetComponent {
                 this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
             }
         });
+    }
+
+
+    getTimesheetApproved(weekNo: number, date: any) {
+        var dateinput = new Date(date);
+        const year = dateinput.getFullYear();
+        var weekNumber = weekNo;
+        var startDate = new Date(year, 0, 1);
+        var dayOfWeek = startDate.getDay();
+        startDate.setDate(startDate.getDate() - dayOfWeek);
+        startDate.setDate(startDate.getDate() + (weekNumber - 1) * 7);
+
+        // Set time components of startDate to 00:00:00
+        startDate.setHours(0, 0, 0, 0);
+
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 6);
+
+        // Set time components of endDate to 00:00:00
+        endDate.setHours(0, 0, 0, 0);
+
+        // Convert start date and end date to string representation in "YYYY-MM-DD" format
+        const startDateString = startDate.toISOString().split('T')[0] + 'T00:00:00Z';
+        const endDateString = endDate.toISOString().split('T')[0] + 'T00:00:00Z';
+
+    
+        const userId = Number(localStorage.getItem("id"));
+    
+        this.timesheetService.getAllTimesheetApprovedData().subscribe((res: any) => {
+            const ds = res;
+    
+            const existingWeek = ds.find((week: any) => {
+                const startDate = new Date(week.start_date);
+                const yearPart = startDate.getFullYear();
+                const weekNo = week.week_no;
+                return yearPart === year && weekNo === weekNumber;
+            });
+    
+            if (existingWeek) {
+                console.log('exist na')
+            } else {
+                const ApprovedData = {
+                    week_no: weekNumber,
+                    user_id: userId,
+                    approved: '',
+                    start_date: startDateString,
+                    end_date: endDateString,
+                }
+                this.postTimesheetApproved(ApprovedData);
+            }
+        });
+    
+        console.log(dateinput);
+        console.log("Start date of week " + weekNumber + " of " + year + " is: " + startDate + " - End date: " + endDate);
+    }
+    
+    
+
+    postTimesheetApproved(approvedData: any){
+        this.timesheetService.postAlltimesheetApproved(approvedData).subscribe({
+            next: (response) => {
+                console.log('successfully', response)
+            },
+            error: (error) => {
+                console.error("Error creating approved:", error);
+            },
+        })           
     }
 }

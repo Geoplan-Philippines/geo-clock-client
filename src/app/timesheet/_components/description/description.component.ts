@@ -4,6 +4,7 @@ import { TimesheetService } from "../../_service/timesheet.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 export interface DialogData {
+    week_number: any;
     id: number;
     description: string;
 }
