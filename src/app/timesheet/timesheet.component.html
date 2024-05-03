@@ -135,7 +135,7 @@
                     <td mat-cell *matCellDef="let element" class="td">
                         <div>
                             <p class="text-xl">{{ columnCount }}h</p>
-                            <mat-icon>close</mat-icon>
+                            <mat-icon (click)="deleteWholeWeek(element.user_id, element.project.id)">close </mat-icon>
                         </div>
                     </td>
                 </ng-container>

@@ -46,25 +46,24 @@ throw new Error('Method not implemented.');
     }
 
 
-
     loadTimesheet() {
-        const weekNumber = this.data.week_number;
-        const userId = this.data.user_id;
-        const startDate = this.data.start_date;
-        const endDate = this.data.end_date;
-        
+      const weekNumber = this.data.week_number;
+      const userId = this.data.user_id;
+      const startDate = this.data.start_date;
+      const endDate = this.data.end_date;
+  
+      this.SummaryService.getAllTimesheetDaily(weekNumber, userId, startDate, endDate).subscribe((res: any) => {
+          const ds = res;
+          this.employeeEntry = ds;
+  
+          const timesheetEntries = ds[0]?.timesheetEntries || [];
+          this.timesheetId = timesheetEntries.id;
+      
+          const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
 
-        this.SummaryService.getAllTimesheetDaily(weekNumber, userId, startDate, endDate).subscribe((res: any) => {
-            const ds = res;
-            this.employeeEntry = ds;
-        
-            const timesheetEntries = ds[0]?.timesheetEntries || [];
-            this.timesheetId = timesheetEntries.id;
-          
-            // Update the dataSource with timesheetEntries
-            this.dataSource = new MatTableDataSource<SummaryModel>(timesheetEntries);
-        });
-    }
+          this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
+      });
+  }
 
     loadTimesheetForLength() {
         const weekNumber = this.data.week_number;
