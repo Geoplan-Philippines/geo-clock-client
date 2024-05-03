@@ -29,9 +29,10 @@ export class TimesheetApprovedComponent {
         public dialog: MatDialog,
     ) {}
 
-    openDialog(weekNo: number, userId: number, startDate: Date, endDate: Date) {
+    openDialog(approvedId: number, weekNo: number, userId: number, startDate: Date, endDate: Date) {
         const dialogRef = this.dialog.open(SummaryComponent, {
             data:{
+                id: approvedId,
                 week_number: weekNo,
                 user_id: userId,
                 start_date: startDate,
@@ -42,10 +43,12 @@ export class TimesheetApprovedComponent {
 
         dialogRef.afterClosed().subscribe((result: any) => {
             // console.log(`Dialog result: ${result}`);
+            this.ngOnInit();
         });
 
 
         const dataEntry = {
+            id: approvedId,
             week_number: weekNo,
             user_id: userId,
             start_date: startDate,
