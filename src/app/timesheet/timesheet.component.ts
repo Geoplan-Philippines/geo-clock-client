@@ -25,6 +25,7 @@ import { DescriptionComponent } from "./_components/description/description.comp
 
 // components
 import { DeleteConfirmationModalComponent } from "./_components/delete-confirmation-modal/delete-confirmation-modal.component";
+import { WholeDeleteModalComponent } from "./_components/whole-delete-modal/whole-delete-modal.component";
 
 @Component({
     selector: "app-timesheet",
@@ -217,6 +218,7 @@ export class TimesheetComponent {
         const timesheetIdString = localStorage.getItem("id");
 
         this.start_date_data = startDate;
+        this.end_date_data = endDate;
 
         if (timesheetIdString !== null) {
             const timesheetId = +timesheetIdString;
@@ -677,5 +679,44 @@ export class TimesheetComponent {
                 console.error("Error creating approved:", error);
             },
         })           
+    }
+
+    deleteWholeWeek(userId: number, projectId: number){
+        const filteringStartDate = new Date(this.start_date_data);
+        const filteringEndDate = new Date(this.end_date_data);
+        const lateststartDate = new Date(this.latest_start_date);
+        const latestEndDate =new Date()
+        latestEndDate.setDate(lateststartDate.getDate() + 6)
+
+        let startDate: any;
+        let endDate:any;
+
+        if (filteringStartDate instanceof Date && !isNaN(filteringStartDate.getTime())) {
+            startDate = filteringStartDate;
+            endDate = filteringEndDate;
+        } else if (lateststartDate instanceof Date && !isNaN(lateststartDate.getTime())) {
+            const latestDateWithPHTimeStart = this.datePipe.transform(lateststartDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
+            const latestDateWithPHTimeEnd = this.datePipe.transform(latestEndDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
+            
+            startDate = latestDateWithPHTimeStart
+            endDate = latestDateWithPHTimeEnd
+        } else {
+            console.error("Both filteringDate and latestDate are not valid Date objects.");
+        }
+
+        this.dialogRef = this.dialog.open(WholeDeleteModalComponent, {
+            data:{
+                user_id: userId,
+                project_id: projectId,
+                start_date: startDate,
+                end_date: endDate
+            }
+        })
+                // After the dialog is closed
+            this.dialogRef.afterClosed().subscribe((result: any) => {
+                // Handle result here
+                console.log('Dialog closed with result:', result);
+                this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+            });
     }
 }
