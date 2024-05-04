@@ -82,7 +82,7 @@ export class EmployeeComponent {
         });
     }
 
-    openEdit(employee_id: number, employee_code: string, first_name: string, last_name: string, email: string, password: string, role: string, is_active: boolean) {
+    openEdit(employee_id: number, employee_code: string, first_name: string, last_name: string, email: string, password: string, department: string, role: string, is_active: boolean) {
         const dialogRef = this.dialog.open(EditComponent, {
             data: {
                 employee_id: employee_id,
@@ -91,6 +91,7 @@ export class EmployeeComponent {
                 employee_code: employee_code,
                 email: email,
                 password: password,
+                department: department,
                 role: role,
                 is_active: is_active
             },

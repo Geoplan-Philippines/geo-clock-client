@@ -41,6 +41,9 @@ export class authGuard implements CanActivate {
       if (this.LoggedinEmail === this.users[i].email) {
           //condition role
           switch(this.users[i].role){
+              case "superAdmin":
+                      this.router.navigate(['/timesheet']); 
+                      break;
               case "admin":
                       this.router.navigate(['/timesheet']); 
                       break;

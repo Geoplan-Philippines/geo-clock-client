@@ -329,7 +329,7 @@ export class TimesheetComponent {
 
         this.timesheetService.getAllProjectData().subscribe((res: any) => {
             const existingProjects = res.response;
-            const existingProject = existingProjects.find((project: any) => project.project_name === projectNameValue);
+            const existingProject = existingProjects.find((project: any) =>project.work_order_number +' | '+ project.project_name === projectNameValue);
             if (existingProject) {
                 console.log("go");
                 this.timesheetService.getProjectName().subscribe((res: any) => {

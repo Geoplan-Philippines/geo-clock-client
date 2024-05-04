@@ -37,6 +37,7 @@ export class AddComponent implements OnInit {
             last_name: ["", Validators.required],
             email: ["", [Validators.required, Validators.email]],
             password: ["", [Validators.required, Validators.minLength(8)]],
+            department: ["", Validators.required],
             role: ["", Validators.required],
             is_active: [true, Validators.required],
         });

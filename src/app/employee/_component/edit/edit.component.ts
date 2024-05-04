@@ -12,6 +12,7 @@ export interface DialogData {
     employee_code: "";
     email: "";
     password: "";
+    department: "";
     role: "";
     is_active: boolean;
 }
@@ -53,6 +54,7 @@ export class EditComponent {
             employee_code: [this.data.employee_code, Validators.required],
             email: [this.data.email, Validators.required],
             password: [this.data.password, Validators.required],
+            department: [this.data.department, Validators.required],
             role: [this.data.role, Validators.required],
             is_active: [this.data.is_active],
         });
@@ -70,14 +72,12 @@ export class EditComponent {
             const userId = this.data.employee_id;
             const userData = this.formData.value;
     
-            
             if (this.employeeEntry.some((employee: { employee_code: any; email: any; id: number; }) => 
-                (employee.employee_code === userData.employee_code || 
-                employee.email === userData.email) && 
-                employee.id !== userId)) {
-                console.log("Employee code or email already exists. Cannot edit.");
-                return; 
-            }            
+                ((employee.employee_code === userData.employee_code || employee.email === userData.email) && 
+                employee.id !== userId))) {
+                console.log("Employee code or email already exists for another user. Cannot update.");
+                return;
+            }
     
             this.employeeservice.patchEmployeeData(userId, userData).subscribe({
                 next: (response) => {
@@ -86,12 +86,14 @@ export class EditComponent {
                 },
                 error: (error) => {
                     console.error("Error patching data:", error);
-                    this.openSnackBar("User already exist", "okay");
+                    this.openSnackBar("Error updating data", "Okay");
                 },
             });
         } else {
             console.log("Form is invalid. Please fill in all required fields.");
         }
     }
+    
+    
     
 }

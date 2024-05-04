@@ -87,12 +87,33 @@ export class TimesheetApprovedComponent {
 
     displayedColumns: any[] = ["week_no", "employee", "approved", "start_date", "end_date"];
 
-    loadTImesheetApproved(){
-                this.timesheetService.getAllTimesheetApprovedData().subscribe((res:any) =>{
-                    const ds = res;
-                    this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(ds);
-                })
+    loadTImesheetApproved() {
+        const userId = Number(localStorage.getItem('id'));
+    
+        // Load user's department
+        this.TimesheetApprovedService.getAllemployeetData().subscribe((employeeData: any) => {
+            const user = employeeData.find((emp: any) => emp.id === userId);
+            if (user) {
+                const userDepartment = user.department;
+                const isOwner = user.department === 'owner'; // Assuming 'owner' is the role for owners
+    
+                // Load all timesheet data
+                this.TimesheetApprovedService.getAllTimesheetApprovedData().subscribe((timesheetData: any) => {
+                    if (isOwner) {
+                        // If user is an owner, display all timesheets
+                        this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(timesheetData);
+                    } else {
+                        // Filter timesheets based on user's department
+                        const filteredTimesheets = timesheetData.filter((timesheet: any) => timesheet.user.department === userDepartment);
+                        this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(filteredTimesheets);
+                    }
+                });
+            } else {
+                console.log("User not found in the employee data.");
+            }
+        });
     }
+    
 
 
 

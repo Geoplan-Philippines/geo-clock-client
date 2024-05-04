@@ -5,15 +5,18 @@
     </div>
     <div class="static z-0 mt-10 h-screen flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
         <div class="justify-between sm:flex">
-            <!-- <p>You selected: {{ selected_employee }}</p> -->
-            <mat-form-field class="h-20 w-full sm:w-96">
-                <mat-label>Projects</mat-label>
-                <mat-select (valueChange)="eventSelection($event)">
-                    <mat-option *ngFor="let data of project" [value]="data.project_name">
-                        {{ data.project_name }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+
+            <div class="">
+                <!-- <p>You selected: {{ selected_employee }}</p> -->
+                <mat-form-field class="h-20 w-full sm:w-96">
+                    <mat-label>Projects</mat-label>
+                    <mat-select (valueChange)="eventSelection($event)">
+                        <mat-option *ngFor="let data of project" [value]="data.project_name">
+                            {{ data.work_order_number + ' | ' + data.project_name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <div class="flex w-max sm:flex">
                 <div>
                     <mat-form-field class="h-20 w-auto">
@@ -75,8 +78,7 @@
                         </div>
                         <!-- *ngIf="timesheet_entries && timesheet_entries.length != 0" -->
                         <datalist id="browsers">
-                            <option *ngFor="let opt of projects" [value]="opt.project_name" class="datalist-option">
-                                {{ opt.work_order_number }}
+                            <option *ngFor="let opt of projects" [value]="opt.work_order_number +' | '+ opt.project_name" class="datalist-option">
                             </option>
                         </datalist>
                     </td>
