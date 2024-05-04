@@ -66,6 +66,7 @@ export class TimesheetComponent {
         return value !== undefined && value !== null && value !== "";
     }
 
+    isLoading = false;
     constructor(
         private timesheetService: TimesheetService,
         private _snackBarService: SnackBarService,
@@ -227,6 +228,7 @@ export class TimesheetComponent {
                 // console.log(ds[1].project[1].actual_hours[1]); // Log the response to inspect its structure
 
                 this.dataSource = new MatTableDataSource<any>(ds);
+                this.dataSource.paginator = this.paginator;
             });
         } else {
             console.error("Timesheet ID is not available in localStorage");
@@ -323,6 +325,8 @@ export class TimesheetComponent {
         }
     }
     validateProjectInput(projectNameValue: string) {
+        this.isLoading = true;
+
         this.timesheetService.getAllProjectData().subscribe((res: any) => {
             const existingProjects = res.response;
             const existingProject = existingProjects.find((project: any) =>project.work_order_number +' | '+ project.project_name === projectNameValue);
@@ -342,6 +346,7 @@ export class TimesheetComponent {
                         const userId = Number(localStorage.getItem("id"));
                         // localStorage.setItem('projectId', projectId)
                         // console.log(this.dataSource.data[currentIndex])
+                        this.isLoading = false;
 
                         this.postData(projectId, userId);
                     } else {
@@ -354,6 +359,7 @@ export class TimesheetComponent {
                                 const projectId = response.id; // Make sure response contains the id
                                 const userId = Number(localStorage.getItem("id"));
                                 // localStorage.setItem('projectId', projectId)
+                                this.isLoading = false;
 
                                 this.postData(projectId, userId);
                             },
@@ -364,6 +370,7 @@ export class TimesheetComponent {
                     }
                 });
             } else {
+                this.isLoading = false;
                 console.log("bawal mema dito");
                 this._snackBarService.openSnackBar("The project name is not whitelisted", "okay");
             }
@@ -395,14 +402,14 @@ export class TimesheetComponent {
             actual_hours: 0,
             is_ot: false,
             is_nd: false,
-            approved_by: '',
+            approved_by: "",
             week_number: weekNum,
         };
 
         this.timesheetService.postProject(dataParams).subscribe({
             next: (response: any) => {
                 console.log("Successfully created:", response);
-                
+
                 this.getTimesheetApproved(weekNum, valueDate);
 
                 // this.loadTimesheetByDate(userId, valueDate);
@@ -468,7 +475,7 @@ export class TimesheetComponent {
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
             console.log(value);
-            if (value <= 20) {
+            if (value <= 20 && value > 0) {
                 const weekNum = weekNumber(formattedDateToISO);
                 const postParams = {
                     date: selectedDate,
@@ -493,7 +500,7 @@ export class TimesheetComponent {
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
                 }
-                this._snackBarService.openSnackBar("20 Hours is the limit entry", "okay");
+                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
             }
         }
     }
@@ -515,7 +522,6 @@ export class TimesheetComponent {
                 console.log(trimmedDate); // Output: 2024-04-11
                 this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
                 this.getTimesheetApproved(params.week_number, valueDate);
-                
             },
             error: (error) => {
                 console.error("Error creating entry:", error);
@@ -614,7 +620,6 @@ export class TimesheetComponent {
         });
     }
 
-
     getTimesheetApproved(weekNo: number, date: any) {
         var dateinput = new Date(date);
         const year = dateinput.getFullYear();
@@ -634,51 +639,48 @@ export class TimesheetComponent {
         endDate.setHours(0, 0, 0, 0);
 
         // Convert start date and end date to string representation in "YYYY-MM-DD" format
-        const startDateString = startDate.toISOString().split('T')[0] + 'T00:00:00Z';
-        const endDateString = endDate.toISOString().split('T')[0] + 'T00:00:00Z';
+        const startDateString = startDate.toISOString().split("T")[0] + "T00:00:00Z";
+        const endDateString = endDate.toISOString().split("T")[0] + "T00:00:00Z";
 
-    
         const userId = Number(localStorage.getItem("id"));
-    
+
         this.timesheetService.getAllTimesheetApprovedData().subscribe((res: any) => {
             const ds = res;
-    
+
             const existingWeek = ds.find((week: any) => {
                 const startDate = new Date(week.start_date);
                 const yearPart = startDate.getFullYear();
                 const weekNo = week.week_no;
                 return yearPart === year && weekNo === weekNumber;
             });
-    
+
             if (existingWeek) {
-                console.log('exist na')
+                console.log("exist na");
             } else {
                 const ApprovedData = {
                     week_no: weekNumber,
                     user_id: userId,
-                    approved: '',
+                    approved: "",
                     start_date: startDateString,
                     end_date: endDateString,
-                }
+                };
                 this.postTimesheetApproved(ApprovedData);
             }
         });
-    
+
         console.log(dateinput);
         console.log("Start date of week " + weekNumber + " of " + year + " is: " + startDate + " - End date: " + endDate);
     }
-    
-    
 
-    postTimesheetApproved(approvedData: any){
+    postTimesheetApproved(approvedData: any) {
         this.timesheetService.postAlltimesheetApproved(approvedData).subscribe({
             next: (response) => {
-                console.log('successfully', response)
+                console.log("successfully", response);
             },
             error: (error) => {
                 console.error("Error creating approved:", error);
             },
-        })           
+        });
     }
 
     deleteWholeWeek(userId: number, projectId: number){
