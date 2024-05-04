@@ -329,7 +329,9 @@ export class TimesheetComponent {
 
         this.timesheetService.getAllProjectData().subscribe((res: any) => {
             const existingProjects = res.response;
-            const existingProject = existingProjects.find((project: any) =>project.work_order_number +' | '+ project.project_name === projectNameValue);
+            const existingProject = existingProjects.find(
+                (project: any) => project.work_order_number + " | " + project.project_name === projectNameValue,
+            );
             if (existingProject) {
                 console.log("go");
                 this.timesheetService.getProjectName().subscribe((res: any) => {
@@ -475,7 +477,7 @@ export class TimesheetComponent {
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
             console.log(value);
-            if (value <= 20 && value > 0) {
+            if (value <= 20) {
                 const weekNum = weekNumber(formattedDateToISO);
                 const postParams = {
                     date: selectedDate,
@@ -574,24 +576,59 @@ export class TimesheetComponent {
                     if (this.dateFromFilter !== undefined) {
                         // Variable is defined
                         this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                        this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                        this._snackBarService.openSnackBar("Delete Canceled", "okay");
                     } else {
                         // Variable is undefined
                         const latestStartDate = new Date(this.latest_start_date);
                         this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                        this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                        this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
                     }
                     // this.loadTimesheet();
                 });
+            } else if (editParams.actual_hours < 0) {
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Delete Canceled", "okay");
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                }
+                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
             } else if (editParams.actual_hours === matchingEntry.actual_hours) {
                 console.log("no edit changes");
             } else {
                 this.editTimesheetEntry(matchingEntry.id, editParams);
             }
+        } else if (editParams.actual_hours < 0) {
+            if (this.dateFromFilter !== undefined) {
+                // Variable is defined
+                this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+            } else {
+                // Variable is undefined
+                const latestStartDate = new Date(this.latest_start_date);
+                this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+            }
+            this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
         } else {
             console.log(matchingEntry);
             if (postParams.actual_hours === 0) {
                 console.log("no change");
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                }
+                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
             } else {
                 this.postTimesheetEntry(postParams);
             }
@@ -611,6 +648,7 @@ export class TimesheetComponent {
             if (this.dateFromFilter !== undefined) {
                 // Variable is defined
                 this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
             } else {
                 // Variable is undefined
                 const latestStartDate = new Date(this.latest_start_date);
@@ -683,42 +721,46 @@ export class TimesheetComponent {
         });
     }
 
-    deleteWholeWeek(userId: number, projectId: number){
+    deleteWholeWeek(userId: number, projectId: number) {
         const filteringStartDate = new Date(this.start_date_data);
         const filteringEndDate = new Date(this.end_date_data);
         const lateststartDate = new Date(this.latest_start_date);
-        const latestEndDate =new Date()
-        latestEndDate.setDate(lateststartDate.getDate() + 6)
+        const latestEndDate = new Date();
+        latestEndDate.setDate(lateststartDate.getDate() + 6);
 
         let startDate: any;
-        let endDate:any;
+        let endDate: any;
 
         if (filteringStartDate instanceof Date && !isNaN(filteringStartDate.getTime())) {
             startDate = filteringStartDate;
             endDate = filteringEndDate;
         } else if (lateststartDate instanceof Date && !isNaN(lateststartDate.getTime())) {
-            const latestDateWithPHTimeStart = this.datePipe.transform(lateststartDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
+            const latestDateWithPHTimeStart = this.datePipe.transform(
+                lateststartDate,
+                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                "Asia/Manila",
+            );
             const latestDateWithPHTimeEnd = this.datePipe.transform(latestEndDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
-            
-            startDate = latestDateWithPHTimeStart
-            endDate = latestDateWithPHTimeEnd
+
+            startDate = latestDateWithPHTimeStart;
+            endDate = latestDateWithPHTimeEnd;
         } else {
             console.error("Both filteringDate and latestDate are not valid Date objects.");
         }
 
         this.dialogRef = this.dialog.open(WholeDeleteModalComponent, {
-            data:{
+            data: {
                 user_id: userId,
                 project_id: projectId,
                 start_date: startDate,
-                end_date: endDate
-            }
-        })
-                // After the dialog is closed
-            this.dialogRef.afterClosed().subscribe((result: any) => {
-                // Handle result here
-                console.log('Dialog closed with result:', result);
-                this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-            });
+                end_date: endDate,
+            },
+        });
+        // After the dialog is closed
+        this.dialogRef.afterClosed().subscribe((result: any) => {
+            // Handle result here
+            console.log("Dialog closed with result:", result);
+            this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+        });
     }
 }

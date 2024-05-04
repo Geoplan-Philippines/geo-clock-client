@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TimesheetComponent } from "./timesheet.component";
 import { SharedModule } from "../shared/shared.module";
 import { MaterialModule } from "../material.module";
-import { DeleteConfirmationModalComponent } from './_components/delete-confirmation-modal/delete-confirmation-modal.component';
-import { DescriptionComponent } from './_components/description/description.component';
-import { WholeDeleteModalComponent } from './_components/whole-delete-modal/whole-delete-modal.component';
+import { DeleteConfirmationModalComponent } from "./_components/delete-confirmation-modal/delete-confirmation-modal.component";
+import { DescriptionComponent } from "./_components/description/description.component";
+import { WholeDeleteModalComponent } from "./_components/whole-delete-modal/whole-delete-modal.component";
 
 @NgModule({
     declarations: [TimesheetComponent, DeleteConfirmationModalComponent, DescriptionComponent, WholeDeleteModalComponent],
@@ -14,5 +14,4 @@ import { WholeDeleteModalComponent } from './_components/whole-delete-modal/whol
     providers: [DatePipe],
     exports: [TimesheetComponent],
 })
-
-export class TimesheetModule { }
+export class TimesheetModule {}

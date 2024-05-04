@@ -14,6 +14,7 @@ export class HeadsupDialogComponent {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private dialogRef: MatDialogRef<HeadsupDialogComponent>,
     ) {}
+    cancel() {}
     onSignOutClick() {
         localStorage.removeItem("role");
         localStorage.removeItem("id");
