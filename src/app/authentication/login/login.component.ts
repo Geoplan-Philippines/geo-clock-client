@@ -89,6 +89,10 @@ export class LoginComponent {
 
                 localStorage.setItem("id", this.users[i].id);
                 switch (this.users[i].role) {
+                    case "superAdmin":
+                        this.router.navigate(["/timesheet"]);
+                        localStorage.setItem("role", this.users[i].role);
+                        break;
                     case "admin":
                         this.router.navigate(["/timesheet"]);
                         localStorage.setItem("role", this.users[i].role);

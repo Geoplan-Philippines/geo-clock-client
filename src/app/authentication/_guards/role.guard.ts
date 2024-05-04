@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+    import { Injectable } from "@angular/core";
 import { CanActivate, Router, ActivatedRouteSnapshot } from "@angular/router";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 // services
@@ -17,32 +17,28 @@ export class RoleAuthGuard implements CanActivate {
     ) {}
 
     canActivate(route: ActivatedRouteSnapshot): boolean {
-         // Check if role token is set in localStorage
-         const roletoken = localStorage.getItem('role');
-         if (!roletoken) {
-             // Redirect to login or appropriate route if role token is not set
-             this.router.navigate(['/login']); // Adjust this to your login route
+         const roleToken = localStorage.getItem('role');
+         if (!roleToken) {
+             this.router.navigate(['/login']); 
              return false;
          }
          
-         // Check if user has access to the requested route based on role
-         const requiredRole = route.data["role"];
-         if (requiredRole === roletoken) {
-             return true;
-         } 
-         else if(requiredRole !== roletoken) {
-            switch(roletoken){
-                case "admin":
-                        this.router.navigate(['/timesheet']); 
-                     
-                        break;
-                case "user":
-                        this.router.navigate(['/timesheet']); 
-              
-                        break;
-                    default: console.log("error sa role")
-            }
-         }
-         return false;
+    const requiredRoles = route.data["role"] as string[];
+    if (requiredRoles.includes(roleToken) || requiredRoles.includes('admin') && roleToken === 'superAdmin') {
+        return true;
+    } else {
+        switch(roleToken){
+            case "admin":
+            case "superAdmin":
+                this.router.navigate(['/timesheet']);  
+                break;
+            case "user":
+                this.router.navigate(['/timesheet']); 
+                break;
+            default:
+                console.log("error in role");
+        }
+    }
+    return false;
      }
-     }
+    }

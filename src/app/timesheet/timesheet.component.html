@@ -11,7 +11,7 @@
                     <mat-label>Projects</mat-label>
                     <mat-select (valueChange)="eventSelection($event)">
                         <mat-option *ngFor="let data of project" [value]="data.project_name">
-                            {{ data.project_name }}
+                            {{ data.work_order_number + ' | ' + data.project_name }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -80,8 +80,7 @@
 
                         <!-- *ngIf="timesheet_entries && timesheet_entries.length != 0" -->
                         <datalist id="browsers">
-                            <option *ngFor="let opt of projects" [value]="opt.project_name" class="datalist-option">
-                                {{ opt.work_order_number }}
+                            <option *ngFor="let opt of projects" [value]="opt.work_order_number +' | '+ opt.project_name" class="datalist-option">
                             </option>
                         </datalist>
                     </td>

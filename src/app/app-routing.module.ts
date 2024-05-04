@@ -47,9 +47,10 @@ const routes: Routes = [
         path: "timesheet-approved",
         // component: LoginComponent,
         component: TimesheetApprovedComponent,
-        canActivate: [AngularFireAuthGuard],
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
+            role: ["admin", "superAdmin"]
         },
     },
     {
@@ -67,7 +68,7 @@ const routes: Routes = [
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: "admin",
+            role: ["admin", "superAdmin"]
         },
     },
     {
@@ -76,7 +77,7 @@ const routes: Routes = [
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: "admin",
+            role: ["superAdmin"]
         },
     },
     {
@@ -85,7 +86,7 @@ const routes: Routes = [
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: "admin",
+            role: ["admin", "superAdmin"]
         },
     },
 ];
