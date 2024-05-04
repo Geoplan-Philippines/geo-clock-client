@@ -13,7 +13,7 @@ body {
 }
 
 .button {
-    @apply px-4 py-2 font-bold rounded-lg bg-red-400 hover:bg-red-500
+    @apply rounded-lg bg-red-400 px-4 py-2 font-bold hover:bg-red-500;
 }
 
 ::-webkit-scrollbar {
@@ -32,6 +32,6 @@ body {
     background-color: #0a54a0;
 }
 
-*{
-    overflow: hidden;
-}
+// *{
+//     overflow: hidden;
+// }

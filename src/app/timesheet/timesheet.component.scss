@@ -5,28 +5,23 @@
         color: white !important;
         margin-top: 2px;
     }
-
     .mat-date-range-input-separator {
         //for date filter, to remove the separator sign of filtered date
         display: none;
     }
-
     .mat-elevation-z8 {
         border-top-right-radius: 8px;
         border-top-left-radius: 8px;
         overflow: scroll;
-
         th {
             font-size: 16px;
             color: white;
             white-space: nowrap;
             overflow: hidden;
             background-color: #0a54a0;
-
             top: 0;
             position: sticky;
         }
-
         td {
             border-top: 2px black;
             font-size: 16px;
@@ -34,28 +29,23 @@
             white-space: nowrap;
             overflow: hidden;
         }
-
         td:last-child {
             background-color: lightgray;
             color: gray;
-
             div {
                 display: flex;
                 justify-content: space-between;
                 vertical-align: middle;
             }
         }
-
         th:nth-child(1) {
             border-top-left-radius: 8px;
             text-align: left;
         }
-
         th:last-child {
             border-top-right-radius: 8px;
             text-align: right;
         }
-
         input[type="number"] {
             width: 60px;
             text-align: center;
@@ -63,30 +53,28 @@
             color: gray;
             padding: 6px 0px;
         }
-
         input[type="number"]:focus {
             border: 1px solid black;
             color: black;
             border-top-left-radius: 8px;
             border-bottom-left-radius: 8px;
-
             outline: none;
         }
-
         .descriptionIcon {
             border-top: 1px solid gray;
             border-right: 1px solid gray;
             border-bottom: 1px solid gray;
-
         }
-
+        td:nth-child(1) {
+            text-align: left;
+            width: 26rem;
+        }
         .projectInput {
-            width: 14rem;
+            width: 26rem;
             border: 0px;
             color: gray;
-            padding: 6px 5px;
+            padding: 6px 0px;
         }
-
         .projectInput:focus {
             border: 1px solid black;
             color: black;
@@ -94,10 +82,6 @@
             outline: none;
         }
     }
-
-
-
-
 
     .datepick {
         color: black;
