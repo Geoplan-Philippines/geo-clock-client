@@ -621,14 +621,17 @@ export class TimesheetComponent {
         var weekNumber = weekNo;
         var startDate = new Date(year, 0, 1);
         var dayOfWeek = startDate.getDay();
-        startDate.setDate(startDate.getDate() - dayOfWeek);
+        // Adjust the start date to the first Monday of the year
+        startDate.setDate(startDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -5 : 1));
+        // Adjust the start date to the first day of the specified week
         startDate.setDate(startDate.getDate() + (weekNumber - 1) * 7);
 
         // Set time components of startDate to 00:00:00
         startDate.setHours(0, 0, 0, 0);
 
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 6);
+        // Calculate the end date by adding 6 days to the start date
+        var endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 7);
 
         // Set time components of endDate to 00:00:00
         endDate.setHours(0, 0, 0, 0);

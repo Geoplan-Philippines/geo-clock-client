@@ -51,7 +51,10 @@ throw new Error('Method not implemented.');
       const userId = this.data.user_id;
       const startDate = this.data.start_date;
       const endDate = this.data.end_date;
-  
+      
+      console.log(startDate)
+      console.log(endDate)
+
       this.SummaryService.getAllTimesheetDaily(weekNumber, userId, startDate, endDate).subscribe((res: any) => {
           const ds = res;
           this.employeeEntry = ds;
@@ -100,7 +103,7 @@ throw new Error('Method not implemented.');
       
       determineApprovalStatus(approvedCount: number): string {
         let approvalStatus: string = '';
-        if (approvedCount === 5) {
+        if (approvedCount > 5) {
           approvalStatus = 'Approved';
         } else if (approvedCount > 0) {
           approvalStatus = 'Partially Approved';
