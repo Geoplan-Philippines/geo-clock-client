@@ -3,7 +3,9 @@ import { MatTableDataSource } from "@angular/material/table";
 import { SummaryModel } from "src/app/models/summary.model";
 import { SummaryService } from "./_service/summary.service";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { ClipboardModule, ClipboardService } from "ngx-clipboard";
 import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.service";
+
 
 export interface DialogData {
     id: number;
@@ -27,10 +29,13 @@ export class SummaryComponent implements OnInit {
 
     admin_name: any;
     timesheetId: any;
+    clickboard: any = "";
 
     constructor(
         private SummaryService: SummaryService,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
+        private clipboardService: ClipboardService,
+
         private _snackBarService: SnackBarService,
     ) {}
     ngOnInit() {
@@ -67,6 +72,9 @@ export class SummaryComponent implements OnInit {
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
 
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
+
+            this.clickboard = filteredEntries;
+
         });
     }
 
@@ -113,6 +121,7 @@ export class SummaryComponent implements OnInit {
         }
         return approvalStatus;
     }
+
     updateApproved(status: any) {
         const ApprovedId = this.data.id;
         const approvedForm = {
@@ -147,8 +156,15 @@ export class SummaryComponent implements OnInit {
             }
         } else if (field === "is_nd") {
             updateValueApproved.is_nd = !element.is_nd;
+            if (element.approved_check === false) {
+                updateValueApproved.approved_by = "";
+            }
         } else if (field === "is_ot") {
             updateValueApproved.is_ot = !element.is_ot;
+            if (element.approved_check === false) {
+                updateValueApproved.approved_by = "";
+            }
+
         }
 
         this.updateTimesheetEntry(entryId, updateValueApproved);
@@ -167,6 +183,47 @@ export class SummaryComponent implements OnInit {
             },
         });
     }
+    copyToClipboard() {
+      const filteredEntries = this.clickboard;
+      console.log(filteredEntries);
+  
+      // Initialize an array to store sentences
+      const sentences: string[] = [];
+  
+      // Create sentences for each entry
+      for (const entry of filteredEntries) {
+          let sentence = '';
+          for (const key in entry) {
+              if (entry.hasOwnProperty(key)) {
+                  let value = entry[key];
+                  if (typeof value === 'object') {
+                      // Handle nested objects
+                      let nestedSentence = '';
+                      for (const nestedKey in value) {
+                          if (value.hasOwnProperty(nestedKey)) {
+                              if (nestedSentence !== '') {
+                                  nestedSentence += ', ';
+                              }
+                              nestedSentence += `${nestedKey}: ${value[nestedKey]}`;
+                          }
+                      }
+                      value = nestedSentence;
+                  }
+                  if (sentence !== '') {
+                      sentence += ', ';
+                  }
+                  sentence += `${key}: ${value}`;
+              }
+          }
+          sentences.push(sentence);
+      }
+  
+      // Convert the sentences to a single string
+      const contentToCopy = sentences.join('. ');
+  
+      // Copy the content to the clipboard
+      this.clipboardService.copyFromContent(contentToCopy);
+  }
 
     displayedColumns: any[] = [
         "project_name",

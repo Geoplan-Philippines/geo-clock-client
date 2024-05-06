@@ -1,22 +1,32 @@
-import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { MatDialog } from "@angular/material/dialog";
 import { HeadsupDialogComponent } from "src/app/shared/ui/headsup-dialog/headsup-dialog.component";
+import { HeaderService } from "./_service/header.service";
 
 @Component({
     selector: "app-header",
     templateUrl: "./header.component.html",
     styleUrls: ["./header.component.scss"],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
     mobileMenuOpen: boolean = false;
+    headerCategory: any;
+    sidebarLinks: any;
 
     constructor(
         private router: Router,
         private angularAuth: AngularFireAuth,
         public dialog: MatDialog,
+        private headerService: HeaderService
     ) {}
+
+    ngOnInit(){
+        this.loadHeaderBarData();
+        // const role = localStorage.getItem("role");
+        // console.log(role)
+    }
 
     @ViewChild("userMenuWrapper")
     userMenuWrapper!: ElementRef;
@@ -32,4 +42,29 @@ export class HeaderComponent {
             data: { key: "Are you sure you want to log out?" }, // Replace key, value with your actual data
         });
     }
+
+    loadHeaderBarData() {
+        const siderole = localStorage.getItem("role");
+        if (siderole !== null) {
+            this.headerService.getSidebarModule(siderole).subscribe((res: any) => {
+                const ds = res;
+                this.headerCategory = ds.map((category: { category_name: any; items: any; }) => ({
+                    category_name: category.category_name,
+                    sidebarLinks: category.items 
+                }));
+                this.headerFunction();
+            });
+        } else {
+            console.error("'role' not found in localStorage");
+        }
+    }
+
+    headerFunction() {
+        this.sidebarLinks = []; 
+        for(let head of this.headerCategory){
+            for(let asideItems of head.sidebarLinks){ 
+                this.sidebarLinks.push(asideItems); 
+        }
+    }
+ }
 }

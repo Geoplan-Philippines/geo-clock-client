@@ -80,20 +80,23 @@
     </div>
     <!-- Mobile menu, show/hide based on menu state. -->
     <div id="mobile-menu" class="fixed z-50 h-full w-full bg-white shadow-md sm:hidden" [class.hidden]="!mobileMenuOpen">
-        <div class="content-center justify-center space-y-1 px-2 pb-3">
+        <div class="content-center justify-center space-y-1 px-2 pb-3" *ngFor="let data of headerCategory">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <p class="text-gray-400">TIMESHEET</p>
-            <a
-                href="/timesheet"
-                class="group flex items-center rounded-lg p-2 font-medium text-black hover:bg-[#0a54a0] hover:text-white"
-                aria-current="page"
-            >
-                <mat-icon class="font-extrabold">schedule</mat-icon>
-                <span class="ms-3"
-                    >TIMESHEET<span class="m-1 rounded-sm bg-gray-500 p-0.5 px-2 text-[0.75rem]">approved by</span></span
+            <p class="text-gray-400">{{data.category_name}}</p>
+        <ul>
+            <li *ngFor="let sidebarLink of data.sidebarLinks">
+                <a
+                    [routerLink]="sidebarLink.router_link"
+                    class="group flex items-center rounded-lg p-2 font-medium text-black hover:bg-[#0a54a0] hover:text-white"
+                    aria-current="page"
                 >
+                <mat-icon class="font-extrabold">{{ sidebarLink.icon }}</mat-icon>
+                    <span class="ms-3">{{ sidebarLink.name }}</span>
+                
             </a>
-            <a
+        </li>
+    </ul>
+            <!-- <a
                 href="/timesheet"
                 class="group flex items-center rounded-lg p-2 font-medium text-black hover:bg-[#0a54a0] hover:text-white"
                 aria-current="page"
@@ -181,7 +184,7 @@
             >
                 <mat-icon class="font-extrabold">table_chart_view</mat-icon>
                 <span class="ms-3 flex-1 whitespace-nowrap">KPI</span>
-            </a>
+            </a> -->
         </div>
     </div>
 </nav>
