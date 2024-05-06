@@ -4,6 +4,9 @@ import { SummaryModel } from "src/app/models/summary.model";
 import { SummaryService } from "./_service/summary.service";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ClipboardModule, ClipboardService } from "ngx-clipboard";
+import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.service";
+
+
 export interface DialogData {
     id: number;
     week_number: number;
@@ -32,6 +35,8 @@ export class SummaryComponent implements OnInit {
         private SummaryService: SummaryService,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
         private clipboardService: ClipboardService,
+
+        private _snackBarService: SnackBarService,
     ) {}
     ngOnInit() {
         this.loadTimesheet();
@@ -69,6 +74,7 @@ export class SummaryComponent implements OnInit {
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
 
             this.clickboard = filteredEntries;
+
         });
     }
 
@@ -158,6 +164,7 @@ export class SummaryComponent implements OnInit {
             if (element.approved_check === false) {
                 updateValueApproved.approved_by = "";
             }
+
         }
 
         this.updateTimesheetEntry(entryId, updateValueApproved);
@@ -167,6 +174,7 @@ export class SummaryComponent implements OnInit {
         this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
             next: (response) => {
                 console.log("Edit successfully:", response);
+                this._snackBarService.openSnackBar("Update successfully", "okay");
 
                 this.loadTimesheetForLength();
             },
@@ -216,11 +224,6 @@ export class SummaryComponent implements OnInit {
       // Copy the content to the clipboard
       this.clipboardService.copyFromContent(contentToCopy);
   }
-  
-  
-  
-  
-  
 
     displayedColumns: any[] = [
         "project_name",

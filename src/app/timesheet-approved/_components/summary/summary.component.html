@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>ex. Week 2</h2>
 <mat-dialog-content class="mat-typography">
-    <div class="mat-elevation-z8" >
+    <div class="mat-elevation-z8">
         <table class="pagi_table" mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="aproved_by">
                 <th mat-header-cell *matHeaderCellDef>APPROVED BY</th>
@@ -36,7 +36,7 @@
             </ng-container>
             <ng-container matColumnDef="date_created">
                 <th mat-header-cell *matHeaderCellDef>DATE</th>
-                <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.date | date: "EEE, MMM d" }}</td>
             </ng-container>
             <ng-container matColumnDef="actual_hours">
                 <th mat-header-cell *matHeaderCellDef>DURATION</th>
