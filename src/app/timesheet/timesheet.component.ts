@@ -343,11 +343,8 @@ export class TimesheetComponent {
 
                         const projectId = existingProject.id;
                         const projectName = existingProject.project_name;
-                        // this.dataSource.data[currentIndex].project.id = projectId
-                        // this.dataSource.data[currentIndex].project.project_name = projectName
+                      
                         const userId = Number(localStorage.getItem("id"));
-                        // localStorage.setItem('projectId', projectId)
-                        // console.log(this.dataSource.data[currentIndex])
                         this.isLoading = false;
 
                         this.postData(projectId, userId);
@@ -357,10 +354,9 @@ export class TimesheetComponent {
                             next: (response: any) => {
                                 console.log("Successfully created:", response);
 
-                                // Assuming project.id is available in the response
-                                const projectId = response.id; // Make sure response contains the id
+                                const projectId = response.id; 
                                 const userId = Number(localStorage.getItem("id"));
-                                // localStorage.setItem('projectId', projectId)
+                                
                                 this.isLoading = false;
 
                                 this.postData(projectId, userId);
@@ -412,12 +408,11 @@ export class TimesheetComponent {
             next: (response: any) => {
                 console.log("Successfully created:", response);
 
+
                 this.getTimesheetApproved(weekNum, valueDate);
 
-                // this.loadTimesheetByDate(userId, valueDate);
-
                 this._snackBarService.openSnackBar("Project name has been created", "okay");
-                ///
+
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
@@ -688,11 +683,12 @@ export class TimesheetComponent {
         this.timesheetService.getAllTimesheetApprovedData().subscribe((res: any) => {
             const ds = res;
 
-            const existingWeek = ds.find((week: any) => {
+            const existingWeek = ds.find((week: any) => {  
+                const user_id = week.user.id
                 const startDate = new Date(week.start_date);
                 const yearPart = startDate.getFullYear();
                 const weekNo = week.week_no;
-                return yearPart === year && weekNo === weekNumber;
+                return userId === user_id && yearPart === year && weekNo === weekNumber;
             });
 
             if (existingWeek) {
