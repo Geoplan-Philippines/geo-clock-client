@@ -31,14 +31,28 @@
                     <input matInput formControlName="password" placeholder="Enter Duration" />
                 </mat-form-field>
 
-                <mat-form-field class="example-full-width">
+                <!-- <mat-form-field class="example-full-width">
                     <mat-label>Department</mat-label>
                     <input matInput formControlName="department" placeholder="Enter District Partner" />
+                </mat-form-field> -->
+                <mat-form-field class="example-full-width">
+                    <mat-label>Department</mat-label>
+                    <mat-select formControlName="department">
+                        <mat-option>None</mat-option>
+                        <mat-option value="System Developer">System Developer</mat-option>
+                        <mat-option value="Marketing Department">Marketing Department</mat-option>
+                        <mat-option value="Sales Department">Sales Department</mat-option>
+                    </mat-select>
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
                     <mat-label>Role</mat-label>
-                    <input matInput formControlName="role" placeholder="Enter District Partner" />
+                    <mat-select formControlName="role">
+                        <mat-option>None</mat-option>
+                        <mat-option value="superAdmin">Super Admin</mat-option>
+                        <mat-option value="admin">Admin</mat-option>
+                        <mat-option value="user">Employee</mat-option>
+                    </mat-select>
                 </mat-form-field>
 
                 <div class="mt-4">

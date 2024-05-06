@@ -13,7 +13,6 @@ import { TimesheetService } from "../timesheet/_service/timesheet.service";
     styleUrls: ["./timesheet-approved.component.scss"],
 })
 export class TimesheetApprovedComponent {
-
     [x: string]: any;
     employeeEntry: any[] = [];
     weekNumber: any[] = [];
@@ -31,29 +30,27 @@ export class TimesheetApprovedComponent {
 
     openDialog(approvedId: number, weekNo: number, userId: number, startDate: Date, endDate: Date) {
         const dialogRef = this.dialog.open(SummaryComponent, {
-            data:{
+            data: {
                 id: approvedId,
                 week_number: weekNo,
                 user_id: userId,
                 start_date: startDate,
-                end_date: endDate
-            }
+                end_date: endDate,
+            },
         });
-
 
         dialogRef.afterClosed().subscribe((result: any) => {
             // console.log(`Dialog result: ${result}`);
             this.ngOnInit();
         });
 
-
         const dataEntry = {
             id: approvedId,
             week_number: weekNo,
             user_id: userId,
             start_date: startDate,
-            end_date: endDate
-        }
+            end_date: endDate,
+        };
 
         console.log(dataEntry);
     }
@@ -61,7 +58,7 @@ export class TimesheetApprovedComponent {
     // Function to calculate the day of the year
     ngOnInit() {
         // this.loadTimesheet();
-        // this.loadWeekNumbers();
+        this.loadWeekNumbers();
         this.loadTImesheetApproved();
     }
     // loadTimesheet() {
@@ -77,26 +74,26 @@ export class TimesheetApprovedComponent {
         // console.log(weekNumber(startDateObject))
         return weekNumber(startDateObject);
     }
-    // loadWeekNumbers() {
-    //     this.TimesheetApprovedService.WeekNumberService().subscribe((res: any) => {
-    //         const ds = res.data;
-    //         this.weekNumber = ds;
-    //         // this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(ds);
-    //     });
-    // }
+    loadWeekNumbers() {
+        this.TimesheetApprovedService.WeekNumberService().subscribe((res: any) => {
+            const ds = res.data;
+            this.weekNumber = ds;
+            this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(ds);
+        });
+    }
 
     displayedColumns: any[] = ["week_no", "employee", "approved", "start_date", "end_date"];
 
     loadTImesheetApproved() {
-        const userId = Number(localStorage.getItem('id'));
-    
+        const userId = Number(localStorage.getItem("id"));
+
         // Load user's department
         this.TimesheetApprovedService.getAllemployeetData().subscribe((employeeData: any) => {
             const user = employeeData.find((emp: any) => emp.id === userId);
             if (user) {
                 const userDepartment = user.department;
-                const isOwner = user.department === 'owner'; // Assuming 'owner' is the role for owners
-    
+                const isOwner = user.department === "owner"; // Assuming 'owner' is the role for owners
+
                 // Load all timesheet data
                 this.TimesheetApprovedService.getAllTimesheetApprovedData().subscribe((timesheetData: any) => {
                     if (isOwner) {
@@ -104,7 +101,9 @@ export class TimesheetApprovedComponent {
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(timesheetData);
                     } else {
                         // Filter timesheets based on user's department
-                        const filteredTimesheets = timesheetData.filter((timesheet: any) => timesheet.user.department === userDepartment);
+                        const filteredTimesheets = timesheetData.filter(
+                            (timesheet: any) => timesheet.user.department === userDepartment,
+                        );
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(filteredTimesheets);
                     }
                 });
@@ -113,26 +112,16 @@ export class TimesheetApprovedComponent {
             }
         });
     }
-    
-
-
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     }
-    eventSelection(event: Event) {
+
+    selectWeekNumber(event: Event) {
         this.selectedEmployee = event;
-        this.filteredDataSource.filter = this.selectedEmployee.trim().toLowerCase();
-    }
-    // eventSelectionWeekly(event: Event) {
-    //     this.selectedWeek = event;
-    //     this.dataSource.filter = this.selectedWeek.trim().toLowerCase();
-    // }
-    eventSelectionWeeklyAPI(selectedWeek: number) {
-        // Apply filtering to update filtered data source
-        this.filteredDataSource.data = this.employeeEntry.filter(
-            (entry) => this.calculateDayOfYear(entry.start_date) === selectedWeek,
+        this.dataSource.data = this.selectedEmployee.filter(
+            (timesheet: any) => timesheet.user.department === this.selectedEmployee,
         );
     }
 }
