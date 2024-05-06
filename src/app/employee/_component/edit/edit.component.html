@@ -22,19 +22,30 @@
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" />
                 </mat-form-field>
+
                 <mat-form-field class="example-full-width">
                     <mat-label>Password</mat-label>
                     <input matInput formControlName="password" />
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
-                    <mat-label>department</mat-label>
-                    <input matInput formControlName="department" />
+                    <mat-label>Department</mat-label>
+                    <mat-select formControlName="department">
+                        <mat-option>None</mat-option>
+                        <mat-option value="System Developer">System Developer</mat-option>
+                        <mat-option value="Marketing Department">Marketing Department</mat-option>
+                        <mat-option value="Sales Department">Sales Department</mat-option>
+                    </mat-select>
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
-                    <mat-label>role</mat-label>
-                    <input matInput formControlName="role" />
+                    <mat-label>Role</mat-label>
+                    <mat-select formControlName="role">
+                        <mat-option>None</mat-option>
+                        <mat-option value="superAdmin">Super Admin</mat-option>
+                        <mat-option value="admin">Admin</mat-option>
+                        <mat-option value="user">Employee</mat-option>
+                    </mat-select>
                 </mat-form-field>
 
                 <!-- <mat-form-field class="example-full-width">
