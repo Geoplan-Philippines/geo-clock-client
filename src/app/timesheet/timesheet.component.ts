@@ -62,10 +62,9 @@ export class TimesheetComponent {
 
     //entries
     timesheet_entries: string = "";
-    
+
     //total hours
     totalActualHoursByDate: number = 0;
-    
 
     hasValue(value: any): boolean {
         return value !== undefined && value !== null && value !== "";
@@ -183,8 +182,6 @@ export class TimesheetComponent {
             this.dynamicHeaderName.push(formattedDate);
             convertedStartDate.setDate(convertedStartDate.getDate() + 1);
         }
-
-        
     }
 
     formatDate(date: any) {
@@ -350,7 +347,7 @@ export class TimesheetComponent {
 
                         const projectId = existingProject.id;
                         const projectName = existingProject.project_name;
-                      
+
                         const userId = Number(localStorage.getItem("id"));
                         this.isLoading = false;
 
@@ -361,9 +358,9 @@ export class TimesheetComponent {
                             next: (response: any) => {
                                 console.log("Successfully created:", response);
 
-                                const projectId = response.id; 
+                                const projectId = response.id;
                                 const userId = Number(localStorage.getItem("id"));
-                                
+
                                 this.isLoading = false;
 
                                 this.postData(projectId, userId);
@@ -414,7 +411,6 @@ export class TimesheetComponent {
         this.timesheetService.postProject(dataParams).subscribe({
             next: (response: any) => {
                 console.log("Successfully created:", response);
-
 
                 this.getTimesheetApproved(weekNum, valueDate);
 
@@ -469,7 +465,7 @@ export class TimesheetComponent {
 
     saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {
         //console.log(event.type);
-        if (event.key === "Enter" || event.type === "blur") {
+        if (event.type === "blur") {
             const entry = timesheetEntries.find((entry) => {
                 const date = new Date(this.dynamicHeaderName[index]);
                 return this.formatDate(date) === this.dynamicHeaderName[index];
@@ -660,13 +656,6 @@ export class TimesheetComponent {
         });
     }
 
-
-
-
-
-
-
-
     getTimesheetApproved(weekNo: number, date: any) {
         var dateinput = new Date(date);
         const year = dateinput.getFullYear();
@@ -693,25 +682,22 @@ export class TimesheetComponent {
         const endDateString = endDate.toISOString().split("T")[0] + "T00:00:00Z";
 
         const userId = Number(localStorage.getItem("id"));
-        
-        let employeeName: string
-        this.timesheetService.getUserLoadById(userId).subscribe((res:any) =>{
+
+        let employeeName: string;
+        this.timesheetService.getUserLoadById(userId).subscribe((res: any) => {
             const ds = res;
 
             const firstName = ds.first_name;
-            const lastName =ds.last_name;
+            const lastName = ds.last_name;
 
-            employeeName = firstName+ ' '+ lastName
-        })
-
+            employeeName = firstName + " " + lastName;
+        });
 
         this.timesheetService.getAllTimesheetApprovedData().subscribe((res: any) => {
             const ds = res;
 
-            
-
-            const existingWeek = ds.find((week: any) => {  
-                const user_id = week.user.id
+            const existingWeek = ds.find((week: any) => {
+                const user_id = week.user.id;
                 const startDate = new Date(week.start_date);
                 const yearPart = startDate.getFullYear();
                 const weekNo = week.week_no;
@@ -727,12 +713,11 @@ export class TimesheetComponent {
                     approved: "",
                     start_date: startDateString,
                     end_date: endDateString,
-                    employee_name: employeeName
+                    employee_name: employeeName,
                 };
                 this.postTimesheetApproved(ApprovedData);
             }
         });
-
     }
 
     postTimesheetApproved(approvedData: any) {
@@ -792,7 +777,7 @@ export class TimesheetComponent {
     getTotalHoursForProject(timesheetEntries: any[]): number {
         let totalHours = 0;
         if (timesheetEntries && timesheetEntries.length > 0) {
-            timesheetEntries.forEach(entry => {
+            timesheetEntries.forEach((entry) => {
                 if (entry.actual_hours && !isNaN(entry.actual_hours)) {
                     totalHours += entry.actual_hours;
                 }
@@ -800,6 +785,4 @@ export class TimesheetComponent {
         }
         return totalHours;
     }
-    
-   
 }
