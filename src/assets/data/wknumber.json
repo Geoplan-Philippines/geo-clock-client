@@ -26,6 +26,50 @@
             "value": 6
         },
         {
+            "wk_name": "Week 7",
+            "value": 7
+        },
+        {
+            "wk_name": "Week 8",
+            "value": 8
+        },
+        {
+            "wk_name": "Week 9",
+            "value": 9
+        },
+        {
+            "wk_name": "Week 10",
+            "value": 10
+        },
+        {
+            "wk_name": "Week 11",
+            "value": 12
+        },
+        {
+            "wk_name": "Week 12",
+            "value": 12
+        },
+        {
+            "wk_name": "Week 13",
+            "value": 13
+        },
+        {
+            "wk_name": "Week 14",
+            "value": 14
+        },
+        {
+            "wk_name": "Week 15",
+            "value": 15
+        },
+        {
+            "wk_name": "Week 16",
+            "value": 16
+        },
+        {
+            "wk_name": "Week 17",
+            "value": 17
+        },
+        {
             "wk_name": "Week 18",
             "value": 18
         },
@@ -34,66 +78,88 @@
             "value": 19
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 20",
+            "value": 20
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 21",
+            "value": 21
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 22",
+            "value": 22
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 23",
+            "value": 23
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 24",
+            "value": 24
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 25",
+            "value": 25
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
-        },
-
-        {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 26",
+            "value": 26
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 27",
+            "value": 27
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 28",
+            "value": 28
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 29",
+            "value": 29
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 30",
+            "value": 30
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 31",
+            "value": 31
         },
         {
-            "wk_name": "Week 3",
-            "value": 3
+            "wk_name": "Week 32",
+            "value": 32
         },
-
         {
-            "wk_name": "Week 52",
-            "value": 52
+            "wk_name": "Week 33",
+            "value": 33
+        },
+        {
+            "wk_name": "Week 34",
+            "value": 34
+        },
+        {
+            "wk_name": "Week 35",
+            "value": 35
+        },
+        {
+            "wk_name": "Week 36",
+            "value": 36
+        },
+        {
+            "wk_name": "Week 37",
+            "value": 37
+        },
+        {
+            "wk_name": "Week 38",
+            "value": 38
+        },
+        {
+            "wk_name": "Week 39",
+            "value": 39
+        },
+        {
+            "wk_name": "Week 40",
+            "value": 40
         }
     ]
 }

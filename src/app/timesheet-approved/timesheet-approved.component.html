@@ -10,16 +10,6 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input class="custom-input" />
             </mat-form-field>
             <div class="block w-[700px] sm:flex sm:justify-between">
-                <div class="w-max">
-                    <mat-form-field class="w-[170%] sm:w-auto">
-                        <mat-label>Employees</mat-label>
-                        <mat-select>
-                            <mat-option *ngFor="let data of employeeEntry" [value]="data.name">
-                                {{ data.name }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
                 <div>
                     <mat-form-field>
                         <mat-label>Week no. API</mat-label>
@@ -56,7 +46,7 @@
                                 openDialog(element.id, element.week_no, element.user.id, element.start_date, element.end_date)
                             "
                         >
-                            {{ element.user?.first_name }} {{ element.user?.last_name }}
+                            {{ element.employee_name }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="approved">

@@ -99,12 +99,14 @@ export class TimesheetApprovedComponent {
                     if (isOwner) {
                         // If user is an owner, display all timesheets
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(timesheetData);
+                        console.log(this.dataSource);
                     } else {
                         // Filter timesheets based on user's department
                         const filteredTimesheets = timesheetData.filter(
                             (timesheet: any) => timesheet.user.department === userDepartment,
                         );
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(filteredTimesheets);
+                        console.log(this.dataSource);
                     }
                 });
             } else {
@@ -113,15 +115,18 @@ export class TimesheetApprovedComponent {
         });
     }
 
-    applyFilter(event: Event) {
+    applyFilter(event: any) {
         const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    selectWeekNumber(event: Event) {
-        this.selectedEmployee = event;
-        this.dataSource.data = this.selectedEmployee.filter(
-            (timesheet: any) => timesheet.user.department === this.selectedEmployee,
-        );
+    selectWeekNumber(event: any) {
+        const weekFilterValue = event.toString();
+        this.dataSource.filterPredicate = (data: TimesheetApprovedModel, filter: string) => {
+            return data.week_no.toString().toLowerCase() === filter;
+        };
+        this.dataSource.filter = weekFilterValue.trim().toLowerCase();
+        console.log(weekFilterValue);
+        console.log(this.dataSource);
     }
 }
