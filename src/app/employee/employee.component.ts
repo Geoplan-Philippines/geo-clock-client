@@ -34,15 +34,16 @@ export class EmployeeComponent {
             const ds = res;
             this.employeeEntry = ds;
             this.dataSource = new MatTableDataSource<EmployeeModel>(ds);
+            this.dataSource.paginator = this.paginator;
 
-         this.getEmployeeId();
+            this.getEmployeeId();
         });
     }
 
-    getEmployeeId(){
+    getEmployeeId() {
         try {
             if (this.dataSource.data && this.dataSource.data.length > 0) {
-                const allIdsAlt = this.dataSource.data.map(employee => employee.id);
+                const allIdsAlt = this.dataSource.data.map((employee) => employee.id);
                 this.employeeId = allIdsAlt;
             } else {
                 console.log("Data source is empty");
@@ -71,18 +72,27 @@ export class EmployeeComponent {
 
     openAdd(): void {
         const dialogRef = this.dialog.open(AddComponent);
-    
+
         dialogRef.afterClosed().subscribe((result) => {
             console.log(`Dialog result: ${result}`);
         });
-    
-        
+
         dialogRef.componentInstance.refreshEmployees.subscribe(() => {
             this.ngOnInit();
         });
     }
 
-    openEdit(employee_id: number, employee_code: string, first_name: string, last_name: string, email: string, password: string, department: string, role: string, is_active: boolean) {
+    openEdit(
+        employee_id: number,
+        employee_code: string,
+        first_name: string,
+        last_name: string,
+        email: string,
+        password: string,
+        department: string,
+        role: string,
+        is_active: boolean,
+    ) {
         const dialogRef = this.dialog.open(EditComponent, {
             data: {
                 employee_id: employee_id,
@@ -93,12 +103,12 @@ export class EmployeeComponent {
                 password: password,
                 department: department,
                 role: role,
-                is_active: is_active
+                is_active: is_active,
             },
         });
-    
+
         dialogRef.afterClosed().subscribe(() => {
-            this.ngOnInit(); 
+            this.ngOnInit();
         });
-    }    
+    }
 }

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { TimesheetApprovedService } from "./_service/timesheet-approved.service";
 import { TimesheetApprovedModel } from "../models/timesheet-approved.model";
@@ -6,6 +6,7 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { SummaryComponent } from "./_components/summary/summary.component";
 import { weekNumber } from "weeknumber";
 import { TimesheetService } from "../timesheet/_service/timesheet.service";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
     selector: "app-timesheet-approved",
@@ -21,6 +22,9 @@ export class TimesheetApprovedComponent {
     selectedWeek: any = "";
     dataSource = new MatTableDataSource<TimesheetApprovedModel>();
     filteredDataSource!: MatTableDataSource<TimesheetApprovedModel>; // Define filtered data source
+
+    @ViewChild(MatPaginator)
+    paginator!: MatPaginator;
 
     constructor(
         private timesheetService: TimesheetService,
@@ -99,14 +103,14 @@ export class TimesheetApprovedComponent {
                     if (isOwner) {
                         // If user is an owner, display all timesheets
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(timesheetData);
-                        console.log(this.dataSource);
+                        this.dataSource.paginator = this.paginator;
                     } else {
                         // Filter timesheets based on user's department
                         const filteredTimesheets = timesheetData.filter(
                             (timesheet: any) => timesheet.user.department === userDepartment,
                         );
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(filteredTimesheets);
-                        console.log(this.dataSource);
+                        this.dataSource.paginator = this.paginator;
                     }
                 });
             } else {

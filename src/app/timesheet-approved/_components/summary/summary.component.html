@@ -1,4 +1,8 @@
-<h2 mat-dialog-title>ex. Week 2</h2>
+<div class="flex justify-between">
+    <h2 mat-dialog-title>Summary</h2>
+    <button mat-button class="matBtn" (click)="copyToClipboard()">COPY</button>
+</div>
+
 <mat-dialog-content class="mat-typography">
     <div class="mat-elevation-z8">
         <table class="pagi_table" mat-table [dataSource]="dataSource">
@@ -49,15 +53,14 @@
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-            
         </table>
-
-
-        <button mat-button (click)="copyToClipboard()">
-          Copy Data 
-        </button>        
-        <mat-paginator [pageSizeOptions]="[4, 5, 6]" showFirstLastButtons aria-label="Select page of periodic elements">
-        </mat-paginator>
     </div>
 </mat-dialog-content>
+
+<mat-paginator
+    class="overflow-hidden whitespace-nowrap"
+    [pageSizeOptions]="[4, 5, 6]"
+    showFirstLastButtons
+    aria-label="Select page of periodic elements"
+>
+</mat-paginator>

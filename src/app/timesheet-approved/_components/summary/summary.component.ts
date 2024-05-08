@@ -6,7 +6,6 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ClipboardModule, ClipboardService } from "ngx-clipboard";
 import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.service";
 
-
 export interface DialogData {
     id: number;
     week_number: number;
@@ -74,7 +73,6 @@ export class SummaryComponent implements OnInit {
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
 
             this.clickboard = filteredEntries;
-
         });
     }
 
@@ -164,7 +162,6 @@ export class SummaryComponent implements OnInit {
             if (element.approved_check === false) {
                 updateValueApproved.approved_by = "";
             }
-
         }
 
         this.updateTimesheetEntry(entryId, updateValueApproved);
@@ -183,47 +180,70 @@ export class SummaryComponent implements OnInit {
             },
         });
     }
+
     copyToClipboard() {
-      const filteredEntries = this.clickboard;
-      console.log(filteredEntries);
-  
-      // Initialize an array to store sentences
-      const sentences: string[] = [];
-  
-      // Create sentences for each entry
-      for (const entry of filteredEntries) {
-          let sentence = '';
-          for (const key in entry) {
-              if (entry.hasOwnProperty(key)) {
-                  let value = entry[key];
-                  if (typeof value === 'object') {
-                      // Handle nested objects
-                      let nestedSentence = '';
-                      for (const nestedKey in value) {
-                          if (value.hasOwnProperty(nestedKey)) {
-                              if (nestedSentence !== '') {
-                                  nestedSentence += ', ';
-                              }
-                              nestedSentence += `${nestedKey}: ${value[nestedKey]}`;
-                          }
-                      }
-                      value = nestedSentence;
-                  }
-                  if (sentence !== '') {
-                      sentence += ', ';
-                  }
-                  sentence += `${key}: ${value}`;
-              }
-          }
-          sentences.push(sentence);
-      }
-  
-      // Convert the sentences to a single string
-      const contentToCopy = sentences.join('. ');
-  
-      // Copy the content to the clipboard
-      this.clipboardService.copyFromContent(contentToCopy);
-  }
+        const filteredEntries = this.clickboard;
+        console.log(filteredEntries);
+
+        // Initialize an array to store sentences
+        const sentences: string[] = [];
+
+        // Keep track of the previous date
+        let previousDate: string | null = null;
+
+        // Create sentences for each entry
+        for (const entry of filteredEntries) {
+            let sentence = "";
+            for (const key in entry) {
+                if (entry.hasOwnProperty(key)) {
+                    if (["date", "actual_hours", "is_ot", "is_nd", "week_number", "project", "approved_by"].includes(key)) {
+                        let value = entry[key];
+                        if (typeof value === "object") {
+                            // Handle nested objects
+                            let nestedSentence = "";
+                            for (const nestedKey in value) {
+                                if (value.hasOwnProperty(nestedKey)) {
+                                    if (nestedSentence !== "") {
+                                        nestedSentence += ", ";
+                                    }
+                                    if (nestedKey === "project_name") {
+                                        nestedSentence += `project_name: ${value[nestedKey]}`;
+                                    } else {
+                                        nestedSentence += `${nestedKey}: ${value[nestedKey]}`;
+                                    }
+                                }
+                            }
+                            value = nestedSentence;
+                        }
+                        if (sentence !== "") {
+                            sentence += ", ";
+                        }
+                        if (key === "project") {
+                            sentence += `${value}`;
+                        } else {
+                            sentence += `${key}: ${value}`;
+                        }
+                    }
+                }
+            }
+
+            // Check if the current date differs from the previous one
+            if (previousDate !== entry.date) {
+                // Append a new line if it's a new date
+                if (previousDate !== null) {
+                    sentences.push(""); // Empty line
+                }
+                previousDate = entry.date;
+            }
+            sentences.push(sentence);
+        }
+
+        // Convert the sentences to a single string
+        const contentToCopy = sentences.join(".\n");
+
+        // Copy the content to the clipboard
+        this.clipboardService.copyFromContent(contentToCopy);
+    }
 
     displayedColumns: any[] = [
         "project_name",
