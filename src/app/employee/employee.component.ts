@@ -106,7 +106,6 @@ export class EmployeeComponent {
                 is_active: is_active,
             },
         });
-
         dialogRef.afterClosed().subscribe(() => {
             this.ngOnInit();
         });
