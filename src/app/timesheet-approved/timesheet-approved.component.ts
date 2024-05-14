@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { TimesheetApprovedService } from "./_service/timesheet-approved.service";
 import { TimesheetApprovedModel } from "../models/timesheet-approved.model";
@@ -6,6 +6,7 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { SummaryComponent } from "./_components/summary/summary.component";
 import { weekNumber } from "weeknumber";
 import { TimesheetService } from "../timesheet/_service/timesheet.service";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
     selector: "app-timesheet-approved",
@@ -21,6 +22,9 @@ export class TimesheetApprovedComponent {
     selectedWeek: any = "";
     dataSource = new MatTableDataSource<TimesheetApprovedModel>();
     filteredDataSource!: MatTableDataSource<TimesheetApprovedModel>; // Define filtered data source
+
+    @ViewChild(MatPaginator)
+    paginator!: MatPaginator;
 
     constructor(
         private timesheetService: TimesheetService,
@@ -99,12 +103,14 @@ export class TimesheetApprovedComponent {
                     if (isOwner) {
                         // If user is an owner, display all timesheets
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(timesheetData);
+                        this.dataSource.paginator = this.paginator;
                     } else {
                         // Filter timesheets based on user's department
                         const filteredTimesheets = timesheetData.filter(
                             (timesheet: any) => timesheet.user.department === userDepartment,
                         );
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(filteredTimesheets);
+                        this.dataSource.paginator = this.paginator;
                     }
                 });
             } else {
@@ -113,15 +119,18 @@ export class TimesheetApprovedComponent {
         });
     }
 
-    applyFilter(event: Event) {
+    applyFilter(event: any) {
         const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    selectWeekNumber(event: Event) {
-        this.selectedEmployee = event;
-        this.dataSource.data = this.selectedEmployee.filter(
-            (timesheet: any) => timesheet.user.department === this.selectedEmployee,
-        );
+    selectWeekNumber(event: any) {
+        const weekFilterValue = event.toString();
+        this.dataSource.filterPredicate = (data: TimesheetApprovedModel, filter: string) => {
+            return data.week_no.toString().toLowerCase() === filter;
+        };
+        this.dataSource.filter = weekFilterValue.trim().toLowerCase();
+        console.log(weekFilterValue);
+        console.log(this.dataSource);
     }
 }

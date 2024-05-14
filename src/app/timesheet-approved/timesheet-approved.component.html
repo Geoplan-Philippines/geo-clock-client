@@ -4,33 +4,19 @@
         <app-aside></app-aside>
     </div>
     <div class="static z-0 mt-10 h-screen flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:p-10 sm:pt-10">
-        <div class="block justify-between sm:flex">
-            <mat-form-field>
+        <div class="filters block justify-between sm:flex">
+            <mat-form-field class="w-[100%] sm:w-80">
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input class="custom-input" />
             </mat-form-field>
-            <div class="block w-[700px] sm:flex sm:justify-between">
-                <div class="w-max">
-                    <mat-form-field class="w-[170%] sm:w-auto">
-                        <mat-label>Employees</mat-label>
-                        <mat-select>
-                            <mat-option *ngFor="let data of employeeEntry" [value]="data.name">
-                                {{ data.name }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div>
-                    <mat-form-field>
-                        <mat-label>Week no. API</mat-label>
-                        <mat-select (valueChange)="selectWeekNumber($event)">
-                            <mat-option *ngFor="let data of weekNumber" [value]="data.value">
-                                {{ data.value }}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
+            <mat-form-field class="w-[100%] sm:w-80">
+                <mat-label>Week no. API</mat-label>
+                <mat-select (valueChange)="selectWeekNumber($event)">
+                    <mat-option *ngFor="let data of weekNumber" [value]="data.value">
+                        {{ data.wk_name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
         <div class="static overflow-auto">
             <div class="mat-elevation-z8">
@@ -56,7 +42,7 @@
                                 openDialog(element.id, element.week_no, element.user.id, element.start_date, element.end_date)
                             "
                         >
-                            {{ element.user?.first_name }} {{ element.user?.last_name }}
+                            {{ element.employee_name }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="approved">
@@ -98,9 +84,9 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
-                <mat-paginator [pageSizeOptions]="[5, 6, 7]" showFirstLastButtons aria-label="Select page of periodic elements">
-                </mat-paginator>
             </div>
         </div>
+        <mat-paginator [pageSizeOptions]="[5, 6, 7]" showFirstLastButtons aria-label="Select page of periodic elements">
+        </mat-paginator>
     </div>
 </div>

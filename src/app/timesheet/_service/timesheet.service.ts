@@ -59,4 +59,8 @@ export class TimesheetService {
     postAlltimesheetApproved(data: any): Observable<any>{
         return this._http.post(`http://localhost:3000/timesheet-approved`,data);
     }
+
+    getUserLoadById(userId: number){
+        return this._http.get(`http://localhost:3000/users/${userId}`);
+    }
 }

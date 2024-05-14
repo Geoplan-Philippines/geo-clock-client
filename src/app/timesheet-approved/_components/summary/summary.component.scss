@@ -5,13 +5,20 @@
         white-space: nowrap;
         overflow: hidden;
         background-color: #0a54a0;
+
+        th:nth-child(1) {
+            border-top-left-radius: 8px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 8px;
+        }
     }
 
-    .mat-elevation-z8 th:nth-child(1) {
-        border-top-left-radius: 8px;
-    }
-
-    .mat-elevation-z8 th:last-child {
-        border-top-right-radius: 8px;
+    .matBtn {
+        margin: 16px;
+        background-color: #0a54a0;
+        color: white !important;
+        font-weight: bold;
     }
 }
