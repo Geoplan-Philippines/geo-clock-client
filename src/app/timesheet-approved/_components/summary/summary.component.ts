@@ -144,6 +144,7 @@ export class SummaryComponent implements OnInit {
             approved_check: element.approved_check,
             is_nd: element.is_nd,
             is_ot: element.is_ot,
+            description: element.description,
             approved_by: adminName,
         };
 
