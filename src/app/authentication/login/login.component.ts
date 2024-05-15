@@ -112,7 +112,7 @@ export class LoginComponent {
                 .signOut()
                 .then(() => {
                     // alert("email not exist");
-                    this.openSnackBar("Email is not whitelisted", "okey");
+                    this.openSnackBar("The account is not authorized please contact the Administrator", "okey");
                 })
                 .catch((error) => {
                     console.log(error);
@@ -122,7 +122,7 @@ export class LoginComponent {
 
     openSnackBar(message: string, action: string) {
         this._snackBar.open(message, action, {
-            duration: 2 * 1000,
+            duration: 2 * 5000,
             horizontalPosition: "left",
             verticalPosition: "top",
         });
