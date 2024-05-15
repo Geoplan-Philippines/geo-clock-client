@@ -62,6 +62,7 @@ export class TimesheetComponent {
 
     //entries
     timesheet_entries: string = "";
+    timesheet_ot: any;
 
     //total hours
     totalActualHoursByDate: number = 0;
@@ -485,24 +486,41 @@ export class TimesheetComponent {
             const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
-
             //console.log(value);
             if (value <= 20) {
-                const weekNum = weekNumber(formattedDateToISO);
-                const postParams = {
-                    date: selectedDate,
-                    actual_hours: +value,
-                    is_ot: false,
-                    is_nd: false,
-                    user_id: entryBy,
-                    project_id: project_id,
-                    week_number: weekNum,
-                };
-                const editParams = {
-                    actual_hours: +value,
-                };
-
-                this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+                if (value > 9) {
+                    this.timesheet_ot = value - 9;
+                    console.log(this.timesheet_ot);
+                    const weekNum = weekNumber(formattedDateToISO);
+                    const postParams = {
+                        date: selectedDate,
+                        actual_hours: 9,
+                        is_ot: false,
+                        is_nd: false,
+                        user_id: entryBy,
+                        project_id: project_id,
+                        week_number: weekNum,
+                    };
+                    const editParams = {
+                        actual_hours: +9,
+                    };
+                    this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+                } else {
+                    const weekNum = weekNumber(formattedDateToISO);
+                    const postParams = {
+                        date: selectedDate,
+                        actual_hours: +value,
+                        is_ot: false,
+                        is_nd: false,
+                        user_id: entryBy,
+                        project_id: project_id,
+                        week_number: weekNum,
+                    };
+                    const editParams = {
+                        actual_hours: +value,
+                    };
+                    this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+                }
             } else {
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
@@ -609,6 +627,16 @@ export class TimesheetComponent {
                 this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
             } else if (editParams.actual_hours === matchingEntry.actual_hours) {
                 console.log("no edit changes");
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Entries Updated", "okay");
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Entries Updated", "okay");
+                }
             } else {
                 this.editTimesheetEntry(matchingEntry.id, editParams);
             }
