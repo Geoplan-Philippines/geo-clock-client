@@ -35,7 +35,6 @@ export class EmployeeComponent {
             this.employeeEntry = ds;
             this.dataSource = new MatTableDataSource<EmployeeModel>(ds);
             this.dataSource.paginator = this.paginator;
-
             this.getEmployeeId();
         });
     }
