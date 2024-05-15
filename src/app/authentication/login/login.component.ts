@@ -83,36 +83,53 @@ export class LoginComponent {
 
     credential(userEmail: string) {
         let userFound = false; // Initialize a flag to track if the user is found
+        let userDeact = false;
         for (let i = 0; i < this.users.length; i++) {
             if (userEmail === this.users[i].email) {
                 userFound = true; // Set flag to true since user is found
+                if(this.users[i].is_active === true ){
+                    userDeact = true;
+                    localStorage.setItem("id", this.users[i].id);
 
-                localStorage.setItem("id", this.users[i].id);
-                switch (this.users[i].role) {
-                    case "superAdmin":
-                        this.router.navigate(["/timesheet"]);
-                        localStorage.setItem("role", this.users[i].role);
-                        break;
-                    case "admin":
-                        this.router.navigate(["/timesheet"]);
-                        localStorage.setItem("role", this.users[i].role);
-                        break;
-                    case "user":
-                        this.router.navigate(["/timesheet"]);
-                        localStorage.setItem("role", this.users[i].role);
-                        break;
-                    default:
-                        console.log("error sa role");
-                }
-                break;
+                    switch (this.users[i].role) {
+                        case "superAdmin":
+                            this.router.navigate(["/timesheet"]);
+                            localStorage.setItem("role", this.users[i].role);
+                            break;
+                        case "admin":
+                            this.router.navigate(["/timesheet"]);
+                            localStorage.setItem("role", this.users[i].role);
+                            break;
+                        case "user":
+                            this.router.navigate(["/timesheet"]);
+                            localStorage.setItem("role", this.users[i].role);
+                            break;
+                        default:
+                            console.log("error sa role");
+                    }
+                    break;
             }
         }
+        
+    }
         if (!userFound) {
             this.angularAuth
                 .signOut()
                 .then(() => {
                     // alert("email not exist");
                     this.openSnackBar("Email is not whitelisted", "okey");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } 
+        
+        else if(!userDeact){
+            this.angularAuth
+                .signOut()
+                .then(() => {
+                    // alert("email not exist");
+                    this.openSnackBar("Your Account has been Deactivated", "okey");
                 })
                 .catch((error) => {
                     console.log(error);
