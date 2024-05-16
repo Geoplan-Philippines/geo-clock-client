@@ -22,6 +22,7 @@ export class TimesheetApprovedComponent {
     selectedWeek: any = "";
     dataSource = new MatTableDataSource<TimesheetApprovedModel>();
     filteredDataSource!: MatTableDataSource<TimesheetApprovedModel>; // Define filtered data source
+    displayedColumns: any[] = ["week_no", "employee", "approved", "start_date", "end_date"];
 
     @ViewChild(MatPaginator)
     paginator!: MatPaginator;
@@ -86,7 +87,6 @@ export class TimesheetApprovedComponent {
         });
     }
 
-    displayedColumns: any[] = ["week_no", "employee", "approved", "start_date", "end_date"];
 
     loadTImesheetApproved() {
         const userId = Number(localStorage.getItem("id"));
