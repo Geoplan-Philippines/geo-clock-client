@@ -19,7 +19,7 @@ export class TimesheetSummaryComponent {
     }
     loadTImesheetSummary() {
         this.timesheetSummaryService.getAllSummaryData().subscribe((res: any) => {
-            const ds = res.data;
+            const ds = res;
             this.dataSource = new MatTableDataSource<TimesheetSummaryModel>(ds);
             console.log(this.dataSource);
         });
