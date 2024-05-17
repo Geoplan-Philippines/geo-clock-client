@@ -96,10 +96,10 @@ export class TimesheetComponent {
         this.latest_start_date = date_first;
 
         this.dynamicTableHeader(
-            date_first,
-            futureDate,
-            // "Sun Mar 10 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
-            // "Sat Mar 16 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
+            // date_first,
+            // futureDate,
+            "Sun Mar 10 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
+            "Sat Mar 16 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
         );
         // this.loadTimesheet();
         // console.log(localStorage.getItem("id"));
@@ -109,16 +109,16 @@ export class TimesheetComponent {
         );
         this.loadProjects();
         // this.totalHours();
-        if (this.dateFromFilter !== undefined) {
-            // Variable is defined
-            this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-            // this._snackBarService.openSnackBar("Delete Canceled", "okay");
-        } else {
-            // Variable is undefined
-            const latestStartDate = new Date(this.latest_start_date);
-            this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-            // this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
-        }
+        // if (this.dateFromFilter !== undefined) {
+        //     // Variable is defined
+        //     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+        //     // this._snackBarService.openSnackBar("Delete Canceled", "okay");
+        // } else {
+        //     // Variable is undefined
+        //     const latestStartDate = new Date(this.latest_start_date);
+        //     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+        //     // this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+        // }
     }
 
     // calculateDayOfYear(startDate: string): number {
@@ -499,10 +499,12 @@ export class TimesheetComponent {
                         is_nd: false,
                         user_id: entryBy,
                         project_id: project_id,
+                        ot_number: this.timesheet_ot,
                         week_number: weekNum,
                     };
                     const editParams = {
                         actual_hours: +9,
+                        ot_number: this.timesheet_ot
                     };
                     this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                 } else {
@@ -625,7 +627,7 @@ export class TimesheetComponent {
                     this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
                 }
                 this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
-            } else if (editParams.actual_hours === matchingEntry.actual_hours) {
+            } else if (editParams.actual_hours === matchingEntry.actual_hours && editParams.ot_number === matchingEntry.ot_number) {
                 console.log("no edit changes");
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
