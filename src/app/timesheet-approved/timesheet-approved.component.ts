@@ -87,10 +87,8 @@ export class TimesheetApprovedComponent {
         });
     }
 
-
     loadTImesheetApproved() {
         const userId = Number(localStorage.getItem("id"));
-
         // Load user's department
         this.TimesheetApprovedService.getAllemployeetData().subscribe((employeeData: any) => {
             const user = employeeData.find((emp: any) => emp.id === userId);
@@ -125,12 +123,16 @@ export class TimesheetApprovedComponent {
     }
 
     selectWeekNumber(event: any) {
-        const weekFilterValue = event.toString();
-        this.dataSource.filterPredicate = (data: TimesheetApprovedModel, filter: string) => {
-            return data.week_no.toString().toLowerCase() === filter;
-        };
-        this.dataSource.filter = weekFilterValue.trim().toLowerCase();
-        console.log(weekFilterValue);
-        console.log(this.dataSource);
+        if (event == null) {
+            this.loadTImesheetApproved();
+        } else {
+            const weekFilterValue = event.toString();
+            this.dataSource.filterPredicate = (data: TimesheetApprovedModel, filter: string) => {
+                return data.week_no.toString().toLowerCase() === filter;
+            };
+            this.dataSource.filter = weekFilterValue.trim().toLowerCase();
+            console.log(weekFilterValue);
+            console.log(this.dataSource);
+        }
     }
 }

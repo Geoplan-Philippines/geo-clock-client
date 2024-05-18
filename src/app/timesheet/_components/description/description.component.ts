@@ -16,6 +16,7 @@ export interface DialogData {
 })
 export class DescriptionComponent implements OnInit {
     formData!: FormGroup; // Using definite assignment assertion
+    selectedType: string | undefined;
 
     constructor(
         private fb: FormBuilder,
@@ -28,6 +29,7 @@ export class DescriptionComponent implements OnInit {
         this.createForm(); // Initialize the form
         // console.log(this.data.id)
         // console.log(this.data.description)
+        this.selectedType = "RG"; // Auto select the first option
     }
 
     createForm(): void {
