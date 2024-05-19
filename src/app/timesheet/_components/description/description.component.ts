@@ -4,9 +4,11 @@ import { TimesheetService } from "../../_service/timesheet.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 export interface DialogData {
-    week_number: any;
+    // week_number: any;
     id: number;
     description: string;
+    working_type: string;
+    ot_number: number;
 }
 
 @Component({
@@ -26,15 +28,17 @@ export class DescriptionComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.createForm(); // Initialize the form
-        // console.log(this.data.id)
-        // console.log(this.data.description)
-        this.selectedType = "RG"; // Auto select the first option
+        this.createForm(); 
+
+        this.selectedType = this.data.working_type
     }
 
     createForm(): void {
         this.formData = this.fb.group({
             description: [this.data.description, Validators.required],
+            working_type: [this.data.working_type],
+            ot_number: [this.data.ot_number]
+
         });
     }
 
@@ -43,12 +47,9 @@ export class DescriptionComponent implements OnInit {
             const id = this.data.id;
             const params = this.formData.value;
 
-            console.log(id);
-            console.log(params);
-
             this.timesheet.editTimesheetEntry(id, params).subscribe({
                 next: (response: any) => {
-                    console.log("Edit successfully:", response);
+                    // console.log("Edit successfully:", response);
                     // this.openSnackBar("Succesfully updated 1 time entries", "okay");
                     this.dialogRef.close();
                 },

@@ -251,9 +251,11 @@ export class SummaryComponent implements OnInit {
         "aproved_by",
         "is_approved",
         "over_time",
-        "night_diff",
+        
         "date_created",
         "actual_hours",
+        "ot_number",
+        "working_type",
         "discription",
     ];
 }
