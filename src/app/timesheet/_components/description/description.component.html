@@ -18,7 +18,7 @@
                     <h2 mat-dialog-title>Location</h2>
                     <mat-form-field>
                         <mat-label>Location</mat-label>
-                        <mat-select [(value)]="selectedType">
+                        <mat-select [(value)]="selectedType" formControlName="working_type">
                             <mat-option selected [value]="'RG'">RG</mat-option>
                             <mat-option [value]="'ND'">ND</mat-option>
                             <mat-option [value]="'WFH'">WFH</mat-option>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="flex justify-between">
                     <h2 mat-dialog-title>Overtime</h2>
-                    <h2 mat-dialog-title>Ex. 5</h2>
+                    <h2 mat-dialog-title>{{ formData.get('ot_number')?.value || 0 }} hours</h2>
                 </div>
             </div>
         </mat-dialog-content>

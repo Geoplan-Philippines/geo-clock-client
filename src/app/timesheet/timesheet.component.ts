@@ -500,11 +500,13 @@ export class TimesheetComponent {
                         user_id: entryBy,
                         project_id: project_id,
                         ot_number: this.timesheet_ot,
+                        working_type: "RG",
                         week_number: weekNum,
                     };
                     const editParams = {
                         actual_hours: +9,
-                        ot_number: this.timesheet_ot
+                        ot_number: this.timesheet_ot,
+                        working_type: "RG"
                     };
                     this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                 } else {
@@ -516,10 +518,12 @@ export class TimesheetComponent {
                         is_nd: false,
                         user_id: entryBy,
                         project_id: project_id,
+                        working_type: "RG",
                         week_number: weekNum,
                     };
                     const editParams = {
                         actual_hours: +value,
+                        working_type: "RG"
                     };
                     this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                 }
@@ -675,15 +679,23 @@ export class TimesheetComponent {
         }
     }
 
-    openTimesheetEntryDescription(date: any, timesheetEntries: any, index: any) {
+    openTimesheetEntryDescription(timesheetEntries: any, index: any) {
         const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
         formattedDateToISO.setFullYear(this.selectedStartDateYear);
         const transformDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
         const matchEntry = timesheetEntries.find((entry: any) => entry.date == transformDate);
+            console.log(matchEntry)
+        const entryData ={
+            id: matchEntry.id, 
+            description: matchEntry.description,
+            working_type: matchEntry.working_type, 
+            ot_number: matchEntry.ot_number
+        }
+
 
         // console.log(date);
-        this.dialogService.openTimesheetEntryDescription(matchEntry.id, matchEntry.description).subscribe((result) => {
+        this.dialogService.openTimesheetEntryDescription(entryData).subscribe((result) => {
             // console.log(`Dialog result: ${result}`);
             if (this.dateFromFilter !== undefined) {
                 // Variable is defined
