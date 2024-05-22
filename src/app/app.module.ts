@@ -26,6 +26,7 @@ import { ProjectsModule } from "./projects/projects.module";
 import { ProfileModule } from "./profile/profile.module";
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { TimesheetSummaryModule } from "./timesheet-summary/timesheet-summary.module";
+
 @NgModule({
     declarations: [AppComponent],
     imports: [
