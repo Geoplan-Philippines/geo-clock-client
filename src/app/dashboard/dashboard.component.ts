@@ -1,8 +1,14 @@
-import { Component, Input, ViewChild, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
     selector: "app-dashboard",
     templateUrl: "./dashboard.component.html",
     styleUrls: ["./dashboard.component.scss"],
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+    isOriginalClass: boolean = true;
+
+    toggleClass() {
+        this.isOriginalClass = !this.isOriginalClass;
+    }
+}

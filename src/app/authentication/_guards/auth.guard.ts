@@ -39,25 +39,18 @@ export class authGuard implements CanActivate {
   for(let i = 0; i < this.users.length; i++) {
           //condition of email database and email google database
       if (this.LoggedinEmail === this.users[i].email) {
-        if(this.users[i].is_active === true ){
           //condition role
           switch(this.users[i].role){
-            case "superAdmin":
-                    this.router.navigate(['/timesheet']); 
-                    break;
-            case "admin":
-                    this.router.navigate(['/timesheet']); 
-                    break;
-            case "user":
-                    this.router.navigate(['/timesheet']); 
-                    break;
+              case "superAdmin":
+                      this.router.navigate(['/timesheet']); 
+                      break;
+              case "admin":
+                      this.router.navigate(['/timesheet']); 
+                      break;
+              case "user":
+                      this.router.navigate(['/timesheet']); 
+                      break;
           }
-        }
-        else if(this.users[i].is_active === false){
-          console.log("Deactivated");
-        }
-
-          
       } else {
         // this.router.navigate(['/login']);
         console.log("error");

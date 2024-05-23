@@ -144,7 +144,6 @@ export class SummaryComponent implements OnInit {
             approved_check: element.approved_check,
             is_nd: element.is_nd,
             is_ot: element.is_ot,
-            description: element.description,
             approved_by: adminName,
         };
 
@@ -251,11 +250,9 @@ export class SummaryComponent implements OnInit {
         "aproved_by",
         "is_approved",
         "over_time",
-        
+        "night_diff",
         "date_created",
         "actual_hours",
-        "ot_number",
-        "working_type",
         "discription",
     ];
 }

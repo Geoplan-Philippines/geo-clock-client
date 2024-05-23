@@ -18,6 +18,7 @@ import { AuthenticationModule } from "./authentication/authentication.module";
 import { environment } from "src/environments/environment.dev";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+import { TimesheetUserModule } from "./timesheet-user/timesheet-user.module";
 import { TimesheetApprovedModule } from "./timesheet-approved/timesheet-approved.module";
 
 import { ReactiveFormsModule } from "@angular/forms";
@@ -25,8 +26,6 @@ import { ProjectsComponent } from "./projects/projects.component";
 import { ProjectsModule } from "./projects/projects.module";
 import { ProfileModule } from "./profile/profile.module";
 import { DashboardModule } from "./dashboard/dashboard.module";
-import { TimesheetSummaryModule } from "./timesheet-summary/timesheet-summary.module";
-
 @NgModule({
     declarations: [AppComponent],
     imports: [
@@ -34,10 +33,10 @@ import { TimesheetSummaryModule } from "./timesheet-summary/timesheet-summary.mo
         BrowserModule,
         AppRoutingModule,
         SharedModule,
-        TimesheetSummaryModule,
         TimesheetApprovedModule,
         BrowserAnimationsModule,
         TimesheetModule,
+        TimesheetUserModule,
         HttpClientModule,
         TrainingModule,
         EmployeeModule,
@@ -45,9 +44,9 @@ import { TimesheetSummaryModule } from "./timesheet-summary/timesheet-summary.mo
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAuthModule,
         ProjectsModule,
-        DashboardModule,
+        DashboardModule
     ],
     providers: [],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
