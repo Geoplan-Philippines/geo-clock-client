@@ -23,4 +23,17 @@ export class SummaryService {
     patchTimesheetApproved(ApprovedId: number, data: any):Observable <any>{
         return this._http.patch(`http://localhost:3000/timesheet-approved/${ApprovedId}`, data)
     }
+
+    //Data Timesheet Summary
+    getAllSummaryData() {
+        return this._http.get("http://localhost:3000/timesheet-summary");
+      }
+    getAllSummaryDataWithId(weekNo: number, Date: string, user_id:number) {
+        return this._http.get(`http://localhost:3000/timesheet-summary/${weekNo}/${Date}/${user_id}`);
+    }
+
+    postTimesheetSummary(Summary: any){
+        return this._http.post(`http://localhost:3000/timesheet-summary`,Summary)
+    }
+
 }

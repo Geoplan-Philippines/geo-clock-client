@@ -43,7 +43,7 @@
         },
         {
             "wk_name": "Week 11",
-            "value": 12
+            "value": 11
         },
         {
             "wk_name": "Week 12",
@@ -160,6 +160,55 @@
         {
             "wk_name": "Week 40",
             "value": 40
+        },
+        {
+            "wk_name": "Week 41",
+            "value": 41
+        },
+        {
+            "wk_name": "Week 42",
+            "value": 42
+        },
+        {
+            "wk_name": "Week 43",
+            "value": 43
+        },
+        {
+            "wk_name": "Week 44",
+            "value": 44
+        },
+        {
+            "wk_name": "Week 45",
+            "value": 45
+        },
+        {
+            "wk_name": "Week 46",
+            "value": 46
+        },
+        {
+            "wk_name": "Week 47",
+            "value": 47
+        },
+        {
+            "wk_name": "Week 48",
+            "value": 48
+        },
+        {
+            "wk_name": "Week 49",
+            "value": 49
+        },
+        {
+            "wk_name": "Week 50",
+            "value": 50
+        },
+        {
+            "wk_name": "Week 51",
+            "value": 51
+        },
+        {
+            "wk_name": "Week 52",
+            "value": 52
         }
+        
     ]
 }
