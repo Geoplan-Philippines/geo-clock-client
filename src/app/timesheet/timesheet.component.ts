@@ -488,7 +488,6 @@ export class TimesheetComponent {
     }
 
     saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {
-        console.log(timesheetEntries);
         if (event.type === "blur") {
             const entry = timesheetEntries.find((entry) => {
                 const date = new Date(this.dynamicHeaderName[index]);
@@ -498,11 +497,7 @@ export class TimesheetComponent {
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
-            // console.log(timesheetEntries[index].approved_check);
-            if (timesheetEntries[index].approved_check == true) {
-                this._snackBarService.openSnackBar("Approved Timesheet cannot be change", "okay");
-                this.dateRefresher();
-            } else {
+            if (!timesheetEntries[index]?.approved_check || timesheetEntries[index].approved_check === false) {
                 if (value <= 20) {
                     if (value > 9) {
                         this.timesheet_ot = value - 9;
@@ -543,17 +538,11 @@ export class TimesheetComponent {
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     }
-                } else {
-                    if (this.dateFromFilter !== undefined) {
-                        // Variable is defined
-                        this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    } else {
-                        // Variable is undefined
-                        const latestStartDate = new Date(this.latest_start_date);
-                        this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    }
-                    this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
                 }
+            } else if (timesheetEntries[index].approved_check === true) {
+                console.log("true");
+                this._snackBarService.openSnackBar("Approved Timesheet cannot be change", "okay");
+                this.dateRefresher();
             }
         }
     }
