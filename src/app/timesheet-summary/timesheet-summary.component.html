@@ -9,6 +9,27 @@
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
             </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Week no. API</mat-label>
+                <mat-select (valueChange)="selectWeekNumber($event)">
+                    <mat-option [value]="null">Clear</mat-option>
+                    <mat-option *ngFor="let data of weekNumber" [value]="data.value">
+                        {{ data.wk_name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- <mat-form-field class="w-[100%] sm:w-80">
+                <mat-label>Week no. API</mat-label>
+                <mat-select (valueChange)="selectWeekNumber($event)">
+                    <mat-option [value]="null">Clear</mat-option>
+                    <mat-option *ngFor="let data of weekNumber" [value]="data.value">
+                        {{ data.wk_name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
         </div>
         <div class="h-96 overflow-y-scroll">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
