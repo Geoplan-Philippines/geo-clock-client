@@ -12,11 +12,11 @@ import { RoleAuthGuard } from "./authentication/_guards/role.guard";
 import { AngularFireAuthGuard, redirectUnauthorizedTo } from "@angular/fire/compat/auth-guard";
 import { LoginComponent } from "./authentication/login/login.component";
 import { RegisterComponent } from "./authentication/register/register.component";
-import { TimesheetUserComponent } from "./timesheet-user/timesheet-user.component";
 import { TimesheetApprovedComponent } from "./timesheet-approved/timesheet-approved.component";
 
 import { ProfileComponent } from "./profile/profile.component";
 import { ProjectsComponent } from "./projects/projects.component";
+import { TimesheetSummaryComponent } from "./timesheet-summary/timesheet-summary.component";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["login"]);
 const routes: Routes = [
@@ -44,13 +44,18 @@ const routes: Routes = [
         component: ProfileComponent,
     },
     {
+        path: "timesheet-summary",
+        // component: LoginComponent,
+        component: TimesheetSummaryComponent,
+    },
+    {
         path: "timesheet-approved",
         // component: LoginComponent,
         component: TimesheetApprovedComponent,
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: ["admin", "superAdmin"]
+            role: ["admin", "superAdmin"],
         },
     },
     {
@@ -68,7 +73,7 @@ const routes: Routes = [
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: ["admin", "superAdmin"]
+            role: ["admin", "superAdmin"],
         },
     },
     {
@@ -77,7 +82,7 @@ const routes: Routes = [
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: ["superAdmin"]
+            role: ["superAdmin"],
         },
     },
     {
@@ -86,7 +91,7 @@ const routes: Routes = [
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: ["admin", "superAdmin"]
+            role: ["admin", "superAdmin"],
         },
     },
 ];

@@ -1,13 +1,13 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SharedModule } from "../shared/shared.module";
-import { TimesheetUserComponent } from "./timesheet-user.component";
+import { TimesheetSummaryComponent } from "./timesheet-summary.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "../material.module";
 
 @NgModule({
-    declarations: [TimesheetUserComponent],
+    declarations: [TimesheetSummaryComponent],
     imports: [CommonModule, SharedModule, ReactiveFormsModule, FormsModule, MaterialModule],
-    exports: [TimesheetUserComponent],
+    exports: [TimesheetSummaryComponent],
 })
-export class TimesheetUserModule {}
+export class TimesheetSummaryModule {}

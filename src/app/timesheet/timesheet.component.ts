@@ -62,6 +62,7 @@ export class TimesheetComponent {
 
     //entries
     timesheet_entries: string = "";
+    timesheet_ot: any;
 
     //total hours
     totalActualHoursByDate: number = 0;
@@ -95,10 +96,10 @@ export class TimesheetComponent {
         this.latest_start_date = date_first;
 
         this.dynamicTableHeader(
-            date_first,
-            futureDate,
-            // "Sun Mar 10 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
-            // "Sat Mar 16 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
+            // date_first,
+            // futureDate,
+            "Sun Mar 10 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
+            "Sat Mar 16 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
         );
         // this.loadTimesheet();
         // console.log(localStorage.getItem("id"));
@@ -108,18 +109,28 @@ export class TimesheetComponent {
         );
         this.loadProjects();
         // this.totalHours();
+        // if (this.dateFromFilter !== undefined) {
+        //     // Variable is defined
+        //     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+        //     // this._snackBarService.openSnackBar("Delete Canceled", "okay");
+        // } else {
+        //     // Variable is undefined
+        //     const latestStartDate = new Date(this.latest_start_date);
+        //     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+        //     // this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+        // }
+    }
+
+    dateRefresher() {
         if (this.dateFromFilter !== undefined) {
             // Variable is defined
             this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-            // this._snackBarService.openSnackBar("Delete Canceled", "okay");
         } else {
             // Variable is undefined
             const latestStartDate = new Date(this.latest_start_date);
             this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-            // this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
         }
     }
-
     // calculateDayOfYear(startDate: string): number {
     //     const startDateObject = new Date(startDate);
     //     return weekNumber(startDateObject);
@@ -230,6 +241,7 @@ export class TimesheetComponent {
             this.dynamicTableHeader(startDate, endDate);
         }
     }
+
     loadFilterTimesheet(startDate: any, endDate: any) {
         const timesheetIdString = localStorage.getItem("id");
 
@@ -241,7 +253,7 @@ export class TimesheetComponent {
             this.timesheetService.getalltimesheetbydate(timesheetId, startDate, endDate).subscribe((res: any) => {
                 const ds = res;
                 // console.log(ds[1].project[1].actual_hours[1]); // Log the response to inspect its structure
-
+                console.log(ds);
                 this.dataSource = new MatTableDataSource<any>(ds);
                 this.dataSource.paginator = this.paginator;
                 // this.totalHours();
@@ -476,7 +488,6 @@ export class TimesheetComponent {
     }
 
     saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {
-        //console.log(event.type);
         if (event.type === "blur") {
             const entry = timesheetEntries.find((entry) => {
                 const date = new Date(this.dynamicHeaderName[index]);
@@ -486,33 +497,52 @@ export class TimesheetComponent {
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
-            //console.log(value);
-            if (value <= 20) {
-                const weekNum = weekNumber(formattedDateToISO);
-                const postParams = {
-                    date: selectedDate,
-                    actual_hours: +value,
-                    is_ot: false,
-                    is_nd: false,
-                    user_id: entryBy,
-                    project_id: project_id,
-                    week_number: weekNum,
-                };
-                const editParams = {
-                    actual_hours: +value,
-                };
-
-                this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
-            } else {
-                if (this.dateFromFilter !== undefined) {
-                    // Variable is defined
-                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                } else {
-                    // Variable is undefined
-                    const latestStartDate = new Date(this.latest_start_date);
-                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+            if (!timesheetEntries[index]?.approved_check || timesheetEntries[index].approved_check === false) {
+                if (value <= 20) {
+                    if (value > 9) {
+                        this.timesheet_ot = value - 9;
+                        console.log(this.timesheet_ot);
+                        const weekNum = weekNumber(formattedDateToISO);
+                        const postParams = {
+                            date: selectedDate,
+                            actual_hours: 9,
+                            is_ot: false,
+                            is_nd: false,
+                            user_id: entryBy,
+                            project_id: project_id,
+                            ot_number: this.timesheet_ot,
+                            working_type: "RG",
+                            week_number: weekNum,
+                        };
+                        const editParams = {
+                            actual_hours: +9,
+                            ot_number: this.timesheet_ot,
+                            working_type: "RG",
+                        };
+                        this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+                    } else {
+                        const weekNum = weekNumber(formattedDateToISO);
+                        const postParams = {
+                            date: selectedDate,
+                            actual_hours: +value,
+                            is_ot: false,
+                            is_nd: false,
+                            user_id: entryBy,
+                            project_id: project_id,
+                            working_type: "RG",
+                            week_number: weekNum,
+                        };
+                        const editParams = {
+                            actual_hours: +value,
+                            working_type: "RG",
+                        };
+                        this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+                    }
                 }
-                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
+            } else if (timesheetEntries[index].approved_check === true) {
+                console.log("true");
+                this._snackBarService.openSnackBar("Approved Timesheet cannot be change", "okay");
+                this.dateRefresher();
             }
         }
     }
@@ -607,8 +637,21 @@ export class TimesheetComponent {
                     this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
                 }
                 this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
-            } else if (editParams.actual_hours === matchingEntry.actual_hours) {
+            } else if (
+                editParams.actual_hours === matchingEntry.actual_hours &&
+                editParams.ot_number === matchingEntry.ot_number
+            ) {
                 console.log("no edit changes");
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Entries Updated", "okay");
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Entries Updated", "okay");
+                }
             } else {
                 this.editTimesheetEntry(matchingEntry.id, editParams);
             }
@@ -645,15 +688,22 @@ export class TimesheetComponent {
         }
     }
 
-    openTimesheetEntryDescription(date: any, timesheetEntries: any, index: any) {
+    openTimesheetEntryDescription(timesheetEntries: any, index: any) {
         const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
         formattedDateToISO.setFullYear(this.selectedStartDateYear);
         const transformDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
         const matchEntry = timesheetEntries.find((entry: any) => entry.date == transformDate);
+        console.log(matchEntry);
+        const entryData = {
+            id: matchEntry.id,
+            description: matchEntry.description,
+            working_type: matchEntry.working_type,
+            ot_number: matchEntry.ot_number,
+        };
 
         // console.log(date);
-        this.dialogService.openTimesheetEntryDescription(matchEntry.id, matchEntry.description).subscribe((result) => {
+        this.dialogService.openTimesheetEntryDescription(entryData).subscribe((result) => {
             // console.log(`Dialog result: ${result}`);
             if (this.dateFromFilter !== undefined) {
                 // Variable is defined
