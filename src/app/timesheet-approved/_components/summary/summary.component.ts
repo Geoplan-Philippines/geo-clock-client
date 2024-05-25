@@ -36,7 +36,6 @@ export class SummaryComponent implements OnInit {
         private SummaryService: SummaryService,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
         private clipboardService: ClipboardService,
-
         private _snackBarService: SnackBarService,
     ) {}
     ngOnInit() {
@@ -76,11 +75,8 @@ export class SummaryComponent implements OnInit {
 
             const timesheetEntries = ds[0]?.timesheetEntries || [];
             this.timesheetId = timesheetEntries.id;
-
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
-
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
-
             this.clickboard = filteredEntries;
         });
     }
@@ -97,13 +93,10 @@ export class SummaryComponent implements OnInit {
 
             const timesheetEntries = ds[0]?.timesheetEntries || [];
             this.timesheetId = timesheetEntries.id;
-
             const approvedCount = this.countApprovedEntries(timesheetEntries);
-
             const approvalStatus = this.determineApprovalStatus(approvedCount);
 
-            // console.log("Approval Status:", approvalStatus);
-            this.updateApproved(approvalStatus); // Pass the ID and status to updateApproved
+            this.updateApproved(approvalStatus);
         });
     }
 
@@ -171,13 +164,29 @@ export class SummaryComponent implements OnInit {
             }
             this.updateTimesheetEntry(entryId, updateValueApproved);
         } else if (field === "is_ot") {
-            updateValueApproved.is_ot = !element.is_ot;
-            if (element.approved_check === false) {
-                updateValueApproved.approved_by = "";
+            if (element.approved_check === true) {
+                this._snackBarService.openSnackBar("Cannot Update", "okay");
+                return; 
             }
+        
+            updateValueApproved.is_ot = !element.is_ot;
+            updateValueApproved.approved_by = "";
+            this.updateOverTime(entryId, updateValueApproved);
         }
+        
     }
     
+    updateOverTime(entryId: number, entriesValue: any) {
+        this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
+            next: (response) => {
+                this._snackBarService.openSnackBar("Update successfully", "okay");
+                this.loadTimesheetForLength();
+            },
+            error: (error) => {
+                console.error("Error creating entry:", error);
+            },
+        });
+    }
 
     updateTimesheetEntry(entryId: number, entriesValue: any) {
         this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
@@ -280,8 +289,6 @@ export class SummaryComponent implements OnInit {
             if (DataSummary.is_ot) {
                 sumData.OT = totalOT;
             }
-            // console.log("DataSummary:", sumData);
-
             this.entrySummary(sumData);
         
         });
