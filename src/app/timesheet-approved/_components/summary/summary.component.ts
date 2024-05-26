@@ -216,12 +216,16 @@ export class SummaryComponent implements OnInit {
     
         let RG = 0;
         let ND = 0;
+        let LVE = 0;
     
         if (working_type === "RG" || working_type === "WFH" || working_type === "FLD") {
             RG = actual_hours;
         } else if (working_type === "ND") {
             ND = actual_hours;
-        } else {
+        } else if (working_type === "LVE") {
+            LVE = actual_hours;
+        }
+         else {
             console.warn("Unexpected working_type:", working_type);
         }
     
@@ -235,6 +239,7 @@ export class SummaryComponent implements OnInit {
             RG: RG,
             OT: ot_number,
             ND: ND,
+            LVE: LVE
         };
     
     
@@ -267,13 +272,15 @@ export class SummaryComponent implements OnInit {
                 regData += data.RG;
                 NDData += data.ND;
                 OTData += data.OT;
+                LVEData += data.LVE;
             }
     
             const totalRegular = isAddition ? (DataSummary.RG + regData) : (regData - DataSummary.RG);
             const totalOT = isAddition ? (DataSummary.OT + OTData) : (OTData - DataSummary.OT);
             const totalND = isAddition ? (DataSummary.ND + NDData) : (NDData - DataSummary.ND);
-            const totalSum = totalRegular + OTData + RDData + RHData + SHData + RHRDData + SHRDData + LVEData + totalND;
-    
+            const totalLVE = isAddition ? (DataSummary.LVE + LVEData) : (LVEData - DataSummary.LVE);
+            const totalSum = totalRegular + OTData + RDData + RHData + SHData + RHRDData + SHRDData + totalLVE + totalND;
+        
             
             const sumData: any = {
                 Week_no: weekNo,
@@ -283,6 +290,7 @@ export class SummaryComponent implements OnInit {
                 Code: DataSummary.Code,
                 RG: totalRegular,
                 ND: totalND,
+                LVE: totalLVE,
                 Hours: totalSum
             };
     
