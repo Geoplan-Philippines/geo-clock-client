@@ -217,13 +217,16 @@ export class SummaryComponent implements OnInit {
         let RG = 0;
         let ND = 0;
         let LVE = 0;
-    
+        let RD = 0;
+
         if (working_type === "RG" || working_type === "WFH" || working_type === "FLD") {
             RG = actual_hours;
         } else if (working_type === "ND") {
             ND = actual_hours;
         } else if (working_type === "LVE") {
             LVE = actual_hours;
+        }  else if (working_type === "RD") {
+            RD = actual_hours;
         }
          else {
             console.warn("Unexpected working_type:", working_type);
@@ -237,12 +240,17 @@ export class SummaryComponent implements OnInit {
             Code: employee_code,
             is_ot: is_ot,
             RG: RG,
-            OT: ot_number,
             ND: ND,
-            LVE: LVE
+            LVE: LVE,
+            RD: RD
         };
     
-    
+        if(is_ot){
+            DataSummary.OT = ot_number
+        }else{
+            DataSummary.OT = 0;
+        }
+
         if (approved_check) {
             this.updateSummary(DataSummary, true);
         } else {
@@ -256,6 +264,7 @@ export class SummaryComponent implements OnInit {
         const date = DataSummary.Date;
         const userId = DataSummary.user_id;
         
+        // console.log(DataSummary.OT)
 
         let regData = 0;
         let OTData = 0;
@@ -273,13 +282,28 @@ export class SummaryComponent implements OnInit {
                 NDData += data.ND;
                 OTData += data.OT;
                 LVEData += data.LVE;
+                RDData += data.RD;
+                RHData += data.RH;
+                SHData += data.SH;
             }
     
+
+            if(RHData > 0 && DataSummary.RD > 0){
+                
+                DataSummary.RHRD = DataSummary.RD
+                console.log(DataSummary.RHRD)
+            }else if (SHData >0 && DataSummary.SH > 0){
+                
+                DataSummary.SHRD = DataSummary.RD
+                console.log(DataSummary.SHRD)
+            }
+
             const totalRegular = isAddition ? (DataSummary.RG + regData) : (regData - DataSummary.RG);
             const totalOT = isAddition ? (DataSummary.OT + OTData) : (OTData - DataSummary.OT);
             const totalND = isAddition ? (DataSummary.ND + NDData) : (NDData - DataSummary.ND);
             const totalLVE = isAddition ? (DataSummary.LVE + LVEData) : (LVEData - DataSummary.LVE);
-            const totalSum = totalRegular + OTData + RDData + RHData + SHData + RHRDData + SHRDData + totalLVE + totalND;
+            const totalRD = isAddition ? (DataSummary.RD + RDData) : (RDData - DataSummary.RD);
+            const totalSum = totalRegular + OTData + totalRD + RHData + SHData + RHRDData + SHRDData + totalLVE + totalND;
         
             
             const sumData: any = {
@@ -289,14 +313,14 @@ export class SummaryComponent implements OnInit {
                 Employee: DataSummary.Employee,
                 Code: DataSummary.Code,
                 RG: totalRegular,
+                OT: totalOT,
                 ND: totalND,
+                RD: totalRD,
+                RH: RHData,
+                SH: SHData,
                 LVE: totalLVE,
                 Hours: totalSum
             };
-    
-            if (DataSummary.is_ot) {
-                sumData.OT = totalOT;
-            }
             this.entrySummary(sumData);
         
         });
