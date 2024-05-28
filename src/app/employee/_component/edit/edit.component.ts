@@ -13,6 +13,7 @@ export interface DialogData {
     email: "";
     password: "";
     department: "";
+    classification: "";
     role: "";
     is_active: boolean;
 }
@@ -55,6 +56,7 @@ export class EditComponent {
             email: [this.data.email, Validators.required],
             password: [this.data.password, Validators.required],
             department: [this.data.department, Validators.required],
+            classification: [this.data.classification, Validators.required],
             role: [this.data.role, Validators.required],
             is_active: [this.data.is_active],
         });

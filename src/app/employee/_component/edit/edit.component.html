@@ -39,6 +39,18 @@
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
+                    <mat-label>classification</mat-label>
+                    <mat-select formControlName="classification">
+                        <mat-option>None</mat-option>
+                        <mat-option value="Regular">Regular </mat-option>
+                        <mat-option value="Provisionary">Provisionary </mat-option>
+                        <mat-option value="Casual">Casual </mat-option>
+                        <mat-option value="Contractual">Contractual </mat-option>
+                        <mat-option value="Seasonal">Seasonal</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
                     <mat-label>Role</mat-label>
                     <mat-select formControlName="role">
                         <mat-option>None</mat-option>

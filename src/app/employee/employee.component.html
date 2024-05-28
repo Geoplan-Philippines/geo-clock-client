@@ -45,6 +45,10 @@
                         <th mat-header-cell *matHeaderCellDef class="th">department</th>
                         <td mat-cell *matCellDef="let element">{{ element.department }}</td>
                     </ng-container>
+                    <ng-container matColumnDef="classification">
+                        <th mat-header-cell *matHeaderCellDef class="th">Cassification</th>
+                        <td mat-cell *matCellDef="let element">{{ element.classification }}</td>
+                    </ng-container>
                     <ng-container matColumnDef="last_update">
                         <th mat-header-cell *matHeaderCellDef class="th">Last Update</th>
                         <td mat-cell *matCellDef="let element">{{ element.updated_at | date: "EEE MMM d" }}</td>
@@ -63,6 +67,7 @@
                                         element.email,
                                         element.password,
                                         element.department,
+                                        element.classification,
                                         element.role,
                                         element.is_active
                                     )

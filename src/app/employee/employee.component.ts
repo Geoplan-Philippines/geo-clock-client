@@ -60,6 +60,7 @@ export class EmployeeComponent {
         "email",
         "password",
         "role",
+        "classification",
         "last_update",
         "action",
     ];
@@ -89,6 +90,7 @@ export class EmployeeComponent {
         email: string,
         password: string,
         department: string,
+        classification: string,
         role: string,
         is_active: boolean,
     ) {
@@ -101,6 +103,7 @@ export class EmployeeComponent {
                 email: email,
                 password: password,
                 department: department,
+                classification: classification,
                 role: role,
                 is_active: is_active,
             },
