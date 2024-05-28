@@ -218,6 +218,8 @@ export class SummaryComponent implements OnInit {
         let ND = 0;
         let LVE = 0;
         let RD = 0;
+        let RHRD = 0;
+        let SHRD = 0;
 
         if (working_type === "RG" || working_type === "WFH" || working_type === "FLD") {
             RG = actual_hours;
@@ -227,7 +229,12 @@ export class SummaryComponent implements OnInit {
             LVE = actual_hours;
         }  else if (working_type === "RD") {
             RD = actual_hours;
+        } else if (working_type === "RHRD") {
+            RHRD = actual_hours;
+        } else if (working_type === "SHRD") {
+            SHRD = actual_hours;
         }
+        
          else {
             console.warn("Unexpected working_type:", working_type);
         }
@@ -242,7 +249,9 @@ export class SummaryComponent implements OnInit {
             RG: RG,
             ND: ND,
             LVE: LVE,
-            RD: RD
+            RD: RD,
+            RHRD: RHRD,
+            SHRD: SHRD
         };
     
         if(is_ot){
@@ -285,17 +294,8 @@ export class SummaryComponent implements OnInit {
                 RDData += data.RD;
                 RHData += data.RH;
                 SHData += data.SH;
-            }
-    
-
-            if(RHData > 0 && DataSummary.RD > 0){
-                
-                DataSummary.RHRD = DataSummary.RD
-                console.log(DataSummary.RHRD)
-            }else if (SHData >0 && DataSummary.SH > 0){
-                
-                DataSummary.SHRD = DataSummary.RD
-                console.log(DataSummary.SHRD)
+                RHRDData += data.RHRD;
+                SHRDData += data.SHRD;
             }
 
             const totalRegular = isAddition ? (DataSummary.RG + regData) : (regData - DataSummary.RG);
@@ -303,7 +303,9 @@ export class SummaryComponent implements OnInit {
             const totalND = isAddition ? (DataSummary.ND + NDData) : (NDData - DataSummary.ND);
             const totalLVE = isAddition ? (DataSummary.LVE + LVEData) : (LVEData - DataSummary.LVE);
             const totalRD = isAddition ? (DataSummary.RD + RDData) : (RDData - DataSummary.RD);
-            const totalSum = totalRegular + OTData + totalRD + RHData + SHData + RHRDData + SHRDData + totalLVE + totalND;
+            const totalRHRD = isAddition ? (DataSummary.RHRD + RHRDData) : (RHRDData - DataSummary.RHRD);
+            const totalSHRD = isAddition ? (DataSummary.SHRD + SHRDData) : (SHRDData - DataSummary.SHRD);
+            const totalSum = totalRegular + totalOT + totalRD + RHData + SHData + totalRHRD + totalSHRD + totalLVE + totalND;
         
             
             const sumData: any = {
@@ -318,6 +320,8 @@ export class SummaryComponent implements OnInit {
                 RD: totalRD,
                 RH: RHData,
                 SH: SHData,
+                RHRD: totalRHRD,
+                SHRD: totalSHRD,
                 LVE: totalLVE,
                 Hours: totalSum
             };
