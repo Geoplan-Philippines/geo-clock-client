@@ -10,6 +10,7 @@ import { TimesheetSummaryService } from "../timesheet-summary/_service/timesheet
 })
 export class TimesheetSummaryComponent {
     weekNumber: any[] = [];
+    yearNumber: any[] = [];
 
 
     dataSource = new MatTableDataSource<TimesheetSummaryModel>();
@@ -34,7 +35,9 @@ export class TimesheetSummaryComponent {
         this.timesheetSummaryService.getAllSummaryData().subscribe((res: any) => {
             const ds = res;
             this.dataSource = new MatTableDataSource<TimesheetSummaryModel>(ds);
-            console.log(this.dataSource);
+            console.log(ds);
+            this.yearNumber = ds.Date
+            // console.log(this.yearNumber)
         });
     }
     applyFilter(event: Event) {
