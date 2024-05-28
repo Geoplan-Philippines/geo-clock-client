@@ -27,6 +27,8 @@ export class SummaryComponent implements OnInit {
     employeeEntry: any;
 
     admin_name: any;
+    employed_name: any;
+    employee_code: any;
     timesheetId: any;
     clickboard: any = "";
 
@@ -39,16 +41,23 @@ export class SummaryComponent implements OnInit {
     ) {}
     ngOnInit() {
         this.loadTimesheet();
-        this.loadUser();
+        this.loadAdminUser();
+        this.loadEmployedUser();
     }
 
-    loadUser() {
+    loadAdminUser() {
         const userId = Number(localStorage.getItem("id"));
         this.SummaryService.getAllDataUsers(userId).subscribe((res: any) => {
             const ds = res;
             this.admin_name = ds.first_name + " " + ds.last_name;
-            console.log(ds);
-            console.log(this.admin_name);
+        });
+    }
+
+    loadEmployedUser() {
+        this.SummaryService.getAllDataUsers(this.data.user_id).subscribe((res: any) => {
+            const ds = res;
+            this.employed_name = ds.first_name + " " + ds.last_name;
+            this.employee_code = ds.employee_code
         });
     }
 
@@ -58,8 +67,8 @@ export class SummaryComponent implements OnInit {
         const startDate = this.data.start_date;
         const endDate = this.data.end_date;
 
-        console.log(startDate);
-        console.log(endDate);
+        // console.log(startDate);
+        // console.log(endDate);
 
         this.SummaryService.getAllTimesheetDaily(weekNumber, userId, startDate, endDate).subscribe((res: any) => {
             const ds = res;
@@ -93,7 +102,7 @@ export class SummaryComponent implements OnInit {
 
             const approvalStatus = this.determineApprovalStatus(approvedCount);
 
-            console.log("Approval Status:", approvalStatus);
+            // console.log("Approval Status:", approvalStatus);
             this.updateApproved(approvalStatus); // Pass the ID and status to updateApproved
         });
     }
@@ -127,7 +136,7 @@ export class SummaryComponent implements OnInit {
         };
         this.SummaryService.patchTimesheetApproved(ApprovedId, approvedForm).subscribe({
             next: (response) => {
-                console.log("Edit successfully:", response);
+                // console.log("Edit successfully:", response);
 
                 this.loadTimesheet();
             },
@@ -144,37 +153,38 @@ export class SummaryComponent implements OnInit {
             approved_check: element.approved_check,
             is_nd: element.is_nd,
             is_ot: element.is_ot,
+            ot_number: element.ot_number,
             description: element.description,
             approved_by: adminName,
         };
-
+    
         if (field === "approved_check") {
             updateValueApproved.approved_check = !element.approved_check;
             if (element.approved_check) {
                 updateValueApproved.approved_by = "";
             }
+            this.updateTimesheetEntry(entryId, updateValueApproved);
         } else if (field === "is_nd") {
             updateValueApproved.is_nd = !element.is_nd;
             if (element.approved_check === false) {
                 updateValueApproved.approved_by = "";
             }
+            this.updateTimesheetEntry(entryId, updateValueApproved);
         } else if (field === "is_ot") {
             updateValueApproved.is_ot = !element.is_ot;
             if (element.approved_check === false) {
                 updateValueApproved.approved_by = "";
             }
         }
-
-        this.updateTimesheetEntry(entryId, updateValueApproved);
     }
+    
 
     updateTimesheetEntry(entryId: number, entriesValue: any) {
         this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
             next: (response) => {
-                console.log("Edit successfully:", response);
                 this._snackBarService.openSnackBar("Update successfully", "okay");
-
                 this.loadTimesheetForLength();
+                this.timesheetApprovedData(response);
             },
             error: (error) => {
                 console.error("Error creating entry:", error);
@@ -182,69 +192,178 @@ export class SummaryComponent implements OnInit {
         });
     }
 
-    copyToClipboard() {
-        const filteredEntries = this.clickboard;
-        console.log(filteredEntries);
-
-        // Initialize an array to store sentences
-        const sentences: string[] = [];
-
-        // Keep track of the previous date
-        let previousDate: string | null = null;
-
-        // Create sentences for each entry
-        for (const entry of filteredEntries) {
-            let sentence = "";
-            for (const key in entry) {
-                if (entry.hasOwnProperty(key)) {
-                    if (["date", "actual_hours", "is_ot", "is_nd", "week_number", "project", "approved_by"].includes(key)) {
-                        let value = entry[key];
-                        if (typeof value === "object") {
-                            // Handle nested objects
-                            let nestedSentence = "";
-                            for (const nestedKey in value) {
-                                if (value.hasOwnProperty(nestedKey)) {
-                                    if (nestedSentence !== "") {
-                                        nestedSentence += ", ";
-                                    }
-                                    if (nestedKey === "project_name") {
-                                        nestedSentence += `project_name: ${value[nestedKey]}`;
-                                    } else {
-                                        nestedSentence += `${nestedKey}: ${value[nestedKey]}`;
-                                    }
-                                }
-                            }
-                            value = nestedSentence;
-                        }
-                        if (sentence !== "") {
-                            sentence += ", ";
-                        }
-                        if (key === "project") {
-                            sentence += `${value}`;
-                        } else {
-                            sentence += `${key}: ${value}`;
-                        }
-                    }
-                }
-            }
-
-            // Check if the current date differs from the previous one
-            if (previousDate !== entry.date) {
-                // Append a new line if it's a new date
-                if (previousDate !== null) {
-                    sentences.push(""); // Empty line
-                }
-                previousDate = entry.date;
-            }
-            sentences.push(sentence);
+    timesheetApprovedData(dataTimesheet: any) {
+        const week_no = dataTimesheet.week_number;
+        const employed_name = this.employed_name;
+        const employee_code = this.employee_code;
+        const employee_id = dataTimesheet.user_id;
+        const working_type = dataTimesheet.working_type;
+        const actual_hours = dataTimesheet.actual_hours;
+        const is_ot = dataTimesheet.is_ot;
+        const ot_number = dataTimesheet.ot_number;
+        const approved_check = dataTimesheet.approved_check;
+        const dateyear = new Date(dataTimesheet.date);
+        const year = dateyear.getFullYear().toString();
+    
+        let RG = 0;
+        let ND = 0;
+    
+        if (working_type === "RG" || working_type === "WFH" || working_type === "FLD") {
+            RG = actual_hours;
+        } else if (working_type === "ND") {
+            ND = actual_hours;
+        } else {
+            console.warn("Unexpected working_type:", working_type);
         }
-
-        // Convert the sentences to a single string
-        const contentToCopy = sentences.join(".\n");
-
-        // Copy the content to the clipboard
-        this.clipboardService.copyFromContent(contentToCopy);
+    
+        const DataSummary: any = {
+            Week_no: week_no,
+            Date: year,
+            user_id: employee_id,
+            Employee: employed_name,
+            Code: employee_code,
+            is_ot: is_ot,
+            RG: RG,
+            OT: ot_number,
+            ND: ND,
+        };
+    
+    
+        if (approved_check) {
+            this.updateSummary(DataSummary, true);
+        } else {
+            this.updateSummary(DataSummary, false);
+        }
     }
+    
+    
+    updateSummary(DataSummary: any, isAddition: boolean) {
+        const weekNo = DataSummary.Week_no;
+        const date = DataSummary.Date;
+        const userId = DataSummary.user_id;
+        
+
+        let regData = 0;
+        let OTData = 0;
+        let RDData = 0;
+        let RHData = 0;
+        let SHData = 0;
+        let RHRDData = 0;
+        let SHRDData = 0;
+        let LVEData = 0;
+        let NDData = 0;
+    
+        this.SummaryService.getAllSummaryDataWithId(weekNo, date, userId).subscribe((res: any) => {
+            for (let data of res) {
+                regData += data.RG;
+                NDData += data.ND;
+                OTData += data.OT;
+            }
+    
+            const totalRegular = isAddition ? (DataSummary.RG + regData) : (regData - DataSummary.RG);
+            const totalOT = isAddition ? (DataSummary.OT + OTData) : (OTData - DataSummary.OT);
+            const totalND = isAddition ? (DataSummary.ND + NDData) : (NDData - DataSummary.ND);
+            const totalSum = totalRegular + OTData + RDData + RHData + SHData + RHRDData + SHRDData + LVEData + totalND;
+    
+            
+            const sumData: any = {
+                Week_no: weekNo,
+                Date: date,
+                user_id: userId,
+                Employee: DataSummary.Employee,
+                Code: DataSummary.Code,
+                RG: totalRegular,
+                ND: totalND,
+                Hours: totalSum
+            };
+    
+            if (DataSummary.is_ot) {
+                sumData.OT = totalOT;
+            }
+            // console.log("DataSummary:", sumData);
+
+            this.entrySummary(sumData);
+        
+        });
+    }
+    
+    entrySummary(SummaryData: any){
+        
+        this.SummaryService.postTimesheetSummary(SummaryData).subscribe({
+            next: (response: any) => {
+                // console.log("Successfully created:", response);
+
+            },
+            error: (error) => {
+                console.log("Successfully created:", error);
+
+            }
+        })
+    }
+
+    // copyToClipboard() {
+    //     const filteredEntries = this.clickboard;
+    //     console.log(filteredEntries);
+
+    //     // Initialize an array to store sentences
+    //     const sentences: string[] = [];
+
+    //     // Keep track of the previous date
+    //     let previousDate: string | null = null;
+
+    //     // Create sentences for each entry
+    //     for (const entry of filteredEntries) {
+    //         let sentence = "";
+    //         for (const key in entry) {
+    //             if (entry.hasOwnProperty(key)) {
+    //                 if (["date", "actual_hours", "is_ot", "is_nd", "week_number", "project", "approved_by"].includes(key)) {
+    //                     let value = entry[key];
+    //                     if (typeof value === "object") {
+    //                         // Handle nested objects
+    //                         let nestedSentence = "";
+    //                         for (const nestedKey in value) {
+    //                             if (value.hasOwnProperty(nestedKey)) {
+    //                                 if (nestedSentence !== "") {
+    //                                     nestedSentence += ", ";
+    //                                 }
+    //                                 if (nestedKey === "project_name") {
+    //                                     nestedSentence += `project_name: ${value[nestedKey]}`;
+    //                                 } else {
+    //                                     nestedSentence += `${nestedKey}: ${value[nestedKey]}`;
+    //                                 }
+    //                             }
+    //                         }
+    //                         value = nestedSentence;
+    //                     }
+    //                     if (sentence !== "") {
+    //                         sentence += ", ";
+    //                     }
+    //                     if (key === "project") {
+    //                         sentence += `${value}`;
+    //                     } else {
+    //                         sentence += `${key}: ${value}`;
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         // Check if the current date differs from the previous one
+    //         if (previousDate !== entry.date) {
+    //             // Append a new line if it's a new date
+    //             if (previousDate !== null) {
+    //                 sentences.push(""); // Empty line
+    //             }
+    //             previousDate = entry.date;
+    //         }
+    //         sentences.push(sentence);
+    //     }
+
+    //     // Convert the sentences to a single string
+    //     const contentToCopy = sentences.join(".\n");
+
+    //     // Copy the content to the clipboard
+    //     this.clipboardService.copyFromContent(contentToCopy);
+    // }
 
     displayedColumns: any[] = [
         "project_name",

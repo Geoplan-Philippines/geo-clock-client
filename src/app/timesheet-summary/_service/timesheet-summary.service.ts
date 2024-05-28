@@ -15,4 +15,8 @@ export class TimesheetSummaryService {
   getAllSummaryData() {
     return this._http.get("http://localhost:3000/timesheet-summary");
   }
+  
+  WeekNumberService() {
+    return this._http.get("http://localhost:4200/assets/data/wknumber.json");
+}
 }
