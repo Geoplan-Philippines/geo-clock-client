@@ -12,10 +12,8 @@ export class TimesheetSummaryComponent {
     weekNumber: any[] = [];
     yearNumber: any[] = [];
 
-
     dataSource = new MatTableDataSource<TimesheetSummaryModel>();
     displayedColumns: any[] = ["id", "Employee", "Code", "RG", "OT", "RD", "RH", "SH", "RHRD", "SHRD", "LVE", "ND", "Hours"];
-
 
     constructor(private timesheetSummaryService: TimesheetSummaryService) {}
 
@@ -35,11 +33,14 @@ export class TimesheetSummaryComponent {
         this.timesheetSummaryService.getAllSummaryData().subscribe((res: any) => {
             const ds = res;
             this.dataSource = new MatTableDataSource<TimesheetSummaryModel>(ds);
-            console.log(ds);
-            this.yearNumber = ds.Date
+
+            this.yearNumber = [...new Set(ds.map((item: { Date: any }) => item.Date))];
+
+            // this.yearNumber = ds.Date;
             // console.log(this.yearNumber)
         });
     }
+
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -52,6 +53,19 @@ export class TimesheetSummaryComponent {
             const weekFilterValue = event.toString();
             this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
                 return data.Week_no.toString().toLowerCase() === filter;
+            };
+            this.dataSource.filter = weekFilterValue.trim().toLowerCase();
+            console.log(weekFilterValue);
+            console.log(this.dataSource);
+        }
+    }
+    selectYearNumber(event: any) {
+        if (event == null) {
+            this.loadTImesheetSummary();
+        } else {
+            const weekFilterValue = event.toString();
+            this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
+                return data.Date.toString().toLowerCase() === filter;
             };
             this.dataSource.filter = weekFilterValue.trim().toLowerCase();
             console.log(weekFilterValue);
