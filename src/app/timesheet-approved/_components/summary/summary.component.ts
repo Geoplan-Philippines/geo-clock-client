@@ -77,6 +77,7 @@ export class SummaryComponent implements OnInit {
             this.timesheetId = timesheetEntries.id;
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
+            console.log(filteredEntries)
             this.clickboard = filteredEntries;
         });
     }
@@ -218,6 +219,7 @@ export class SummaryComponent implements OnInit {
         let ND = 0;
         let LVE = 0;
         let RD = 0;
+        let SH = 0;
         let RHRD = 0;
         let SHRD = 0;
 
@@ -229,7 +231,9 @@ export class SummaryComponent implements OnInit {
             LVE = actual_hours;
         }  else if (working_type === "RD") {
             RD = actual_hours;
-        } else if (working_type === "RHRD") {
+        } else if (working_type === "SH") {
+            SH = actual_hours;
+        }else if (working_type === "RHRD") {
             RHRD = actual_hours;
         } else if (working_type === "SHRD") {
             SHRD = actual_hours;
@@ -250,6 +254,7 @@ export class SummaryComponent implements OnInit {
             ND: ND,
             LVE: LVE,
             RD: RD,
+            SH: SH,
             RHRD: RHRD,
             SHRD: SHRD
         };
@@ -303,9 +308,10 @@ export class SummaryComponent implements OnInit {
             const totalND = isAddition ? (DataSummary.ND + NDData) : (NDData - DataSummary.ND);
             const totalLVE = isAddition ? (DataSummary.LVE + LVEData) : (LVEData - DataSummary.LVE);
             const totalRD = isAddition ? (DataSummary.RD + RDData) : (RDData - DataSummary.RD);
+            const totalSH = isAddition ? (DataSummary.SH + SHData) : (SHData - DataSummary.SH);
             const totalRHRD = isAddition ? (DataSummary.RHRD + RHRDData) : (RHRDData - DataSummary.RHRD);
             const totalSHRD = isAddition ? (DataSummary.SHRD + SHRDData) : (SHRDData - DataSummary.SHRD);
-            const totalSum = totalRegular + totalOT + totalRD + RHData + SHData + totalRHRD + totalSHRD + totalLVE + totalND;
+            const totalSum = totalRegular + totalOT + totalRD + RHData + totalSH + totalRHRD + totalSHRD + totalLVE + totalND;
         
             
             const sumData: any = {
@@ -319,7 +325,7 @@ export class SummaryComponent implements OnInit {
                 ND: totalND,
                 RD: totalRD,
                 RH: RHData,
-                SH: SHData,
+                SH: totalSH,
                 RHRD: totalRHRD,
                 SHRD: totalSHRD,
                 LVE: totalLVE,
