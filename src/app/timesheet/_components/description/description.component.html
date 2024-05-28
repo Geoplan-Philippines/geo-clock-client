@@ -27,14 +27,12 @@
                             <mat-option [value]="'RD'">RD</mat-option>
                             <mat-option [value]="'RHRD'">RHRD</mat-option>
                             <mat-option [value]="'SHRD'">SHRD</mat-option>
-
-
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="flex justify-between">
                     <h2 mat-dialog-title>Overtime</h2>
-                    <h2 mat-dialog-title>{{ formData.get('ot_number')?.value || 0 }} hours</h2>
+                    <h2 mat-dialog-title>{{ formData.get("ot_number")?.value || 0 }} hours</h2>
                 </div>
             </div>
         </mat-dialog-content>

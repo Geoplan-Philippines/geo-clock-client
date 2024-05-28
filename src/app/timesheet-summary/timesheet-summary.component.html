@@ -12,10 +12,10 @@
 
             <mat-form-field>
                 <mat-label>Year no.</mat-label>
-                <mat-select (valueChange)="selectWeekNumber($event)">
+                <mat-select (valueChange)="selectYearNumber($event)">
                     <mat-option [value]="null">Clear</mat-option>
-                    <mat-option *ngFor="let data of yearNumber" [value]="data.value">
-                        {{ data.wk_name }}
+                    <mat-option *ngFor="let year of yearNumber" [value]="year">
+                        {{ year }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -39,7 +39,6 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field> -->
-
         </div>
         <div class="h-96 overflow-y-scroll">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">

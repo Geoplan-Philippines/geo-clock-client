@@ -794,22 +794,28 @@ export class TimesheetComponent {
             description: matchEntry.description,
             working_type: matchEntry.working_type,
             ot_number: matchEntry.ot_number,
+            approved_check: matchEntry.approved_check,
         };
-
+        console.log(matchEntry.approved_check);
         // console.log(date);
-        this.dialogService.openTimesheetEntryDescription(entryData).subscribe((result) => {
-            // console.log(`Dialog result: ${result}`);
-            if (this.dateFromFilter !== undefined) {
-                // Variable is defined
-                this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
-            } else {
-                // Variable is undefined
-                const latestStartDate = new Date(this.latest_start_date);
-                this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
-            }
-        });
+        if (matchEntry.approved_check == true) {
+            this._snackBarService.openSnackBar("Already approved, update info disabled", "okay");
+        } else {
+            console.log("false puwede pa palitan");
+            this.dialogService.openTimesheetEntryDescription(entryData).subscribe((result) => {
+                // console.log(`Dialog result: ${result}`);
+                if (this.dateFromFilter !== undefined) {
+                    // Variable is defined
+                    this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Action revert", "okay");
+                } else {
+                    // Variable is undefined
+                    const latestStartDate = new Date(this.latest_start_date);
+                    this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
+                    this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                }
+            });
+        }
     }
 
     getTimesheetApproved(weekNo: number, date: any) {
