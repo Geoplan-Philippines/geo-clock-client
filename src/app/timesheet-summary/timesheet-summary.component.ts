@@ -41,10 +41,10 @@ export class TimesheetSummaryComponent {
         });
     }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-    }
+    // applyFilter(event: Event) {
+    //     const filterValue = (event.target as HTMLInputElement).value;
+    //     this.dataSource.filter = filterValue.trim().toLowerCase();
+    // }
 
     selectWeekNumber(event: any) {
         if (event == null) {
@@ -71,5 +71,8 @@ export class TimesheetSummaryComponent {
             console.log(weekFilterValue);
             console.log(this.dataSource);
         }
+    }
+    copyClipboard(){
+        
     }
 }

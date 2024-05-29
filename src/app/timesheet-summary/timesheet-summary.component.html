@@ -5,10 +5,10 @@
     </div>
     <div class="static z-0 mt-10 h-screen flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
         <div class="justify-between sm:flex">
-            <mat-form-field>
+            <!-- <mat-form-field>
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
-            </mat-form-field>
+            </mat-form-field> -->
 
             <mat-form-field>
                 <mat-label>Year no.</mat-label>
@@ -121,10 +121,11 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
                 <!-- Row shown when there is no matching data. -->
-                <tr class="mat-row" *matNoDataRow>
+                <!-- <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell" colspan="4">No data matching the filter "{{ input.value }}"</td>
-                </tr>
+                </tr> -->
             </table>
         </div>
+        <button mat-button class="mat-button-copy-clipboard" (click)="copyClipboard()">COPY</button>
     </div>
 </div>
