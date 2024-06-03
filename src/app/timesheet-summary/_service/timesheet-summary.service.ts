@@ -1,22 +1,27 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { TimesheetSummaryModel } from "src/app/models/timesheet-summary.model";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: "root",
 })
 export class TimesheetSummaryService {
+    constructor(private _http: HttpClient) {}
 
-  constructor(private _http: HttpClient) {}
+    //   getAllSummaryData() {
+    //     return this._http.get("http://localhost:4200/assets/data/timesheet-summary.json");
+    //
+    private apiUrl = 'http://localhost:3000/timesheet-summary'; // Replace with your actual API URL
 
-//   getAllSummaryData() {
-//     return this._http.get("http://localhost:4200/assets/data/timesheet-summary.json");
-// 
+    // getAllSummaryData() {
+    //     return this._http.get("http://localhost:3000/timesheet-summary");
+    // }
 
-  getAllSummaryData() {
-    return this._http.get("http://localhost:3000/timesheet-summary");
-  }
-  
-  WeekNumberService() {
-    return this._http.get("http://localhost:4200/assets/data/wknumber.json");
-}
+    WeekNumberService() {
+        return this._http.get("http://localhost:4200/assets/data/wknumber.json");
+    }
+    getAllSummaryData(): Observable<TimesheetSummaryModel[]> {
+        return this._http.get<TimesheetSummaryModel[]>(this.apiUrl);
+    }
 }
