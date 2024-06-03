@@ -63,4 +63,9 @@ export class TimesheetService {
     getUserLoadById(userId: number){
         return this._http.get(`http://localhost:3000/users/${userId}`);
     }
+
+    //holiday table
+    getAllDataHoliday(){
+        return this._http.get("http://localhost:3000/holiday");
+    }
 }

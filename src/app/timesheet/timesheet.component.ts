@@ -67,6 +67,10 @@ export class TimesheetComponent {
     //total hours
     totalActualHoursByDate: number = 0;
 
+    //holiday value
+    holidayDate: any[] =[];
+
+
     hasValue(value: any): boolean {
         return value !== undefined && value !== null && value !== "";
     }
@@ -119,6 +123,8 @@ export class TimesheetComponent {
         //     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
         //     // this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
         // }
+
+        this.getDataHoliday();
     }
 
     dateRefresher() {
@@ -308,38 +314,38 @@ export class TimesheetComponent {
         this.dataSource._updateChangeSubscription();
     }
 
-    exportexcel(): void {
-        // Fetch all data from the data source
-        const allData = this.dataSource.filteredData.slice();
+    // exportexcel(): void {
+    //     // Fetch all data from the data source
+    //     const allData = this.dataSource.filteredData.slice();
 
-        // Extract project data to include only the project information
-        const projectsData = allData.map((item) => item.project);
+    //     // Extract project data to include only the project information
+    //     const projectsData = allData.map((item) => item.project);
 
-        // Extract all timesheet entries for each project
-        const timesheetEntriesData = projectsData
-            .map((project) => {
-                return project.timesheetEntries.map((entry: { actual_hours: any }) => {
-                    return {
-                        project_name: project.project_name,
-                        actual_hours: entry.actual_hours || 0, // Assuming actual_hours is the property you want to export
-                        // Add more properties if needed
-                    };
-                });
-            })
-            .flat(); // Flatten the array of arrays
+    //     // Extract all timesheet entries for each project
+    //     const timesheetEntriesData = projectsData
+    //         .map((project) => {
+    //             return project.timesheetEntries.map((entry: { actual_hours: any }) => {
+    //                 return {
+    //                     project_name: project.project_name,
+    //                     actual_hours: entry.actual_hours || 0, // Assuming actual_hours is the property you want to export
+    //                     // Add more properties if needed
+    //                 };
+    //             });
+    //         })
+    //         .flat(); // Flatten the array of arrays
 
-        // Create a new workbook
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    //     // Create a new workbook
+    //     const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-        // Convert timesheet entries data to a worksheet
-        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(timesheetEntriesData);
+    //     // Convert timesheet entries data to a worksheet
+    //     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(timesheetEntriesData);
 
-        // Add the worksheet to the workbook
-        XLSX.utils.book_append_sheet(wb, ws, "TimesheetEntries");
+    //     // Add the worksheet to the workbook
+    //     XLSX.utils.book_append_sheet(wb, ws, "TimesheetEntries");
 
-        // Save the workbook to a file
-        XLSX.writeFile(wb, this.fileName);
-    }
+    //     // Save the workbook to a file
+    //     XLSX.writeFile(wb, this.fileName);
+    // }
 
     //renan pogi on process start
     postProjects(event: FocusEvent) {
@@ -475,6 +481,8 @@ export class TimesheetComponent {
     // }
 
     //renan pogi on process end
+
+
     getHoursForDate(timesheetEntries: any[], index: any) {
         const entry = timesheetEntries.find((entry) => {
             const date = new Date(entry.date);
@@ -487,14 +495,70 @@ export class TimesheetComponent {
         return timesheetEntries.reduce((total, entry) => total + entry.actual_hours, 0);
     }
 
+    // renan start Special holiday indicator
+    getDataHoliday(){
+        this.timesheetService.getAllDataHoliday().subscribe((res: any) =>{
+            const ds = res;
+
+            // console.log(ds)
+
+            ds.forEach((item: any) => {
+                // console.log(item.holiday_date); 
+
+                this.holidayDate.push(item)
+            });
+
+        })
+    }
+
+    determineWorkingType(date: any) {
+        let holidayByDate = this.holidayDate;
+        console.log(holidayByDate);
+        console.log(date);
+        
+        const dayOfWeek = (new Date(date)).getDay();
+        const isWeekend = dayOfWeek === 6 || dayOfWeek === 0;
+    
+        const holiday = holidayByDate.find(item => item.holiday_date === date);
+        console.log(date);
+        
+        if (holiday) {
+            console.log(holiday.type);
+            if (holiday.type === 'SH' && isWeekend) {
+                console.log("Special holiday and weekend detected");
+                return 'SHRD';
+            } else if (holiday.type === 'RH' && isWeekend) {
+                console.log("Regular holiday and weekend detected");
+                return 'RHRD';
+            }
+            return holiday.type; 
+        }
+    
+        if (isWeekend) {
+            console.log("Weekend detected");
+            return 'RD';
+        }
+        return 'RG'; 
+    }
+    
+
+
+
     saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {
+
         if (event.type === "blur") {
             console.log(index);
+        
+            const workingType = this.determineWorkingType(timesheetEntries[index]?.date)
+            // console.log(workingType)
 
+            //useless start
             const entry = timesheetEntries.find((entry) => {
                 const date = new Date(this.dynamicHeaderName[index]);
                 return this.formatDate(date) === this.dynamicHeaderName[index];
             });
+            //useless end
+
             const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
@@ -522,13 +586,13 @@ export class TimesheetComponent {
                             user_id: entryBy,
                             project_id: project_id,
                             ot_number: this.timesheet_ot,
-                            working_type: "RG",
+                            working_type: workingType,
                             week_number: weekNum,
                         };
                         const editParams = {
                             actual_hours: +9,
                             ot_number: this.timesheet_ot,
-                            working_type: "RG",
+                            working_type: workingType,
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     } else {
@@ -540,12 +604,12 @@ export class TimesheetComponent {
                             is_nd: false,
                             user_id: entryBy,
                             project_id: project_id,
-                            working_type: "RG",
+                            working_type: workingType,
                             week_number: weekNum,
                         };
                         const editParams = {
                             actual_hours: +value,
-                            working_type: "RG",
+                            working_type: workingType,
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     }
@@ -565,13 +629,13 @@ export class TimesheetComponent {
                             user_id: entryBy,
                             project_id: project_id,
                             ot_number: this.timesheet_ot,
-                            working_type: "RG",
+                            working_type: workingType,
                             week_number: weekNum,
                         };
                         const editParams = {
                             actual_hours: +9,
                             ot_number: this.timesheet_ot,
-                            working_type: "RG",
+                            working_type: workingType,
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     } else {
@@ -583,12 +647,12 @@ export class TimesheetComponent {
                             is_nd: false,
                             user_id: entryBy,
                             project_id: project_id,
-                            working_type: "RG",
+                            working_type: workingType,
                             week_number: weekNum,
                         };
                         const editParams = {
                             actual_hours: +value,
-                            working_type: "RG",
+                            working_type: workingType,
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     }
