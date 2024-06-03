@@ -29,17 +29,26 @@ export class TimesheetSummaryComponent {
         });
     }
 
-    loadTImesheetSummary() {
-        this.timesheetSummaryService.getAllSummaryData().subscribe((res: any) => {
-            const ds = res;
-            this.dataSource = new MatTableDataSource<TimesheetSummaryModel>(ds);
+    loadTImesheetSummary(): void {
+        this.timesheetSummaryService.getAllSummaryData().subscribe((res: TimesheetSummaryModel[]) => {
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+            this.dataSource.data = ds;
 
-            this.yearNumber = [...new Set(ds.map((item: { Date: any }) => item.Date))];
-
-            // this.yearNumber = ds.Date;
-            // console.log(this.yearNumber)
+            this.yearNumber = [...new Set(ds.map((item) => item.Date))]; // Assuming 'Date' is a property in TimesheetSummaryModel
         });
     }
+
+    // loadTImesheetSummary() {
+    //     this.timesheetSummaryService.getAllSummaryData().subscribe((res: any) => {
+    //         const ds = res;
+    //         this.dataSource = new MatTableDataSource<TimesheetSummaryModel>(ds);
+
+    //         this.yearNumber = [...new Set(ds.map((item: { Date: any }) => item.Date))];
+
+    //         // this.yearNumber = ds.Date;
+    //         // console.log(this.yearNumber)
+    //     });
+    // }
 
     // applyFilter(event: Event) {
     //     const filterValue = (event.target as HTMLInputElement).value;
@@ -72,7 +81,22 @@ export class TimesheetSummaryComponent {
             console.log(this.dataSource);
         }
     }
-    copyClipboard(){
-        
+    copyClipboard() {
+        const data = this.dataSource.data;
+        const rows = data
+            .map(
+                (item, index) =>
+                    `${index + 1}\t${item.Employee}\t${item.Code}\t${item.RG}\t${item.OT}\t${item.RD}\t${item.RH}\t${item.SH}\t${item.RHRD}\t${item.SHRD}\t${item.LVE}\t${item.ND}\t${item.Hours}`,
+            )
+            .join("\n");
+
+        navigator.clipboard
+            .writeText(rows)
+            .then(() => {
+                console.log("Data copied to clipboard");
+            })
+            .catch((err) => {
+                console.error("Could not copy data to clipboard", err);
+            });
     }
 }
