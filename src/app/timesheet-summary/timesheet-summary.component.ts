@@ -12,6 +12,9 @@ export class TimesheetSummaryComponent {
     weekNumber: any[] = [];
     yearNumber: any[] = [];
 
+
+    filterYear: string = '';
+
     dataSource = new MatTableDataSource<TimesheetSummaryModel>();
     displayedColumns: any[] = ["id", "Employee", "Code", "RG", "OT", "RD", "RH", "SH", "RHRD", "SHRD", "LVE", "ND", "Hours"];
 
@@ -38,35 +41,23 @@ export class TimesheetSummaryComponent {
         });
     }
 
-    // loadTImesheetSummary() {
-    //     this.timesheetSummaryService.getAllSummaryData().subscribe((res: any) => {
-    //         const ds = res;
-    //         this.dataSource = new MatTableDataSource<TimesheetSummaryModel>(ds);
+   
 
-    //         this.yearNumber = [...new Set(ds.map((item: { Date: any }) => item.Date))];
+    selectWeekNumber(week_no: any) {
+        // if (event == null) {
+        //     this.loadTImesheetSummary();
+        // } else {
+        //     const weekFilterValue = event.toString();
+        //     this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
+        //         return data.Week_no.toString().toLowerCase() === filter;
+        //     };
+        //     this.dataSource.filter = weekFilterValue.trim().toLowerCase();
+        //     console.log(weekFilterValue);
+        //     console.log(this.dataSource);
+        // }   
 
-    //         // this.yearNumber = ds.Date;
-    //         // console.log(this.yearNumber)
-    //     });
-    // }
-
-    // applyFilter(event: Event) {
-    //     const filterValue = (event.target as HTMLInputElement).value;
-    //     this.dataSource.filter = filterValue.trim().toLowerCase();
-    // }
-
-    selectWeekNumber(event: any) {
-        if (event == null) {
-            this.loadTImesheetSummary();
-        } else {
-            const weekFilterValue = event.toString();
-            this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
-                return data.Week_no.toString().toLowerCase() === filter;
-            };
-            this.dataSource.filter = weekFilterValue.trim().toLowerCase();
-            console.log(weekFilterValue);
-            console.log(this.dataSource);
-        }
+        
+        console.log("sa week toh")
     }
     selectYearNumber(event: any) {
         if (event == null) {
@@ -80,7 +71,11 @@ export class TimesheetSummaryComponent {
             console.log(weekFilterValue);
             console.log(this.dataSource);
         }
+        console.log("sa year toh")
     }
+
+
+
     copyClipboard() {
         const data = this.dataSource.data;
         const rows = data
