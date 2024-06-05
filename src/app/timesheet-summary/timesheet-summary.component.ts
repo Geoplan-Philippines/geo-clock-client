@@ -14,6 +14,7 @@ export class TimesheetSummaryComponent {
 
 
     filterYear: string = '';
+    filterWeek: number = 0;
 
     dataSource = new MatTableDataSource<TimesheetSummaryModel>();
     displayedColumns: any[] = ["id", "Employee", "Code", "RG", "OT", "RD", "RH", "SH", "RHRD", "SHRD", "LVE", "ND", "Hours"];
@@ -36,43 +37,62 @@ export class TimesheetSummaryComponent {
         this.timesheetSummaryService.getAllSummaryData().subscribe((res: TimesheetSummaryModel[]) => {
             const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
             this.dataSource.data = ds;
-
+            
             this.yearNumber = [...new Set(ds.map((item) => item.Date))]; // Assuming 'Date' is a property in TimesheetSummaryModel
         });
     }
 
    
 
-    selectWeekNumber(week_no: any) {
-        // if (event == null) {
-        //     this.loadTImesheetSummary();
-        // } else {
-        //     const weekFilterValue = event.toString();
-        //     this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
-        //         return data.Week_no.toString().toLowerCase() === filter;
-        //     };
-        //     this.dataSource.filter = weekFilterValue.trim().toLowerCase();
-        //     console.log(weekFilterValue);
-        //     console.log(this.dataSource);
-        // }   
+    selectWeekNumber(event: any) {
+    if (event == null) {
+        this.loadTImesheetSummary();
+    } else {
+        this.filterWeek = Number(event); 
+        const weekFilterValue = event.toString().trim().toLowerCase();
 
-        
-        console.log("sa week toh")
-    }
-    selectYearNumber(event: any) {
-        if (event == null) {
-            this.loadTImesheetSummary();
-        } else {
-            const weekFilterValue = event.toString();
+        this.timesheetSummaryService.getFilteringYearAndWeek(weekFilterValue, this.filterYear).subscribe((res: TimesheetSummaryModel[]) => {
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+            this.dataSource.data = ds;
+
             this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
-                return data.Date.toString().toLowerCase() === filter;
+                return data.Week_no.toString().toLowerCase() === filter;
             };
-            this.dataSource.filter = weekFilterValue.trim().toLowerCase();
-            console.log(weekFilterValue);
-            console.log(this.dataSource);
-        }
-        console.log("sa year toh")
+            this.dataSource.filter = weekFilterValue;
+
+            console.log("Week filter applied:", weekFilterValue);
+            console.log(this.dataSource.data);
+        });
+        
     }
+
+    console.log("sa week toh");
+}
+
+selectYearNumber(event: any) {
+    if (event == null) {
+        this.loadTImesheetSummary();
+    } else {
+        const yearFilterValue = event.toString();
+
+        this.timesheetSummaryService.getFilteringYearAndWeek(this.filterWeek, yearFilterValue).subscribe((res: TimesheetSummaryModel[]) => {
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+            this.dataSource.data = ds;
+
+            this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
+                return data.Date.toString().toLowerCase().includes(filter);
+            };
+            this.dataSource.filter = yearFilterValue;
+
+            console.log("Year filter applied:", yearFilterValue);
+            console.log(this.dataSource.data);
+        });
+
+        this.filterYear = yearFilterValue;
+        console.log(this.filterWeek);
+    }
+    console.log("sa year toh");
+}
 
 
 
