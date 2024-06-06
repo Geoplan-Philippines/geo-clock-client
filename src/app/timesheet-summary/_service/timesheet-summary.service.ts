@@ -21,7 +21,16 @@ export class TimesheetSummaryService {
     WeekNumberService() {
         return this._http.get("http://localhost:4200/assets/data/wknumber.json");
     }
+
     getAllSummaryData(): Observable<TimesheetSummaryModel[]> {
         return this._http.get<TimesheetSummaryModel[]>(this.apiUrl);
     }
+
+    getFilteringYearAndWeek(week_no: number, Year: string): Observable<TimesheetSummaryModel[]> {
+        return this._http.get<TimesheetSummaryModel[]>(`http://localhost:3000/timesheet-summary/${week_no}/${Year}`);
+    }
+    
+
+
+
 }

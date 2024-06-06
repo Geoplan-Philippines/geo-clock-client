@@ -511,6 +511,8 @@ export class TimesheetComponent {
         })
     }
 
+
+
     determineWorkingType(date: any) {
         let holidayByDate = this.holidayDate;
         console.log(holidayByDate);
@@ -518,7 +520,8 @@ export class TimesheetComponent {
         
         const dayOfWeek = (new Date(date)).getDay();
         const isWeekend = dayOfWeek === 6 || dayOfWeek === 0;
-    
+        const isSaturday = dayOfWeek === 6;
+        
         const holiday = holidayByDate.find(item => item.holiday_date === date);
         console.log(date);
         
@@ -533,24 +536,24 @@ export class TimesheetComponent {
             }
             return holiday.type; 
         }
-    
-        if (isWeekend) {
-            console.log("Weekend detected");
+        
+        if (isSaturday) {
+            console.log("Saturday detected");
+            return 'RD';
+        } else if (isWeekend) {
+            console.log("Sunday detected");
             return 'RD';
         }
+    
         return 'RG'; 
     }
-    
-
-
 
     saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {
 
         if (event.type === "blur") {
             console.log(index);
-        
-            const workingType = this.determineWorkingType(timesheetEntries[index]?.date)
-            // console.log(workingType)
+            // the problem
+           
 
             //useless start
             const entry = timesheetEntries.find((entry) => {
@@ -562,6 +565,10 @@ export class TimesheetComponent {
             const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
+
+            const workingType = this.determineWorkingType(selectedDate)
+            console.log("ebtry",selectedDate)
+            console.log(workingType)
 
             // if (!timesheetEntries[index]?.approved_check) {
             //     console.log("no data");

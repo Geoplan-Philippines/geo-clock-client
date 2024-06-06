@@ -12,6 +12,10 @@ export class TimesheetSummaryComponent {
     weekNumber: any[] = [];
     yearNumber: any[] = [];
 
+
+    filterYear: string = '';
+    filterWeek: number = 0;
+
     dataSource = new MatTableDataSource<TimesheetSummaryModel>();
     displayedColumns: any[] = ["id", "Employee", "Code", "RG", "OT", "RD", "RH", "SH", "RHRD", "SHRD", "LVE", "ND", "Hours"];
 
@@ -33,54 +37,65 @@ export class TimesheetSummaryComponent {
         this.timesheetSummaryService.getAllSummaryData().subscribe((res: TimesheetSummaryModel[]) => {
             const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
             this.dataSource.data = ds;
-
+            
             this.yearNumber = [...new Set(ds.map((item) => item.Date))]; // Assuming 'Date' is a property in TimesheetSummaryModel
         });
     }
 
-    // loadTImesheetSummary() {
-    //     this.timesheetSummaryService.getAllSummaryData().subscribe((res: any) => {
-    //         const ds = res;
-    //         this.dataSource = new MatTableDataSource<TimesheetSummaryModel>(ds);
-
-    //         this.yearNumber = [...new Set(ds.map((item: { Date: any }) => item.Date))];
-
-    //         // this.yearNumber = ds.Date;
-    //         // console.log(this.yearNumber)
-    //     });
-    // }
-
-    // applyFilter(event: Event) {
-    //     const filterValue = (event.target as HTMLInputElement).value;
-    //     this.dataSource.filter = filterValue.trim().toLowerCase();
-    // }
+   
 
     selectWeekNumber(event: any) {
-        if (event == null) {
-            this.loadTImesheetSummary();
-        } else {
-            const weekFilterValue = event.toString();
+    if (event == null) {
+        this.loadTImesheetSummary();
+    } else {
+        this.filterWeek = Number(event); 
+        const weekFilterValue = event.toString().trim().toLowerCase();
+
+        this.timesheetSummaryService.getFilteringYearAndWeek(weekFilterValue, this.filterYear).subscribe((res: TimesheetSummaryModel[]) => {
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+            this.dataSource.data = ds;
+
             this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
                 return data.Week_no.toString().toLowerCase() === filter;
             };
-            this.dataSource.filter = weekFilterValue.trim().toLowerCase();
-            console.log(weekFilterValue);
-            console.log(this.dataSource);
-        }
+            this.dataSource.filter = weekFilterValue;
+
+            console.log("Week filter applied:", weekFilterValue);
+            console.log(this.dataSource.data);
+        });
+        
     }
-    selectYearNumber(event: any) {
-        if (event == null) {
-            this.loadTImesheetSummary();
-        } else {
-            const weekFilterValue = event.toString();
+
+    console.log("sa week toh");
+}
+
+selectYearNumber(event: any) {
+    if (event == null) {
+        this.loadTImesheetSummary();
+    } else {
+        const yearFilterValue = event.toString();
+
+        this.timesheetSummaryService.getFilteringYearAndWeek(this.filterWeek, yearFilterValue).subscribe((res: TimesheetSummaryModel[]) => {
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+            this.dataSource.data = ds;
+
             this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
-                return data.Date.toString().toLowerCase() === filter;
+                return data.Date.toString().toLowerCase().includes(filter);
             };
-            this.dataSource.filter = weekFilterValue.trim().toLowerCase();
-            console.log(weekFilterValue);
-            console.log(this.dataSource);
-        }
+            this.dataSource.filter = yearFilterValue;
+
+            console.log("Year filter applied:", yearFilterValue);
+            console.log(this.dataSource.data);
+        });
+
+        this.filterYear = yearFilterValue;
+        console.log(this.filterWeek);
     }
+    console.log("sa year toh");
+}
+
+
+
     copyClipboard() {
         const data = this.dataSource.data;
         const rows = data
