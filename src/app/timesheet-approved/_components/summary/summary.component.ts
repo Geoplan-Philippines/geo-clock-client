@@ -56,8 +56,12 @@ export class SummaryComponent implements OnInit {
         this.SummaryService.getAllDataUsers(this.data.user_id).subscribe((res: any) => {
             const ds = res;
             this.employed_name = ds.first_name + " " + ds.last_name;
-            this.employee_code = ds.employee_code
+            this.employee_code = ds.employee_code;
         });
+    }
+
+    hasValue(value: any): boolean {
+        return value !== undefined && value !== null && value !== "" && value !== 0;
     }
 
     loadTimesheet() {
@@ -77,7 +81,7 @@ export class SummaryComponent implements OnInit {
             this.timesheetId = timesheetEntries.id;
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
-            console.log(filteredEntries)
+            console.log(filteredEntries);
             this.clickboard = filteredEntries;
         });
     }
@@ -151,7 +155,7 @@ export class SummaryComponent implements OnInit {
             description: element.description,
             approved_by: adminName,
         };
-    
+
         if (field === "approved_check") {
             updateValueApproved.approved_check = !element.approved_check;
             if (element.approved_check) {
@@ -167,16 +171,15 @@ export class SummaryComponent implements OnInit {
         } else if (field === "is_ot") {
             if (element.approved_check === true) {
                 this._snackBarService.openSnackBar("Cannot Update", "okay");
-                return; 
+                return;
             }
-        
+
             updateValueApproved.is_ot = !element.is_ot;
             updateValueApproved.approved_by = "";
             this.updateOverTime(entryId, updateValueApproved);
         }
-        
     }
-    
+
     updateOverTime(entryId: number, entriesValue: any) {
         this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
             next: (response) => {
@@ -214,7 +217,7 @@ export class SummaryComponent implements OnInit {
         const approved_check = dataTimesheet.approved_check;
         const dateyear = new Date(dataTimesheet.date);
         const year = dateyear.getFullYear().toString();
-    
+
         let RG = 0;
         let ND = 0;
         let LVE = 0;
@@ -229,20 +232,18 @@ export class SummaryComponent implements OnInit {
             ND = actual_hours;
         } else if (working_type === "LVE") {
             LVE = actual_hours;
-        }  else if (working_type === "RD") {
+        } else if (working_type === "RD") {
             RD = actual_hours;
         } else if (working_type === "SH") {
             SH = actual_hours;
-        }else if (working_type === "RHRD") {
+        } else if (working_type === "RHRD") {
             RHRD = actual_hours;
         } else if (working_type === "SHRD") {
             SHRD = actual_hours;
-        }
-        
-         else {
+        } else {
             console.warn("Unexpected working_type:", working_type);
         }
-    
+
         const DataSummary: any = {
             Week_no: week_no,
             Date: year,
@@ -256,12 +257,12 @@ export class SummaryComponent implements OnInit {
             RD: RD,
             SH: SH,
             RHRD: RHRD,
-            SHRD: SHRD
+            SHRD: SHRD,
         };
-    
-        if(is_ot){
-            DataSummary.OT = ot_number
-        }else{
+
+        if (is_ot) {
+            DataSummary.OT = ot_number;
+        } else {
             DataSummary.OT = 0;
         }
 
@@ -271,13 +272,12 @@ export class SummaryComponent implements OnInit {
             this.updateSummary(DataSummary, false);
         }
     }
-    
-    
+
     updateSummary(DataSummary: any, isAddition: boolean) {
         const weekNo = DataSummary.Week_no;
         const date = DataSummary.Date;
         const userId = DataSummary.user_id;
-        
+
         // console.log(DataSummary.OT)
 
         let regData = 0;
@@ -289,7 +289,7 @@ export class SummaryComponent implements OnInit {
         let SHRDData = 0;
         let LVEData = 0;
         let NDData = 0;
-    
+
         this.SummaryService.getAllSummaryDataWithId(weekNo, date, userId).subscribe((res: any) => {
             for (let data of res) {
                 regData += data.RG;
@@ -303,17 +303,16 @@ export class SummaryComponent implements OnInit {
                 SHRDData += data.SHRD;
             }
 
-            const totalRegular = isAddition ? (DataSummary.RG + regData) : (regData - DataSummary.RG);
-            const totalOT = isAddition ? (DataSummary.OT + OTData) : (OTData - DataSummary.OT);
-            const totalND = isAddition ? (DataSummary.ND + NDData) : (NDData - DataSummary.ND);
-            const totalLVE = isAddition ? (DataSummary.LVE + LVEData) : (LVEData - DataSummary.LVE);
-            const totalRD = isAddition ? (DataSummary.RD + RDData) : (RDData - DataSummary.RD);
-            const totalSH = isAddition ? (DataSummary.SH + SHData) : (SHData - DataSummary.SH);
-            const totalRHRD = isAddition ? (DataSummary.RHRD + RHRDData) : (RHRDData - DataSummary.RHRD);
-            const totalSHRD = isAddition ? (DataSummary.SHRD + SHRDData) : (SHRDData - DataSummary.SHRD);
+            const totalRegular = isAddition ? DataSummary.RG + regData : regData - DataSummary.RG;
+            const totalOT = isAddition ? DataSummary.OT + OTData : OTData - DataSummary.OT;
+            const totalND = isAddition ? DataSummary.ND + NDData : NDData - DataSummary.ND;
+            const totalLVE = isAddition ? DataSummary.LVE + LVEData : LVEData - DataSummary.LVE;
+            const totalRD = isAddition ? DataSummary.RD + RDData : RDData - DataSummary.RD;
+            const totalSH = isAddition ? DataSummary.SH + SHData : SHData - DataSummary.SH;
+            const totalRHRD = isAddition ? DataSummary.RHRD + RHRDData : RHRDData - DataSummary.RHRD;
+            const totalSHRD = isAddition ? DataSummary.SHRD + SHRDData : SHRDData - DataSummary.SHRD;
             const totalSum = totalRegular + totalOT + totalRD + RHData + totalSH + totalRHRD + totalSHRD + totalLVE + totalND;
-        
-            
+
             const sumData: any = {
                 Week_no: weekNo,
                 Date: date,
@@ -329,25 +328,21 @@ export class SummaryComponent implements OnInit {
                 RHRD: totalRHRD,
                 SHRD: totalSHRD,
                 LVE: totalLVE,
-                Hours: totalSum
+                Hours: totalSum,
             };
             this.entrySummary(sumData);
-        
         });
     }
-    
-    entrySummary(SummaryData: any){
-        
+
+    entrySummary(SummaryData: any) {
         this.SummaryService.postTimesheetSummary(SummaryData).subscribe({
             next: (response: any) => {
                 // console.log("Successfully created:", response);
-
             },
             error: (error) => {
                 console.log("Successfully created:", error);
-
-            }
-        })
+            },
+        });
     }
 
     // copyToClipboard() {
@@ -419,7 +414,7 @@ export class SummaryComponent implements OnInit {
         "aproved_by",
         "is_approved",
         "over_time",
-        
+
         "date_created",
         "actual_hours",
         "ot_number",
