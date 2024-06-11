@@ -11,6 +11,10 @@ export class ProfileComponent {
 
     firstName: string = "";
     lastName: string = "";
+    department: string = "";
+    classification: string = "";
+    employee_code: string = "";
+    email: string = "";
 
     constructor(private ProfileService: ProfileService) {}
 
@@ -27,14 +31,17 @@ export class ProfileComponent {
             this.ProfileService.getAllemployeetData().subscribe((res: any) => {
                 const ds = res;
                 const singleData = ds[timesheetId - 1];
-                for(let i = 0; i < ds.length; i++){
-                    if(ds[i].id === timesheetId){
+                for (let i = 0; i < ds.length; i++) {
+                    if (ds[i].id === timesheetId) {
                         this.firstName = ds[i].first_name;
                         this.lastName = ds[i].last_name;
+                        this.department = ds[i].department;
+                        this.classification = ds[i].classification;
+                        this.employee_code = ds[i].employee_code;
+                        this.email = ds[i].email;
                     }
-                    
                 }
-                
+
                 this.profilData = Array.isArray(singleData) ? singleData : [singleData]; // Wrap single object in array
                 // console.log(this.profilData);
             });
