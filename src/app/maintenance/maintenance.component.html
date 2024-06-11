@@ -7,18 +7,18 @@
         <div class="mx-40 grid grid-cols-[200px_1fr] gap-4">
             <div>
                 <ul>
-                    <li>Holidays</li>
-                    <li>Department</li>
+                    <li (click)="scrollToSection('section1')">Holidays</li>
+                    <li (click)="scrollToSection('section2')">Department</li>
                 </ul>
             </div>
             <div class="h-96 overflow-y-scroll border-l-2 border-solid border-l-[#0a54a0]">
-                <div class="h-screen">
+                <div id="section1" class="h-screen">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
                     consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus nulla
                     soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos ut
                     eligendi a in maiores saepe quia impedit!
                 </div>
-                <div class="h-screen">
+                <div id="section2" class="h-screen">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
                     consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus nulla
                     soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos ut
