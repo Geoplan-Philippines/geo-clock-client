@@ -12,6 +12,9 @@ export class AddComponent implements OnInit {
     @Output() refreshEmployees: EventEmitter<void> = new EventEmitter<void>();
     formData!: FormGroup; // Using definite assignment assertion
 
+    departments: any[] = [];
+    classification: any[] = [];
+
     constructor(
         private fb: FormBuilder,
         private snackBar: MatSnackBar,
@@ -28,6 +31,15 @@ export class AddComponent implements OnInit {
 
     ngOnInit(): void {
         this.createForm();
+        this.getClassification();    
+    }
+
+    getClassification(){
+        this.employeeservice.getAllclassification().subscribe((res: any) =>{
+            const ds = res
+
+            this.classification = ds
+        })
     }
 
     createForm(): void {
