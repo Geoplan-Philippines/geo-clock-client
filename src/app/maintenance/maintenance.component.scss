@@ -1,0 +1,23 @@
+$geo-color: #0a54a0;
+.category {
+    li {
+        &:hover {
+            text-decoration: underline;
+            font-weight: bold;
+            color: $geo-color;
+        }
+    }
+}
+.selected {
+    scroll-behavior: smooth;
+    div {
+        p {
+            font-weight: bold;
+            font-size: x-large;
+            color: $geo-color;
+            top: 0;
+            position: sticky;
+            background-color: white;
+        }
+    }
+}

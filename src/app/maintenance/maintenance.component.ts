@@ -1,4 +1,5 @@
 import { Component, ElementRef } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
     selector: "app-maintenance",
@@ -6,7 +7,12 @@ import { Component, ElementRef } from "@angular/core";
     styleUrls: ["./maintenance.component.scss"],
 })
 export class MaintenanceComponent {
-    constructor(private el: ElementRef) {}
+    formData!: FormGroup; // Using definite assignment assertion
+    constructor(
+        private el: ElementRef,
+        private fb: FormBuilder,
+    ) {}
+    ngOnInit(): void {}
 
     scrollToSection(sectionId: string) {
         const element = this.el.nativeElement.querySelector(`#${sectionId}`);
@@ -14,4 +20,5 @@ export class MaintenanceComponent {
             element.scrollIntoView({ behavior: "smooth" });
         }
     }
+    submitForm(): void {}
 }
