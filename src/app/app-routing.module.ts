@@ -17,6 +17,8 @@ import { TimesheetApprovedComponent } from "./timesheet-approved/timesheet-appro
 import { ProfileComponent } from "./profile/profile.component";
 import { ProjectsComponent } from "./projects/projects.component";
 import { TimesheetSummaryComponent } from "./timesheet-summary/timesheet-summary.component";
+import { MaintenanceModule } from "./maintenance/maintenance.module";
+import { MaintenanceComponent } from "./maintenance/maintenance.component";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["login"]);
 const routes: Routes = [
@@ -42,6 +44,11 @@ const routes: Routes = [
         path: "profile",
         // component: LoginComponent,
         component: ProfileComponent,
+    },
+    {
+        path: "maintenance",
+        // component: LoginComponent,
+        component: MaintenanceComponent,
     },
     {
         path: "timesheet-summary",
