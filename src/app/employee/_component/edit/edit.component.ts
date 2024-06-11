@@ -26,6 +26,10 @@ export interface DialogData {
 export class EditComponent {
     formData!: FormGroup; // Using definite assignment assertion
     employeeEntry: any[] = [];
+    
+
+    departments: any[] = [];
+    classification: any[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -46,7 +50,19 @@ export class EditComponent {
     ngOnInit(): void {
         this.createForm();
         this.loadEmployee();
+        this.getClassification();
+
+        
     }
+
+    getClassification(){
+        this.employeeservice.getAllclassification().subscribe((res: any) =>{
+            const ds = res
+
+            this.classification = ds
+        })
+    }
+
 
     createForm(): void {
         this.formData = this.fb.group({
@@ -61,6 +77,7 @@ export class EditComponent {
             is_active: [this.data.is_active],
         });
     }
+   
 
     loadEmployee() {
         this.employeeservice.getAllemployeetData().subscribe((res: any) => {

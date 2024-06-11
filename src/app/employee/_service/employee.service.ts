@@ -28,5 +28,10 @@ export class EmployeeService {
         const url = `http://localhost:3000/users/${userId}`;
         return this._http.patch(url, userDataUpdate);
     }
-    
+
+    //table classification and department
+
+    getAllclassification() {
+        return this._http.get("http://localhost:3000/classification");
+    }
 }

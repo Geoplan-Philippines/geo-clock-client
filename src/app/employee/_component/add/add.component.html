@@ -49,9 +49,9 @@
                     <mat-label>classification</mat-label>
                     <mat-select formControlName="classification">
                         <mat-option>None</mat-option>
-                        <mat-option value="Regular">Regular </mat-option>
-                        <mat-option value="Provisionary">Probationary </mat-option>
-                        <mat-option value="Consultant">Consultant </mat-option>
+                        <mat-option *ngFor="let clas of classification" value="clas.classification_name">   {{ clas.classification_name }} </mat-option>
+                        <!-- <mat-option value="Provisionary">Probationary </mat-option>
+                        <mat-option value="Consultant">Consultant </mat-option> -->
                         
                     </mat-select>
                 </mat-form-field>
