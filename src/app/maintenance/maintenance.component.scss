@@ -1,4 +1,5 @@
 $geo-color: #0a54a0;
+$secondary-text-color: white;
 .category {
     li {
         &:hover {
@@ -18,6 +19,16 @@ $geo-color: #0a54a0;
             top: 0;
             position: sticky;
             background-color: white;
+            z-index: 1000;
         }
+    }
+}
+:host ::ng-deep {
+    .example-full-width {
+        width: 100%;
+    }
+    .submit-Btn {
+        background-color: $geo-color;
+        color: $secondary-text-color !important;
     }
 }

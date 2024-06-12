@@ -21,6 +21,7 @@ export class AddComponent implements OnInit {
         private employeeservice: EmployeeService,
         public dialogRef: MatDialogRef<AddComponent>,
     ) { }
+    
     openSnackBar(message: string, action: string) {
         this.snackBar.open(message, action, {
             duration: 2 * 1000,
@@ -37,7 +38,6 @@ export class AddComponent implements OnInit {
     getClassification(){
         this.employeeservice.getAllclassification().subscribe((res: any) =>{
             const ds = res
-
             this.classification = ds
         })
     }
@@ -55,6 +55,7 @@ export class AddComponent implements OnInit {
             is_active: [true, Validators.required],
         });
     }
+
     submitForm(): void {
         if (this.formData.valid) {
             const userData = this.formData.value;
@@ -73,7 +74,6 @@ export class AddComponent implements OnInit {
                 }
             });
         } else {
-            
             console.log("Form is invalid. Please fill in all required fields.");
             Object.values(this.formData.controls).forEach((control) => control.markAsTouched());
         }
