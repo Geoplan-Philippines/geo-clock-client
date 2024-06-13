@@ -1,17 +1,19 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/internal/Observable";
+import { config } from 'src/config/config.local';
 
 @Injectable({
     providedIn: "root",
 })
 export class MaintenanceService {
+    private apiUrl = config.apiUrl;
     constructor(private _http: HttpClient) {}
 
     getAllDepartmentData() {
-        return this._http.get(`http://localhost:3000/department`);
+        return this._http.get(`${this.apiUrl}/department`);
     }
     postAllDepartmentData(addedDepartment: any): Observable<any>{
-        return this._http.post("http://localhost:3000/department",addedDepartment);
+        return this._http.post(`${this.apiUrl}/department`,addedDepartment);
     }
 }
