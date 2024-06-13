@@ -18,7 +18,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
     exports: [
@@ -40,7 +40,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
         MatSnackBarModule,
         MatAutocompleteModule,
         MatSlideToggleModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
     ],
 })
-export class MaterialModule { }
+export class MaterialModule {}
