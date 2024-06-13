@@ -11,10 +11,13 @@ import { MaintenanceModel } from "../models/maintenance.model";
 })
 export class MaintenanceComponent {
     dataSource = new MatTableDataSource<MaintenanceModel>();
+    dataSourceHolidays = new MatTableDataSource<any>();
+
     @Output() refreshEmployees: EventEmitter<void> = new EventEmitter<void>();
 
     formData!: FormGroup; // Using definite assignment assertion
-    displayedColumns: string[] = ["department_name"];
+    displayedColumns: string[] = ["department_name", "action"];
+    displayedColumnsHolliday: string[] = ["holiday_name"];
 
     constructor(
         private el: ElementRef,
@@ -22,14 +25,22 @@ export class MaintenanceComponent {
         private maintenanceService: MaintenanceService,
     ) {}
     ngOnInit(): void {
-        this.loadProjects();
+        this.loadDepartmentData();
+        this.loadHolidayData();
         this.createForm();
     }
 
-    loadProjects() {
+    loadDepartmentData() {
         this.maintenanceService.getAllDepartmentData().subscribe((res: any) => {
             const ds = res;
             this.dataSource = ds;
+        });
+    }
+
+    loadHolidayData() {
+        this.maintenanceService.getAllHolidayData().subscribe((res: any) => {
+            const ds = res;
+            this.dataSourceHolidays = ds;
         });
     }
 
