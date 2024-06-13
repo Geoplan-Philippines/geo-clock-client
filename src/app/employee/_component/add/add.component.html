@@ -39,9 +39,9 @@
                     <mat-label>Department</mat-label>
                     <mat-select formControlName="department">
                         <mat-option>None</mat-option>
-                        <mat-option value="System Developer">System Developer</mat-option>
-                        <mat-option value="Marketing Department">Marketing Department</mat-option>
-                        <mat-option value="Sales Department">Sales Department</mat-option>
+                        <mat-option *ngFor="let dep of departments" value="dep.department_name"> {{ dep.department_name }}   </mat-option>
+                        <!-- <mat-option value="Marketing Department">Marketing Department</mat-option>
+                        <mat-option value="Sales Department">Sales Department</mat-option> -->
                     </mat-select>
                 </mat-form-field>
 

@@ -32,13 +32,21 @@ export class AddComponent implements OnInit {
 
     ngOnInit(): void {
         this.createForm();
-        this.getClassification();    
+        this.getClassification();  
+        this.getDepartment();  
     }
 
     getClassification(){
-        this.employeeservice.getAllclassification().subscribe((res: any) =>{
+        this.employeeservice.getAllClassification().subscribe((res: any) =>{
             const ds = res
             this.classification = ds
+        })
+    }
+
+    getDepartment(){
+        this.employeeservice.getAllDepartment().subscribe((res: any) =>{
+            const ds = res
+            this.departments = ds
         })
     }
 

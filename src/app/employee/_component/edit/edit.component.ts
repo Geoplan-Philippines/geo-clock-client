@@ -51,18 +51,25 @@ export class EditComponent {
         this.createForm();
         this.loadEmployee();
         this.getClassification();
+        this.getDepartment();
 
         
     }
 
     getClassification(){
-        this.employeeservice.getAllclassification().subscribe((res: any) =>{
+        this.employeeservice.getAllClassification().subscribe((res: any) =>{
             const ds = res
 
             this.classification = ds
         })
     }
 
+    getDepartment(){
+        this.employeeservice.getAllDepartment().subscribe((res: any) =>{
+            const ds = res
+            this.departments = ds
+        })
+    }
 
     createForm(): void {
         this.formData = this.fb.group({
