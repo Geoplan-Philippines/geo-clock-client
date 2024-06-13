@@ -14,30 +14,36 @@
                 </ul>
             </div>
             <div class="selected h-[80vh] overflow-y-scroll border-l-2 border-solid border-l-[#0a54a0] px-5">
-                <div id="section1" class="h-screen">
-                    <form class="h-full" (ngSubmit)="submitForm()">
-                        <p>Holidays</p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
-                        consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus
-                        nulla soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos
-                        ut eligendi a in maiores saepe quia impedit!
-                    </form>
+                <div class="h-auto">
+                    <p>Holidays</p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
+                    consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus nulla
+                    soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos ut
+                    eligendi a in maiores saepe quia impedit!
                 </div>
-                <div class="h-screen">
+                <div class="h-auto">
                     <p>example1</p>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
                     consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus nulla
                     soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos ut
                     eligendi a in maiores saepe quia impedit!
                 </div>
-                <div class="h-screen">
-                    <p>example</p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
-                    consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus nulla
-                    soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos ut
-                    eligendi a in maiores saepe quia impedit!
+                <div id="section1" class="h-auto">
+                    <p>Holidays</p>
+ 
+                    <table mat-table [dataSource]="dataSourceHolidays" class="mat-elevation-z8">
+                        <ng-container matColumnDef="holiday_name">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Holiday</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.holiday_name }}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsHolliday"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsHolliday"></tr>
+                    </table>
                 </div>
-                <div id="section2" class="h-screen">
+                <div id="section2" class="h-auto">
                     <p>Department</p>
                     <form [formGroup]="formData" (ngSubmit)="submitForm()">
                         <div class="block w-[100%] sm:flex">
@@ -58,6 +64,14 @@
                                 <h1 class="font-bold">Departments</h1>
                             </th>
                             <td mat-cell *matCellDef="let element">{{ element.department_name }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Action</h1></th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="flex justify-center">
+                                    <button mat-stroked-button class="submit-Btn bg w-full text-center sm:w-32">Delete</button>
+                                </div>
+                            </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

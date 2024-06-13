@@ -11,7 +11,8 @@ $secondary-text-color: white;
 }
 .selected {
     scroll-behavior: smooth;
-    div {
+    > div {
+        margin-top: 2rem;
         p {
             font-weight: bold;
             font-size: x-large;

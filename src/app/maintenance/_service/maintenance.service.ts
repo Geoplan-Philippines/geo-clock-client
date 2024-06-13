@@ -11,7 +11,10 @@ export class MaintenanceService {
     getAllDepartmentData() {
         return this._http.get(`http://localhost:3000/department`);
     }
-    postAllDepartmentData(addedDepartment: any): Observable<any>{
-        return this._http.post("http://localhost:3000/department",addedDepartment);
+    postAllDepartmentData(addedDepartment: any): Observable<any> {
+        return this._http.post("http://localhost:3000/department", addedDepartment);
+    }
+    getAllHolidayData() {
+        return this._http.get(`http://localhost:3000/holiday`);
     }
 }
