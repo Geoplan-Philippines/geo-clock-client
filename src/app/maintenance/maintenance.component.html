@@ -30,7 +30,39 @@
                 </div>
                 <div id="section1" class="h-auto">
                     <p>Holidays</p>
- 
+                    <form [formGroup]="formDataHoliday" (ngSubmit)="submitFormHoliday()">
+                        <div class="block w-[100%] sm:flex">
+                            <div class="sm:ml-1">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Holiday Name</mat-label>
+                                    <input matInput formControlName="holiday_name" placeholder="Enter Holiday Name" />
+                                </mat-form-field>
+                            </div>
+                            <div class="sm:ml-1">
+                                <mat-form-field class="example-full-width">
+                                    <mat-label>Holiday Category</mat-label>
+                                    <mat-select formControlName="type" placeholder="Enter Holiday Category">
+                                        <mat-option value="SH">Special Holiday</mat-option>
+                                        <mat-option value="RH">Regular Holiday</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="sm:ml-1">
+                                <mat-form-field class="example-full-width" appearance="fill">
+                                    <mat-label>Holiday Date</mat-label>
+                                    <input matInput [matDatepicker]="picker" formControlName="holiday_date" placeholder="Enter Holiday Date" />
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-8 ml-0 mt-3 sm:ml-5 sm:mt-3">
+                                <button mat-stroked-button class="submit-Btn bg w-full sm:w-32" [disabled]="!formDataHoliday.valid">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
                     <table mat-table [dataSource]="dataSourceHolidays" class="mat-elevation-z8">
                         <ng-container matColumnDef="holiday_name">
                             <th mat-header-cell *matHeaderCellDef>
@@ -38,21 +70,22 @@
                             </th>
                             <td mat-cell *matCellDef="let element">{{ element.holiday_name }}</td>
                         </ng-container>
-
+                        
+                        
                         <tr mat-header-row *matHeaderRowDef="displayedColumnsHolliday"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumnsHolliday"></tr>
                     </table>
                 </div>
                 <div id="section2" class="h-auto">
                     <p>Department</p>
-                    <form [formGroup]="formData" (ngSubmit)="submitForm()">
+                    <form [formGroup]="formDataDep" (ngSubmit)="submitFormDep()">
                         <div class="block w-[100%] sm:flex">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Department Name</mat-label>
                                 <input matInput formControlName="department_name" placeholder="Enter Employee Code" />
                             </mat-form-field>
                             <div class="mb-8 ml-0 mt-3 sm:ml-5 sm:mt-3">
-                                <button mat-stroked-button class="submit-Btn bg w-full sm:w-32" [disabled]="!formData.valid">
+                                <button mat-stroked-button class="submit-Btn bg w-full sm:w-32" [disabled]="!formDataDep.valid">
                                     Submit
                                 </button>
                             </div>
