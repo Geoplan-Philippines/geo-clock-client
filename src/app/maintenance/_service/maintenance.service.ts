@@ -14,15 +14,19 @@ export class MaintenanceService {
         return this._http.get(`${this.apiUrl}/department`);
     }
 
+    postAllHolidayData(addedHoliday: any): Observable<any>{
+        return this._http.post(`${this.apiUrl}/holiday`,addedHoliday);
+    }
+
     postAllDepartmentData(addedDepartment: any): Observable<any>{
         return this._http.post(`${this.apiUrl}/department`,addedDepartment);
     }
 
     getAllHolidayData() {
-        return this._http.get(`http://localhost:3000/holiday`);
-    }
-    
+        return this._http.get(`${this.apiUrl}/holiday`);
+    }    
     deleteDepartmentData(id: any){
         return this._http.delete(`${this.apiUrl}/department/${id}`)
     }
 }
+

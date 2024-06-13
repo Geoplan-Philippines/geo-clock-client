@@ -18,7 +18,12 @@ export class MaintenanceComponent {
 
     @Output() refreshEmployees: EventEmitter<void> = new EventEmitter<void>();
 
-    formData!: FormGroup; // Using definite assignment assertion
+
+    formDataHoliday!: FormGroup;
+
+
+
+    formDataDep!: FormGroup; // Using definite assignment assertion
     displayedColumns: string[] = ["department_name", "action"];
     displayedColumnsHolliday: string[] = ["holiday_name", "date", "type", "action"];
 
@@ -31,7 +36,8 @@ export class MaintenanceComponent {
     ngOnInit(): void {
         this.loadDepartmentData();
         this.loadHolidayData();
-        this.createForm();
+        this.createFormDep();
+        this.createFormHoliday();
     }
 
     loadDepartmentData() {
@@ -48,29 +54,62 @@ export class MaintenanceComponent {
         });
     }
 
-    createForm(): void {
-        this.formData = this.fb.group({
-            department_name: ["", Validators.required],
+    createFormHoliday(): void {
+        this.formDataHoliday = this.fb.group({
+            holiday_date: ["", Validators.required],
+            holiday_name: ["", Validators.required],
+            type: ["", Validators.required],
         });
     }
 
-    submitForm(): void {
-        if (this.formData.valid) {
-            const addedDepartment = this.formData.value;
-            this.maintenanceService.postAllDepartmentData(addedDepartment).subscribe({
+
+    submitFormHoliday(): void {
+        if (this.formDataHoliday.valid) {
+            const addedDepartment = this.formDataHoliday.value;
+            this.maintenanceService.postAllHolidayData(addedDepartment).subscribe({
                 next: (response) => {
-                    console.log("User created successfully:", response);
-                    this.formData.reset();
-                    // this.refreshEmployees.emit();
+                    console.log("Holiday created successfully:", response);
+                    this.formDataHoliday.reset();
+                    this.refreshEmployees.emit();
+                    this.loadHolidayData();
                 },
                 error: (error) => {
-                    console.error("Error creating user:", error);
+                    console.error("Error creating holiday:", error);
                     // this.openSnackBar("User already exist", "okay");
                 },
             });
         } else {
             console.log("Form is invalid. Please fill in all required fields.");
-            Object.values(this.formData.controls).forEach((control) => control.markAsTouched());
+            Object.values(this.formDataDep.controls).forEach((control) => control.markAsTouched());
+        }
+    }
+
+
+
+    createFormDep(): void {
+        this.formDataDep = this.fb.group({
+            department_name: ["", Validators.required],
+        });
+    }
+
+    submitFormDep(): void {
+        if (this.formDataDep.valid) {
+            const addedDepartment = this.formDataDep.value;
+            this.maintenanceService.postAllDepartmentData(addedDepartment).subscribe({
+                next: (response) => {
+                    console.log("Department created successfully:", response);
+                    this.formDataDep.reset();
+                    
+
+                },
+                error: (error) => {
+                    console.error("Error creating department:", error);
+                    // this.openSnackBar("User already exist", "okay");
+                },
+            });
+        } else {
+            console.log("Form is invalid. Please fill in all required fields.");
+            Object.values(this.formDataDep.controls).forEach((control) => control.markAsTouched());
         }
         this.loadDepartmentData(); // Adjusted call to pass the date object
     }
