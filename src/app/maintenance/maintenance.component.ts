@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MaintenanceService } from "./_service/maintenance.service";
 import { MatTableDataSource } from "@angular/material/table";
 import { MaintenanceModel } from "../models/maintenance.model";
+import { DeleteConfirmModalComponent } from "./_components/delete-confirm-modal/delete-confirm-modal.component";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
     selector: "app-maintenance",
@@ -12,6 +14,7 @@ import { MaintenanceModel } from "../models/maintenance.model";
 export class MaintenanceComponent {
     dataSource = new MatTableDataSource<MaintenanceModel>();
     dataSourceHolidays = new MatTableDataSource<any>();
+    dialogRef: any = MatDialogRef<any>;
 
     @Output() refreshEmployees: EventEmitter<void> = new EventEmitter<void>();
 
@@ -22,12 +25,13 @@ export class MaintenanceComponent {
 
     formDataDep!: FormGroup; // Using definite assignment assertion
     displayedColumns: string[] = ["department_name", "action"];
-    displayedColumnsHolliday: string[] = ["holiday_name"];
+    displayedColumnsHolliday: string[] = ["holiday_name", "date", "type", "action"];
 
     constructor(
         private el: ElementRef,
         private fb: FormBuilder,
         private maintenanceService: MaintenanceService,
+        private dialog: MatDialog,
     ) {}
     ngOnInit(): void {
         this.loadDepartmentData();
@@ -95,7 +99,8 @@ export class MaintenanceComponent {
                 next: (response) => {
                     console.log("Department created successfully:", response);
                     this.formDataDep.reset();
-                    this.refreshEmployees.emit();
+                    
+
                 },
                 error: (error) => {
                     console.error("Error creating department:", error);
@@ -106,11 +111,26 @@ export class MaintenanceComponent {
             console.log("Form is invalid. Please fill in all required fields.");
             Object.values(this.formDataDep.controls).forEach((control) => control.markAsTouched());
         }
+        this.loadDepartmentData(); // Adjusted call to pass the date object
     }
+
     scrollToSection(sectionId: string) {
         const element = this.el.nativeElement.querySelector(`#${sectionId}`);
         if (element) {
             element.scrollIntoView({ behavior: "smooth" });
         }
+    }
+    deleteData(id: number) {
+        this.dialogRef = this.dialog.open(DeleteConfirmModalComponent, {
+            data: {
+                id: id,
+            },
+        });
+
+        this.dialogRef.afterClosed().subscribe((result: any) => {
+            // Handle result here
+            console.log("Dialog closed with result:", result);
+            this.loadDepartmentData(); // Adjusted call to pass the date object
+        });
     }
 }

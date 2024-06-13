@@ -24,6 +24,9 @@ export class MaintenanceService {
 
     getAllHolidayData() {
         return this._http.get(`${this.apiUrl}/holiday`);
+    }    
+    deleteDepartmentData(id: any){
+        return this._http.delete(`${this.apiUrl}/department/${id}`)
     }
-
 }
+
