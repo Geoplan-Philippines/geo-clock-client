@@ -8,6 +8,7 @@ import { weekNumber } from "weeknumber";
 import { TimesheetService } from "../timesheet/_service/timesheet.service";
 import { MatPaginator } from "@angular/material/paginator";
 
+import { EncryptionService } from "../authentication/_guards/encrpytion.service";
 @Component({
     selector: "app-timesheet-approved",
     templateUrl: "./timesheet-approved.component.html",
@@ -31,6 +32,7 @@ export class TimesheetApprovedComponent {
         private timesheetService: TimesheetService,
         private TimesheetApprovedService: TimesheetApprovedService,
         public dialog: MatDialog,
+        private encrypt: EncryptionService
     ) {}
 
     openDialog(approvedId: number, weekNo: number, userId: number, startDate: Date, endDate: Date) {
@@ -88,7 +90,7 @@ export class TimesheetApprovedComponent {
     }
 
     loadTImesheetApproved() {
-        const userId = Number(localStorage.getItem("id"));
+        const userId = Number(this.encrypt.getItem("id"));
         // Load user's department
         this.TimesheetApprovedService.getAllemployeetData().subscribe((employeeData: any) => {
             const user = employeeData.find((emp: any) => emp.id === userId);

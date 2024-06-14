@@ -10,6 +10,8 @@ import { AuthenticationService } from "../_service/authentication.service";
 //mat
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
+import { EncryptionService } from "../_guards/encrpytion.service";
+
 @Component({
     selector: "app-login",
     templateUrl: "./login.component.html",
@@ -28,6 +30,7 @@ export class LoginComponent {
         private router: Router,
         private route: ActivatedRoute, // Include route here
         private _snackBar: MatSnackBar,
+        private encrypt: EncryptionService
     ) {}
 
     ngOnInit() {
@@ -89,20 +92,20 @@ export class LoginComponent {
                 userFound = true; // Set flag to true since user is found
                 if(this.users[i].is_active === true ){
                     userDeact = true;
-                    localStorage.setItem("id", this.users[i].id);
+                    this.encrypt.setItem("id", this.users[i].id);
 
                     switch (this.users[i].role) {
                         case "superAdmin":
                             this.router.navigate(["/timesheet"]);
-                            localStorage.setItem("role", this.users[i].role);
+                            this.encrypt.setItem("role", this.users[i].role);
                             break;
                         case "admin":
                             this.router.navigate(["/timesheet"]);
-                            localStorage.setItem("role", this.users[i].role);
+                            this.encrypt.setItem("role", this.users[i].role);
                             break;
                         case "user":
                             this.router.navigate(["/timesheet"]);
-                            localStorage.setItem("role", this.users[i].role);
+                            this.encrypt.setItem("role", this.users[i].role);
                             break;
                         default:
                             console.log("error sa role");

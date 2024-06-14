@@ -4,6 +4,7 @@ import { AngularFireAuth } from "@angular/fire/compat/auth";
 // services
 import { AuthenticationService } from "../_service/authentication.service";
 
+import { EncryptionService } from "../_guards/encrpytion.service";
 @Injectable({
     providedIn: "root",
 })
@@ -12,12 +13,12 @@ export class RoleAuthGuard implements CanActivate {
     LoggedinEmail: string = "";
 
     constructor(
-
         private router: Router,
+        private encrypt: EncryptionService
     ) {}
 
     canActivate(route: ActivatedRouteSnapshot): boolean {
-         const roleToken = localStorage.getItem('role');
+         const roleToken = this.encrypt.getItem('role');
          if (!roleToken) {
              this.router.navigate(['/login']); 
              return false;

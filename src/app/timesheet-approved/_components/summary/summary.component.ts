@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ClipboardModule, ClipboardService } from "ngx-clipboard";
 import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.service";
 
+import { EncryptionService } from "src/app/authentication/_guards/encrpytion.service";
 export interface DialogData {
     id: number;
     week_number: number;
@@ -37,6 +38,7 @@ export class SummaryComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
         private clipboardService: ClipboardService,
         private _snackBarService: SnackBarService,
+        private encrypt: EncryptionService
     ) {}
     ngOnInit() {
         this.loadTimesheet();
@@ -45,7 +47,7 @@ export class SummaryComponent implements OnInit {
     }
 
     loadAdminUser() {
-        const userId = Number(localStorage.getItem("id"));
+        const userId = Number(this.encrypt.getItem("id"));
         this.SummaryService.getAllDataUsers(userId).subscribe((res: any) => {
             const ds = res;
             this.admin_name = ds.first_name + " " + ds.last_name;
