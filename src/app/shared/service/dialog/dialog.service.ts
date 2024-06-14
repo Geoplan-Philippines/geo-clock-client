@@ -16,6 +16,7 @@ export class DialogService {
             data: {
                 id: entryData.id,
                 description: entryData.description,
+                working_location: entryData.working_location,
                 working_type: entryData.working_type,
                 ot_number: entryData.ot_number
             },
