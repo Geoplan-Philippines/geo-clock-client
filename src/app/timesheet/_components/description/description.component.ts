@@ -7,6 +7,7 @@ export interface DialogData {
     // week_number: any;
     id: number;
     description: string;
+    working_location: string;
     working_type: string;
     ot_number: number;
 }
@@ -30,12 +31,13 @@ export class DescriptionComponent implements OnInit {
     ngOnInit(): void {
         this.createForm(); 
 
-        this.selectedType = this.data.working_type
+        this.selectedType = this.data.working_location
     }
 
     createForm(): void {
         this.formData = this.fb.group({
             description: [this.data.description, Validators.required],
+            working_location: [this.data.working_location],
             working_type: [this.data.working_type],
             ot_number: [this.data.ot_number]
 
@@ -46,7 +48,7 @@ export class DescriptionComponent implements OnInit {
         if (this.formData.valid) {
             const id = this.data.id;
             const params = this.formData.value;
-
+            console.log(params)
             this.timesheet.editTimesheetEntry(id, params).subscribe({
                 next: (response: any) => {
                     // console.log("Edit successfully:", response);

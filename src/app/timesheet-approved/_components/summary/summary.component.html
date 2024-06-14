@@ -56,8 +56,12 @@
                 <th mat-header-cell *matHeaderCellDef>DATE</th>
                 <td mat-cell *matCellDef="let element">{{ element.date | date: "EEE, MMM d" }}</td>
             </ng-container>
+            <ng-container matColumnDef="working_location">
+                <th mat-header-cell *matHeaderCellDef>LOCATION</th>
+                <td mat-cell *matCellDef="let element">{{ element.working_location }}</td>
+            </ng-container>
             <ng-container matColumnDef="working_type">
-                <th mat-header-cell *matHeaderCellDef>LOCATION TYPE</th>
+                <th mat-header-cell *matHeaderCellDef>TYPE</th>
                 <td mat-cell *matCellDef="let element">{{ element.working_type }}</td>
             </ng-container>
             <ng-container matColumnDef="actual_hours">
