@@ -27,6 +27,8 @@ import { DescriptionComponent } from "./_components/description/description.comp
 import { DeleteConfirmationModalComponent } from "./_components/delete-confirmation-modal/delete-confirmation-modal.component";
 import { WholeDeleteModalComponent } from "./_components/whole-delete-modal/whole-delete-modal.component";
 
+
+import { EncryptionService } from "../authentication/_guards/encrpytion.service";
 @Component({
     selector: "app-timesheet",
     templateUrl: "./timesheet.component.html",
@@ -82,6 +84,7 @@ export class TimesheetComponent {
         private datePipe: DatePipe,
         private dialogService: DialogService,
         private dialog: MatDialog,
+        private encrypt: EncryptionService
         // private dialog: MatDialog,
     ) {}
 
@@ -106,7 +109,7 @@ export class TimesheetComponent {
             "Sat Mar 16 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
         );
         // this.loadTimesheet();
-        // console.log(localStorage.getItem("id"));
+    
         this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(""),
             map((value) => this._filter(value || "")),
@@ -143,7 +146,7 @@ export class TimesheetComponent {
     // }
 
     loadTimesheet() {
-        const timesheetIdString = localStorage.getItem("id");
+        const timesheetIdString = this.encrypt.getItem("id");
         if (timesheetIdString !== null) {
             const timesheetId = +timesheetIdString;
             this.timesheetService.getAllTimesheetData(timesheetId).subscribe((res: any) => {
@@ -249,7 +252,7 @@ export class TimesheetComponent {
     }
 
     loadFilterTimesheet(startDate: any, endDate: any) {
-        const timesheetIdString = localStorage.getItem("id");
+        const timesheetIdString = this.encrypt.getItem("id");
 
         this.start_date_data = startDate;
         this.end_date_data = endDate;
@@ -378,7 +381,7 @@ export class TimesheetComponent {
                         const projectId = existingProject.id;
                         const projectName = existingProject.project_name;
 
-                        const userId = Number(localStorage.getItem("id"));
+                        const userId = Number(this.encrypt.getItem("id"));
                         this.isLoading = false;
 
                         this.postData(projectId, userId);
@@ -389,7 +392,7 @@ export class TimesheetComponent {
                                 console.log("Successfully created:", response);
 
                                 const projectId = response.id;
-                                const userId = Number(localStorage.getItem("id"));
+                                const userId = Number(this.encrypt.getItem("id"));
 
                                 this.isLoading = false;
 
@@ -921,7 +924,7 @@ export class TimesheetComponent {
         const startDateString = startDate.toISOString().split("T")[0] + "T00:00:00Z";
         const endDateString = endDate.toISOString().split("T")[0] + "T00:00:00Z";
 
-        const userId = Number(localStorage.getItem("id"));
+        const userId = Number(this.encrypt.getItem("id"));
 
         let employeeName: string;
         this.timesheetService.getUserLoadById(userId).subscribe((res: any) => {

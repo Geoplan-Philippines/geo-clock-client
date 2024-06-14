@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AsideService } from "./_service/aside.service";
+
+import { EncryptionService } from "src/app/authentication/_guards/encrpytion.service";
 @Component({
     selector: "app-aside",
     templateUrl: "./aside.component.html",
@@ -12,10 +14,11 @@ export class AsideComponent implements OnInit {
     constructor(
         private router: Router,
         private asidebar: AsideService,
+        private encrypt: EncryptionService
     ) {}
 
     ngOnInit() {
-        const role = localStorage.getItem("role");
+        const role = this.encrypt.getItem("role");
         this.loadSidebarData();
         // console.log("asdas")
     }
@@ -25,7 +28,7 @@ export class AsideComponent implements OnInit {
     }
 
     loadSidebarData() {
-        const siderole = localStorage.getItem("role");
+        const siderole = this.encrypt.getItem("role");
         if (siderole !== null) {
             this.asidebar.getSidebarModule(siderole).subscribe((res: any) => {
                 const ds = res;

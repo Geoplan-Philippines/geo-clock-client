@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ProfileService } from "./_service/profile.service";
-
+import { EncryptionService } from "../authentication/_guards/encrpytion.service";
 @Component({
     selector: "app-profile",
     templateUrl: "./profile.component.html",
@@ -16,14 +16,13 @@ export class ProfileComponent {
     employee_code: string = "";
     email: string = "";
 
-    constructor(private ProfileService: ProfileService) {}
+    constructor(private ProfileService: ProfileService, private encrypt: EncryptionService) {}
 
     ngOnInit() {
-        // console.log(localStorage.getItem("id"));
         this.loadEmployeeData();
     }
     loadEmployeeData() {
-        const timesheetIdString = localStorage.getItem("id");
+        const timesheetIdString = this.encrypt.getItem("id");
 
         if (timesheetIdString !== null) {
             const timesheetId = +timesheetIdString;
@@ -50,18 +49,5 @@ export class ProfileComponent {
         }
     }
 
-    // loadEmployeeData() {
-    //     const timesheetIdString = localStorage.getItem("id");
-    //     if (timesheetIdString !== null) {
-    //         const timesheetId = +timesheetIdString;
-    //         // this.timesheetService
-    //         //     .getalltimesheetbydate(timesheetId, this.start_date_data, this.end_date_data)
-    //         this.ProfileService.getCurrentUserData(timesheetId).subscribe((res: any) => {
-    //             const ds = res;
-    //             console.log(ds);
-    //         });
-    //     } else {
-    //         console.error("Timesheet ID is not available in localStorage");
-    //     }
-    // }
+ 
 }
