@@ -9,8 +9,19 @@
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input class="custom-input" />
             </mat-form-field>
+             <!-- renan year start -->
+             <mat-form-field class="w-[100%] sm:w-80">
+                <mat-label>Year</mat-label>
+                <mat-select (valueChange)="selectYearNumber($event)">
+                    <mat-option [value]="null">Clear</mat-option>
+                    <mat-option *ngFor="let year of yearNumber" [value]="year">
+                        {{ year }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <!-- renan year end -->
             <mat-form-field class="w-[100%] sm:w-80">
-                <mat-label>Week no. API</mat-label>
+                <mat-label>Week no.</mat-label>
                 <mat-select (valueChange)="selectWeekNumber($event)">
                     <mat-option [value]="null">Clear</mat-option>
                     <mat-option *ngFor="let data of weekNumber" [value]="data.value">
@@ -18,6 +29,7 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+           
         </div>
         <div class="static overflow-auto">
             <div class="mat-elevation-z8">

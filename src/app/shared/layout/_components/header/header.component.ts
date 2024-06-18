@@ -4,6 +4,7 @@ import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { MatDialog } from "@angular/material/dialog";
 import { HeadsupDialogComponent } from "src/app/shared/ui/headsup-dialog/headsup-dialog.component";
 import { HeaderService } from "./_service/header.service";
+import { EncryptionService } from "src/app/authentication/_guards/encrpytion.service";
 
 @Component({
     selector: "app-header",
@@ -19,7 +20,8 @@ export class HeaderComponent implements OnInit{
         private router: Router,
         private angularAuth: AngularFireAuth,
         public dialog: MatDialog,
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        private encrypt: EncryptionService
     ) {}
 
     ngOnInit(){
@@ -44,7 +46,7 @@ export class HeaderComponent implements OnInit{
     }
 
     loadHeaderBarData() {
-        const siderole = localStorage.getItem("role");
+        const siderole = this.encrypt.getItem("role");
         if (siderole !== null) {
             this.headerService.getSidebarModule(siderole).subscribe((res: any) => {
                 const ds = res;

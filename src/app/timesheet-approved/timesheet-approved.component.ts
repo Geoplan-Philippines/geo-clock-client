@@ -18,6 +18,10 @@ export class TimesheetApprovedComponent {
     [x: string]: any;
     employeeEntry: any[] = [];
     weekNumber: any[] = [];
+    yearNumber: any[] = [];
+
+    filterYear: string = '';
+    filterWeek: number = 0;
 
     selectedEmployee: any = "";
     selectedWeek: any = "";
@@ -48,7 +52,13 @@ export class TimesheetApprovedComponent {
 
         dialogRef.afterClosed().subscribe((result: any) => {
             // console.log(`Dialog result: ${result}`);
+
+        if(this.filterWeek === null || this.filterYear === ''){
             this.ngOnInit();
+
+        }else{
+         this.loadingUsingFiltering();
+        }
         });
 
         const dataEntry = {
@@ -64,23 +74,31 @@ export class TimesheetApprovedComponent {
 
     // Function to calculate the day of the year
     ngOnInit() {
-        // this.loadTimesheet();
+        this.loadTimesheetApprovedYear();
         this.loadWeekNumbers();
         this.loadTImesheetApproved();
     }
-    // loadTimesheet() {
-    //     this.TimesheetApprovedService.getAllTimesheetData().subscribe((res: any) => {
-    //         const ds = res.data;
-    //         this.employeeEntry = ds;
-    //         // this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(ds);
-    //         this.filteredDataSource = new MatTableDataSource<TimesheetApprovedModel>(ds); // Initialize filtered data source
-    //     });
-    // }
-    calculateDayOfYear(startDate: string): number {
-        const startDateObject = new Date(startDate);
-        // console.log(weekNumber(startDateObject))
-        return weekNumber(startDateObject);
+
+    loadTimesheetApprovedYear(): void {
+        this.TimesheetApprovedService.getAllTimesheetApprovedData().subscribe((res: TimesheetApprovedModel[]) => {
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+            this.dataSource.data = ds;
+            
+            this.yearNumber = [...new Set(ds.map((item) => new Date(item.start_date).getFullYear()))]; 
+            
+            
+            
+        
+                });
     }
+
+    // calculateDayOfYear(startDate: string): number {
+    //     const startDateObject = new Date(startDate);
+    //     // console.log(weekNumber(startDateObject))
+    //     console.log(weekNumber(startDateObject))
+    //     return weekNumber(startDateObject);
+    // }
+    
     loadWeekNumbers() {
         this.TimesheetApprovedService.WeekNumberService().subscribe((res: any) => {
             const ds = res.data;
@@ -122,19 +140,60 @@ export class TimesheetApprovedComponent {
     applyFilter(event: any) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
-    }
+    }    
 
     selectWeekNumber(event: any) {
-        if (event == null) {
+        if (event === null) {
             this.loadTImesheetApproved();
         } else {
             const weekFilterValue = event.toString();
-            this.dataSource.filterPredicate = (data: TimesheetApprovedModel, filter: string) => {
-                return data.week_no.toString().toLowerCase() === filter;
-            };
-            this.dataSource.filter = weekFilterValue.trim().toLowerCase();
-            console.log(weekFilterValue);
-            console.log(this.dataSource);
+            this.filterWeek = weekFilterValue;
+            this.applyCompositeFilter();
         }
+        console.log("sa week toh");
+    }
+    
+    selectYearNumber(event: any) {
+        if (event === null) {
+            this.loadTImesheetApproved();
+        } else {
+            const yearFilterValue = event.toString();
+            this.filterYear = yearFilterValue;
+            this.applyCompositeFilter();
+        }
+        console.log("sa year toh");
+    }
+    
+    applyCompositeFilter() {
+        this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.filterYear, this.filterWeek).subscribe((res: TimesheetApprovedModel[]) => {
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+            this.dataSource.data = ds;
+    
+            this.dataSource.filterPredicate = (data: TimesheetApprovedModel, filter: string) => {
+                const filters = filter.split('|');
+                const filterYear = filters[0];
+                const filterWeek = filters[1];
+                const matchesYear = data.start_date.toString().toLowerCase().includes(filterYear);
+                const matchesWeek = data.week_no.toString().toLowerCase() === filterWeek;
+                return matchesYear && matchesWeek;
+            };
+    
+            const compositeFilterValue = `${this.filterYear}|${this.filterWeek}`;
+            this.dataSource.filter = compositeFilterValue;
+    
+            console.log("Composite filter applied:", compositeFilterValue);
+            console.log(this.dataSource.data);
+        });
+    }
+
+    loadingUsingFiltering(){
+        this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.filterYear, this.filterWeek).subscribe((res: TimesheetApprovedModel[]) => {
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+
+            this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(ds);
+            console.log(this.dataSource.data);
+        });
+        console.log(this.filterWeek);
+        console.log(this.filterYear);
     }
 }
