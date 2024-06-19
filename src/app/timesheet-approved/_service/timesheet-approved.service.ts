@@ -1,6 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { config } from 'src/config/config.local';
+import { Observable } from "rxjs";
+import { TimesheetApprovedModel } from "src/app/models/timesheet-approved.model";
 
 @Injectable({
     providedIn: "root",
@@ -15,8 +17,12 @@ export class TimesheetApprovedService {
     }
 
     //timesheetApproved
-    getAllTimesheetApprovedData() {
-        return this._http.get(`${this.apiUrl}/timesheet-approved`);
+    getAllTimesheetApprovedData(): Observable<TimesheetApprovedModel[]> {
+        return this._http.get<TimesheetApprovedModel[]>(`${this.apiUrl}/timesheet-approved`);
+    }
+
+    getAllTimesheetApprovedDataByYearandWeek(year_no: string, week_no: string): Observable<TimesheetApprovedModel[]> {
+        return this._http.get<TimesheetApprovedModel[]>(`${this.apiUrl}/timesheet-approved/${year_no}/${week_no}`);
     }
 
     // getAllTimesheetData() {
