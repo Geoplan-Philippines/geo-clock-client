@@ -21,7 +21,7 @@ export class TimesheetApprovedService {
         return this._http.get<TimesheetApprovedModel[]>(`${this.apiUrl}/timesheet-approved`);
     }
 
-    getAllTimesheetApprovedDataByYearandWeek(year_no: string, week_no: number): Observable<TimesheetApprovedModel[]> {
+    getAllTimesheetApprovedDataByYearandWeek(year_no: string, week_no: string): Observable<TimesheetApprovedModel[]> {
         return this._http.get<TimesheetApprovedModel[]>(`${this.apiUrl}/timesheet-approved/${year_no}/${week_no}`);
     }
 

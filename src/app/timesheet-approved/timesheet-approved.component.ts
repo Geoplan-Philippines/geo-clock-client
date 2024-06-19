@@ -21,7 +21,8 @@ export class TimesheetApprovedComponent {
     yearNumber: any[] = [];
 
     filterYear: string = '';
-    filterWeek: number = 0;
+    filterWeek: string = '';
+    generalFilter: string = '';
 
     selectedEmployee: any = "";
     selectedWeek: any = "";
@@ -138,10 +139,11 @@ export class TimesheetApprovedComponent {
     }
 
     applyFilter(event: any) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-    }    
-
+        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+        this.generalFilter = filterValue; 
+        this.applyCompositeFilter();
+    }
+    
     selectWeekNumber(event: any) {
         if (event === null) {
             this.loadTImesheetApproved();
@@ -150,7 +152,7 @@ export class TimesheetApprovedComponent {
             this.filterWeek = weekFilterValue;
             this.applyCompositeFilter();
         }
-        console.log("sa week toh");
+        console.log("Week selected:", this.filterWeek);
     }
     
     selectYearNumber(event: any) {
@@ -161,30 +163,33 @@ export class TimesheetApprovedComponent {
             this.filterYear = yearFilterValue;
             this.applyCompositeFilter();
         }
-        console.log("sa year toh");
+        console.log("Year selected:", this.filterYear);
     }
     
     applyCompositeFilter() {
+        if (!this.filterYear || !this.filterWeek) {
+            // Either year or week filter is not set, do not apply filter
+            return;
+        }
+    
         this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.filterYear, this.filterWeek).subscribe((res: TimesheetApprovedModel[]) => {
             const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
-            this.dataSource.data = ds;
     
-            this.dataSource.filterPredicate = (data: TimesheetApprovedModel, filter: string) => {
-                const filters = filter.split('|');
-                const filterYear = filters[0];
-                const filterWeek = filters[1];
-                const matchesYear = data.start_date.toString().toLowerCase().includes(filterYear);
-                const matchesWeek = data.week_no.toString().toLowerCase() === filterWeek;
-                return matchesYear && matchesWeek;
-            };
+            // Apply composite filtering
+            const filteredData = ds.filter(data => {
+                const matchesYear = data.start_date.toString().toLowerCase().includes(this.filterYear.toLowerCase());
+                const matchesWeek = data.week_no.toString().toLowerCase() === this.filterWeek.toLowerCase();
+                const matchesGeneralFilter = this.generalFilter ? JSON.stringify(data).toLowerCase().includes(this.generalFilter) : true;
+                return matchesYear && matchesWeek && matchesGeneralFilter;
+            });
     
-            const compositeFilterValue = `${this.filterYear}|${this.filterWeek}`;
-            this.dataSource.filter = compositeFilterValue;
+            this.dataSource.data = filteredData;
     
-            console.log("Composite filter applied:", compositeFilterValue);
+            console.log("Composite filter applied with data source update.");
             console.log(this.dataSource.data);
         });
     }
+    
 
     loadingUsingFiltering(){
         this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.filterYear, this.filterWeek).subscribe((res: TimesheetApprovedModel[]) => {
