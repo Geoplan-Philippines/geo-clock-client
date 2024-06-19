@@ -108,8 +108,16 @@ export class TimesheetApprovedComponent {
         });
     }
 
+    applyFilter(event: any) {
+        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+        this.generalFilter = filterValue; 
+        this.applyCompositeFilter();
+        this.loadTImesheetApproved();
+    }
+
     loadTImesheetApproved() {
         const userId = Number(this.encrypt.getItem("id"));
+        
         // Load user's department
         this.TimesheetApprovedService.getAllemployeetData().subscribe((employeeData: any) => {
             const user = employeeData.find((emp: any) => emp.id === userId);
@@ -123,6 +131,7 @@ export class TimesheetApprovedComponent {
                         // If user is an owner, display all timesheets
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(timesheetData);
                         this.dataSource.paginator = this.paginator;
+                    
                     } else {
                         // Filter timesheets based on user's department
                         const filteredTimesheets = timesheetData.filter(
@@ -131,6 +140,12 @@ export class TimesheetApprovedComponent {
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(filteredTimesheets);
                         this.dataSource.paginator = this.paginator;
                     }
+                     const ds = timesheetData.map((item: any, index: number) => ({ ...item, id: index + 1 }));
+                    const filteredData = ds.filter((data: any) => {
+                        const matchesGeneralFilter = this.generalFilter ? JSON.stringify(data).toLowerCase().includes(this.generalFilter) : true;
+                        return  matchesGeneralFilter;
+                    });
+                    this.dataSource.data = filteredData;
                 });
             } else {
                 console.log("User not found in the employee data.");
@@ -138,11 +153,7 @@ export class TimesheetApprovedComponent {
         });
     }
 
-    applyFilter(event: any) {
-        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-        this.generalFilter = filterValue; 
-        this.applyCompositeFilter();
-    }
+  
     
     selectWeekNumber(event: any) {
         if (event === null) {

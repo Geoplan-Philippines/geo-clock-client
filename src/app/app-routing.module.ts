@@ -19,6 +19,7 @@ import { ProjectsComponent } from "./projects/projects.component";
 import { TimesheetSummaryComponent } from "./timesheet-summary/timesheet-summary.component";
 import { MaintenanceModule } from "./maintenance/maintenance.module";
 import { MaintenanceComponent } from "./maintenance/maintenance.component";
+import { AttendanceComponent } from "./attendance/attendance.component";
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(["login"]);
 const routes: Routes = [
@@ -95,6 +96,15 @@ const routes: Routes = [
     {
         path: "training",
         component: TrainingComponent,
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
+        data: {
+            authGuardPipe: redirectUnauthorizedToLogin,
+            role: ["admin", "superAdmin"],
+        },
+    },
+    {
+        path: "attendance",
+        component: AttendanceComponent,
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,

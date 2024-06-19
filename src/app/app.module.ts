@@ -27,6 +27,7 @@ import { ProfileModule } from "./profile/profile.module";
 import { DashboardModule } from "./dashboard/dashboard.module";
 import { TimesheetSummaryModule } from "./timesheet-summary/timesheet-summary.module";
 import { MaintenanceModule } from "./maintenance/maintenance.module";
+import { AttedanceModule } from "./attendance/attedance.module";
 
 @NgModule({
     declarations: [AppComponent],
@@ -48,6 +49,7 @@ import { MaintenanceModule } from "./maintenance/maintenance.module";
         ProjectsModule,
         DashboardModule,
         MaintenanceModule,
+        AttedanceModule
     ],
     providers: [],
     bootstrap: [AppComponent],
