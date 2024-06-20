@@ -1,0 +1,32 @@
+:host ::ng-deep{
+    .mat-elevation-z8 {
+        .table {
+            display: static !important;
+        }
+
+        th {
+            font-size: 16px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            background-color: #0a54a0;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        th:nth-child(1) {
+            border-top-left-radius: 8px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        td {
+            border-top: 2px black;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+        }
+    }
+}

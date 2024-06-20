@@ -77,7 +77,7 @@ export class TimesheetApprovedComponent {
     ngOnInit() {
         this.loadTimesheetApprovedYear();
         this.loadWeekNumbers();
-        this.loadTImesheetApproved();
+        this.loadAllTimesheetApproved();
     }
 
     loadTimesheetApprovedYear(): void {
@@ -108,14 +108,7 @@ export class TimesheetApprovedComponent {
         });
     }
 
-    applyFilter(event: any) {
-        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-        this.generalFilter = filterValue; 
-        this.applyCompositeFilter();
-        this.loadTImesheetApproved();
-    }
-
-    loadTImesheetApproved() {
+    loadAllTimesheetApproved() {
         const userId = Number(this.encrypt.getItem("id"));
         
         // Load user's department
@@ -151,13 +144,26 @@ export class TimesheetApprovedComponent {
                 console.log("User not found in the employee data.");
             }
         });
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+
+        console.log("Current year:", currentYear);
     }
+
+    applyFilter(event: any) {
+        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+        this.generalFilter = filterValue; 
+        this.applyCompositeFilter();
+        this.loadAllTimesheetApproved();
+    }
+
+    
 
   
     
     selectWeekNumber(event: any) {
         if (event === null) {
-            this.loadTImesheetApproved();
+            this.loadAllTimesheetApproved();
         } else {
             const weekFilterValue = event.toString();
             this.filterWeek = weekFilterValue;
@@ -168,7 +174,7 @@ export class TimesheetApprovedComponent {
     
     selectYearNumber(event: any) {
         if (event === null) {
-            this.loadTImesheetApproved();
+            this.loadAllTimesheetApproved();
         } else {
             const yearFilterValue = event.toString();
             this.filterYear = yearFilterValue;

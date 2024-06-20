@@ -565,6 +565,10 @@ export class TimesheetComponent {
             });
             //useless end
 
+           
+
+       
+
             const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
@@ -573,62 +577,67 @@ export class TimesheetComponent {
             console.log("ebtry",selectedDate)
             console.log(workingType)
 
-            // if (!timesheetEntries[index]?.approved_check) {
-            //     console.log("no data");
-            // }
+            const approval = timesheetEntries.find(entry => entry.date === selectedDate);
 
-            if (timesheetEntries[index]?.approved_check === true) {
-                console.log("true");
-                this._snackBarService.openSnackBar("Approved Timesheet cannot be change", "okay");
-                this.dateRefresher();
-            } else if (timesheetEntries[index]?.approved_check === false) {
-                console.log("false");
-                if (value <= 20) {
-                    if (value > 9) {
-                        this.timesheet_ot = value - 9;
-                        console.log(this.timesheet_ot);
-                        const weekNum = weekNumber(formattedDateToISO);
-                        const postParams = {
-                            date: selectedDate,
-                            actual_hours: 9,
-                            is_ot: false,
-                            is_nd: false,
-                            user_id: entryBy,
-                            project_id: project_id,
-                            ot_number: this.timesheet_ot,
-                            working_location: "OFC-DW",
-                            working_type: workingType,
-                            week_number: weekNum,
-                        };
-                        const editParams = {
-                            actual_hours: +9,
-                            ot_number: this.timesheet_ot,
-                            working_location: "OFC-DW",
-                            working_type: workingType,
-                        };
-                        this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
-                    } else {
-                        const weekNum = weekNumber(formattedDateToISO);
-                        const postParams = {
-                            date: selectedDate,
-                            actual_hours: +value,
-                            is_ot: false,
-                            is_nd: false,
-                            user_id: entryBy,
-                            project_id: project_id,
-                            working_location: "OFC-DW",
-                            working_type: workingType,
-                            week_number: weekNum,
-                        };
-                        const editParams = {
-                            actual_hours: +value,
-                            working_location: "OFC-DW",
-                            working_type: workingType,
-                        };
-                        this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+            if (approval) {
+                console.log("Approval found:", approval);
+            
+                if (approval.approved_check === true) {
+                    console.log("Timesheet is approved. Cannot be changed.");
+                    this._snackBarService.openSnackBar("Approved Timesheet cannot be changed", "okay");
+                    this.dateRefresher();
+                } else if (approval.approved_check === false) {
+                    console.log("Timesheet is not approved.");
+            
+                    if (value <= 20) {
+                        if (value > 9) {
+                            this.timesheet_ot = value - 9;
+                            console.log(this.timesheet_ot);
+                            const weekNum = weekNumber(formattedDateToISO);
+                            const postParams = {
+                                date: selectedDate,
+                                actual_hours: 9,
+                                is_ot: false,
+                                is_nd: false,
+                                user_id: entryBy,
+                                project_id: project_id,
+                                ot_number: this.timesheet_ot,
+                                working_location: "OFC-DW",
+                                working_type: workingType,
+                                week_number: weekNum,
+                            };
+                            const editParams = {
+                                actual_hours: +9,
+                                ot_number: this.timesheet_ot,
+                                working_location: "OFC-DW",
+                                working_type: workingType,
+                            };
+                            this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+                        } else {
+                            const weekNum = weekNumber(formattedDateToISO);
+                            const postParams = {
+                                date: selectedDate,
+                                actual_hours: +value,
+                                is_ot: false,
+                                is_nd: false,
+                                user_id: entryBy,
+                                project_id: project_id,
+                                working_location: "OFC-DW",
+                                working_type: workingType,
+                                week_number: weekNum,
+                            };
+                            const editParams = {
+                                actual_hours: +value,
+                                working_location: "OFC-DW",
+                                working_type: workingType,
+                            };
+                            this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
+                        }
                     }
                 }
             } else {
+                console.log("No data found for the selected date.");
+            
                 console.log("no data");
                 if (value <= 20) {
                     if (value > 9) {
@@ -674,6 +683,7 @@ export class TimesheetComponent {
                     }
                 }
             }
+            
             // this._snackBarService.openSnackBar("Approved Timesheet cannot be change", "okay");
             // this.dateRefresher();
 
