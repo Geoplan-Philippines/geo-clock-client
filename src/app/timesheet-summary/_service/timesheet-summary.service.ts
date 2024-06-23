@@ -29,7 +29,7 @@ export class TimesheetSummaryService {
         return this._http.get<TimesheetSummaryModel[]>(this.apiUrl);
     }
 
-    getFilteringYearAndWeek(week_no: number, Year: string): Observable<TimesheetSummaryModel[]> {
+    getFilteringYearAndWeek(week_no: string, Year: string): Observable<TimesheetSummaryModel[]> {
         return this._http.get<TimesheetSummaryModel[]>(`${this.apiUrl1}/timesheet-summary/${week_no}/${Year}`);
     }
     

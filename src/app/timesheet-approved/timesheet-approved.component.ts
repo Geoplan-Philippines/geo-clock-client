@@ -24,6 +24,9 @@ export class TimesheetApprovedComponent {
     filterWeek: string = '';
     generalFilter: string = '';
 
+    latestWeekNumber: string= '';
+    latestYearNumber: string= '';
+
     selectedEmployee: any = "";
     selectedWeek: any = "";
     dataSource = new MatTableDataSource<TimesheetApprovedModel>();
@@ -58,7 +61,7 @@ export class TimesheetApprovedComponent {
             this.ngOnInit();
 
         }else{
-         this.loadingUsingFiltering();
+         this.applyCompositeFilter();
         }
         });
 
@@ -78,19 +81,26 @@ export class TimesheetApprovedComponent {
         this.loadTimesheetApprovedYear();
         this.loadWeekNumbers();
         this.loadAllTimesheetApproved();
+
+        const date = new Date();
+        this.latestYearNumber = date.getFullYear().toString();
+        this.latestWeekNumber = weekNumber(date).toString();
+        // console.log(date)
+        // console.log("qwe",this.latestWeekNumber)
+        // console.log("rty", this.latestYearNumber)
+
+        // this.applyCompositeFilter()
+        
     }
 
     loadTimesheetApprovedYear(): void {
         this.TimesheetApprovedService.getAllTimesheetApprovedData().subscribe((res: TimesheetApprovedModel[]) => {
             const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
-            this.dataSource.data = ds;
+            // this.dataSource.data = ds;
             
             this.yearNumber = [...new Set(ds.map((item) => new Date(item.start_date).getFullYear()))]; 
             
-            
-            
-        
-                });
+        });
     }
 
     // calculateDayOfYear(startDate: string): number {
@@ -119,53 +129,63 @@ export class TimesheetApprovedComponent {
                 const isOwner = user.department === "owner"; // Assuming 'owner' is the role for owners
 
                 // Load all timesheet data
-                this.TimesheetApprovedService.getAllTimesheetApprovedData().subscribe((timesheetData: any) => {
+                this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.latestYearNumber, this.latestWeekNumber).subscribe((timesheetData: any) => {
+                    
                     if (isOwner) {
                         // If user is an owner, display all timesheets
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(timesheetData);
                         this.dataSource.paginator = this.paginator;
-                    
+                        console.log(timesheetData)
+
+                        const ds = timesheetData.map((item: any, index: number) => ({ ...item, id: index + 1 }));
+                        const filteredData = ds.filter((data: any) => {
+                            const matchesGeneralFilter = this.generalFilter ? JSON.stringify(data).toLowerCase().includes(this.generalFilter) : true;
+                            return  matchesGeneralFilter;
+                        });
+                        this.dataSource.data = filteredData;
                     } else {
                         // Filter timesheets based on user's department
                         const filteredTimesheets = timesheetData.filter(
                             (timesheet: any) => timesheet.user.department === userDepartment,
                         );
+                        
+                        console.log(filteredTimesheets)
+
                         this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(filteredTimesheets);
                         this.dataSource.paginator = this.paginator;
+
+
+                        const ds = filteredTimesheets.map((item: any, index: number) => ({ ...item, id: index + 1 }));
+                        const filteredData = ds.filter((data: any) => {
+                            const matchesGeneralFilter = this.generalFilter ? JSON.stringify(data).toLowerCase().includes(this.generalFilter) : true;
+                            return  matchesGeneralFilter;
+                        });
+                        this.dataSource.data = filteredData;
                     }
-                     const ds = timesheetData.map((item: any, index: number) => ({ ...item, id: index + 1 }));
-                    const filteredData = ds.filter((data: any) => {
-                        const matchesGeneralFilter = this.generalFilter ? JSON.stringify(data).toLowerCase().includes(this.generalFilter) : true;
-                        return  matchesGeneralFilter;
-                    });
-                    this.dataSource.data = filteredData;
+                  
+                    
                 });
             } else {
                 console.log("User not found in the employee data.");
             }
         });
-        const currentDate = new Date();
-        const currentYear = currentDate.getFullYear();
-
-        console.log("Current year:", currentYear);
     }
 
     applyFilter(event: any) {
         const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
         this.generalFilter = filterValue; 
+        // console.log(this.generalFilter)
         this.applyCompositeFilter();
         this.loadAllTimesheetApproved();
     }
 
-    
-
-  
-    
     selectWeekNumber(event: any) {
         if (event === null) {
             this.loadAllTimesheetApproved();
+          
         } else {
-            const weekFilterValue = event.toString();
+            const weekFilterValue = event.value;
+            this.filterYear = this.latestYearNumber
             this.filterWeek = weekFilterValue;
             this.applyCompositeFilter();
         }
@@ -175,8 +195,10 @@ export class TimesheetApprovedComponent {
     selectYearNumber(event: any) {
         if (event === null) {
             this.loadAllTimesheetApproved();
+     
         } else {
-            const yearFilterValue = event.toString();
+            const yearFilterValue = event.value;
+            this.filterWeek = this.latestYearNumber
             this.filterYear = yearFilterValue;
             this.applyCompositeFilter();
         }
@@ -188,34 +210,57 @@ export class TimesheetApprovedComponent {
             // Either year or week filter is not set, do not apply filter
             return;
         }
-    
-        this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.filterYear, this.filterWeek).subscribe((res: TimesheetApprovedModel[]) => {
-            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
-    
-            // Apply composite filtering
-            const filteredData = ds.filter(data => {
-                const matchesYear = data.start_date.toString().toLowerCase().includes(this.filterYear.toLowerCase());
-                const matchesWeek = data.week_no.toString().toLowerCase() === this.filterWeek.toLowerCase();
-                const matchesGeneralFilter = this.generalFilter ? JSON.stringify(data).toLowerCase().includes(this.generalFilter) : true;
-                return matchesYear && matchesWeek && matchesGeneralFilter;
-            });
-    
-            this.dataSource.data = filteredData;
-    
-            console.log("Composite filter applied with data source update.");
-            console.log(this.dataSource.data);
-        });
-    }
-    
+        // console.log(this.filterWeek)
+        // console.log(this.filterYear)
+        const userId = Number(this.encrypt.getItem("id"));
 
-    loadingUsingFiltering(){
-        this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.filterYear, this.filterWeek).subscribe((res: TimesheetApprovedModel[]) => {
-            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+        this.TimesheetApprovedService.getAllemployeetData().subscribe((employeeData: any) => {
+            const user = employeeData.find((emp: any) => emp.id === userId);
+            if (user) {
+                const userDepartment = user.department;
+                const isOwner = user.department === "owner"; // Assuming 'owner' is the role for owners
 
-            this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(ds);
-            console.log(this.dataSource.data);
+                // Load all timesheet data
+                this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.filterYear, this.filterWeek).subscribe((timesheetData: any) => {
+                    if (isOwner) {
+                        // If user is an owner, display all timesheets
+                        this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(timesheetData);
+                        this.dataSource.paginator = this.paginator;
+                        console.log(timesheetData)
+
+                       
+                        
+                        const ds = timesheetData.map((item: any, index: number) => ({ ...item, id: index + 1 }));
+                        const filteredData = ds.filter((data: any) => {
+                            const matchesGeneralFilter = this.generalFilter ? JSON.stringify(data).toLowerCase().includes(this.generalFilter) : true;
+                            return  matchesGeneralFilter;
+                        });
+                        this.dataSource.data = filteredData;
+                    } else {
+                        // Filter timesheets based on user's department
+                        const filteredTimesheets = timesheetData.filter(
+                            (timesheet: any) => timesheet.user.department === userDepartment,
+                        );
+                        
+                        console.log(filteredTimesheets)
+
+                        this.dataSource = new MatTableDataSource<TimesheetApprovedModel>(filteredTimesheets);
+                        this.dataSource.paginator = this.paginator;
+
+
+                        const ds = filteredTimesheets.map((item: any, index: number) => ({ ...item, id: index + 1 }));
+                        const filteredData = ds.filter((data: any) => {
+                            const matchesGeneralFilter = this.generalFilter ? JSON.stringify(data).toLowerCase().includes(this.generalFilter) : true;
+                            return  matchesGeneralFilter;
+                        });
+                        this.dataSource.data = filteredData;
+                    }
+                  
+                    
+                });
+            } else {
+                console.log("User not found in the employee data.");
+            }
         });
-        console.log(this.filterWeek);
-        console.log(this.filterYear);
     }
 }

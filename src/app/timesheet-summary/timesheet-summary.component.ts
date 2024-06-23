@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { TimesheetSummaryModel } from "../models/timesheet-summary.model";
 import { MatTableDataSource } from "@angular/material/table";
 import { TimesheetSummaryService } from "../timesheet-summary/_service/timesheet-summary.service";
+import { weekNumber } from "weeknumber";
 
 @Component({
     selector: "app-timesheet-summary",
@@ -14,7 +15,10 @@ export class TimesheetSummaryComponent {
 
 
     filterYear: string = '';
-    filterWeek: number = 0;
+    filterWeek: string = '';
+
+    latestYearNumber: string = '';
+    latestWeekNumber: string = '';
 
     dataSource = new MatTableDataSource<TimesheetSummaryModel>();
     displayedColumns: any[] = ["id", "Employee", "Code", "RG", "OT", "RD", "RH", "SH", "RHRD", "SHRD", "LVE", "ND", "Hours"];
@@ -22,8 +26,14 @@ export class TimesheetSummaryComponent {
     constructor(private timesheetSummaryService: TimesheetSummaryService) {}
 
     ngOnInit() {
-        this.loadTImesheetSummary();
+        const date = new Date();
+        this.latestYearNumber = date.getFullYear().toString();
+        this.latestWeekNumber = weekNumber(date).toString();
+
+
         this.loadWeekNumbers();
+        this.loadTimesheetSummary();
+        this.loadFilterSummaryYear();
     }
 
     loadWeekNumbers() {
@@ -33,22 +43,31 @@ export class TimesheetSummaryComponent {
         });
     }
 
-    loadTImesheetSummary(): void {
-        this.timesheetSummaryService.getAllSummaryData().subscribe((res: TimesheetSummaryModel[]) => {
+    loadFilterSummaryYear(){
+         this.timesheetSummaryService.getAllSummaryData().subscribe((res: TimesheetSummaryModel[]) => {
             const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
             this.dataSource.data = ds;
             
-            this.yearNumber = [...new Set(ds.map((item) => item.Date))]; // Assuming 'Date' is a property in TimesheetSummaryModel
+            this.yearNumber = [...new Set(ds.map((item) => item.Date))]; 
         });
+    }
+
+
+    loadTimesheetSummary() {
+        this.timesheetSummaryService.getFilteringYearAndWeek(this.latestWeekNumber, this.latestYearNumber).subscribe((res: TimesheetSummaryModel[]) =>{
+            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+            this.dataSource.data = ds;
+        })
+
     }
 
    
 
     selectWeekNumber(event: any) {
     if (event == null) {
-        this.loadTImesheetSummary();
+        this.loadTimesheetSummary();
     } else {
-        this.filterWeek = Number(event); 
+        this.filterWeek = event; 
         const weekFilterValue = event.toString().trim().toLowerCase();
 
         this.timesheetSummaryService.getFilteringYearAndWeek(weekFilterValue, this.filterYear).subscribe((res: TimesheetSummaryModel[]) => {
@@ -71,7 +90,7 @@ export class TimesheetSummaryComponent {
 
 selectYearNumber(event: any) {
     if (event == null) {
-        this.loadTImesheetSummary();
+        this.loadTimesheetSummary();
     } else {
         const yearFilterValue = event.toString();
 
@@ -114,4 +133,5 @@ selectYearNumber(event: any) {
                 console.error("Could not copy data to clipboard", err);
             });
     }
+
 }
