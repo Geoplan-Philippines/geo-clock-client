@@ -24,6 +24,7 @@
     "apexcharts": "^3.49.1",
     "crypto-js": "^4.2.0",
     "file-saver": "^2.0.5",
+    "moment-timezone": "^0.5.45",
     "ng-apexcharts": "^1.10.0",
     "ngx-clipboard": "^16.0.0",
     "rxjs": "~7.8.0",
