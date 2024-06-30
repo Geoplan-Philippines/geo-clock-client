@@ -6,11 +6,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { AttendanceTypeComponent } from './_components/attendance-type/attendance-type.component';
 
 
 
 @NgModule({
-  declarations: [AttendanceComponent],
+  declarations: [AttendanceComponent, AttendanceTypeComponent],
   imports: [
     CommonModule, 
     SharedModule, 

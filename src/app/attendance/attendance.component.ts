@@ -7,6 +7,7 @@ import { AttendanceService } from "./_service/attendance.service";
 import { EncryptionService } from "../authentication/_guards/encrpytion.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import * as moment from 'moment-timezone';
+import { AttendanceTypeComponent } from "./_components/attendance-type/attendance-type.component";
 
 @Component({
     selector: "app-attendance",
@@ -69,9 +70,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
     getShift(currentTime: Date): string {
         const hour = currentTime.getHours();
-        if (hour >= 22 || hour < 6) {
+        if (hour >= 22 || hour < 8) {
           return "ND";
-        } else if (hour >= 8 && hour < 18) {
+        } else if (hour >= 8 && hour < 22) {
           return "DW";
         } else {
           return "Undefined Shift";
@@ -79,10 +80,13 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     }
         
     timeIn() {
-        const currentDateTime = new Date().toISOString();
-        const date= this.datePipe.transform(currentDateTime, "yyyy-MM-dd", "Asia/Manila");
-        const type = this.getShift(new Date(currentDateTime))
-        const dateTime = this.datePipe.transform(currentDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
+        const currentDateTime = moment().tz("Asia/Manila");
+        const date = currentDateTime.format("YYYY-MM-DD");
+        const type = this.getShift(currentDateTime.toDate());
+        const time = currentDateTime.format("HH:mm:ss.sss");
+        const dateTime = `${date}T${time}Z`
+
+        console.log({ date, type, dateTime });
         const user = this.encrypt.getItem("id");
         console.log(user);
       
@@ -134,67 +138,83 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     // time in click end
     // time out click start
 
-        getShiftTimeOut(currentTime: Date): string {
-            const hour = currentTime.getHours();
-            const date = new Date(currentTime);
+     getShiftTimeOut(currentTime: Date): string {
+            const currentMoment = moment(currentTime).tz("Asia/Manila");
+            const hour = currentMoment.hour();
+            const adjustedMoment = currentMoment.clone().add(8, 'hours');
 
-            date.setHours(date.getHours() + 8);
-        
-            if (hour >= 22 || hour < 6) {
-                // Night shift
-                date.setDate(date.getDate() - 1); 
-                return date.toISOString(); 
-            } else if (hour >= 8 && hour < 18) {
-                // Day shift
-                return date.toISOString(); 
+            if (hour >= 22 || hour < 8) {
+            // // Night shift
+            // adjustedMoment.subtract(1, 'day');
+            return adjustedMoment.toISOString();
+            } else if (hour >= 8 && hour < 22) {
+            // Day shift
+            return adjustedMoment.toISOString();
             } else {
-                return "Undefined Shift";
+            return "Undefined Shift";
             }
         }
 
-        getDateType(currentTime: Date): string {
-            const hour = currentTime.getHours();
-            const date = currentTime;
-            console.log("check", date)
-            if (hour >= 22 || hour < 6) {
-                // Night shift
-                if (hour >= 1 && hour < 6) {
-                    date.setDate(date.getDate() - 1); // Subtract one day
-                }
-                const formattedDate = this.datePipe.transform(date, "yyyy-MM-dd", "Asia/Manila");
-                return formattedDate || ''; 
-            } else if (hour >= 8 && hour < 18) {
-                // Day shift
-                const formattedDate = this.datePipe.transform(date, "yyyy-MM-dd", "Asia/Manila");
-                return formattedDate || ''; 
-            } else {
-                return "Undefined Shift";
-            }
-        }
+        // getDateType(currentTime: Date): string {
+        //     const currentMoment = moment(currentTime).tz("Asia/Manila");
+        //     const hour = currentMoment.hour();
+
+        //     if (hour >= 22 || hour < 6) {
+        //     // Night shift
+        //     if (hour >= 1 && hour < 6) {
+        //         currentMoment.subtract(1, 'day');
+        //     }
+        //     return currentMoment.format("YYYY-MM-DD");
+        //     } else if (hour >= 8 && hour < 18) {
+        //     // Day shift
+        //     return currentMoment.format("YYYY-MM-DD");
+        //     } else {
+        //     return "Undefined Shift";
+        //     }
+        // }
 
       timeOut() {
-        const currentDateTime = new Date().toISOString();
-        // const currentDateSample = "2024-06-27T14:00:00.000Z";
+        const currentDateTime = moment().tz("Asia/Manila")
+        const type = this.getShift(moment(currentDateTime).toDate());
+        const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
-        console.log(user);
+
+        const time_out = this.getShiftTimeOut(moment(currentDateTime).toDate());
+        const time_in_string = moment.utc(this.filterData).valueOf();
+        const formattedTimeIn = moment.utc(time_in_string).format('YYYY-MM-DD HH:mm:ss');
+        const formattedTimeOut = moment.utc(time_out).format('YYYY-MM-DD HH:mm:ss');
+
+        const timeIn = moment.utc(formattedTimeIn, 'YYYY-MM-DD HH:mm:ss');
+        const timeOut = moment.utc(formattedTimeOut, 'YYYY-MM-DD HH:mm:ss');
+        // Calculate the difference in milliseconds
+        const duration = moment.duration(timeOut.diff(timeIn));
+
+        // Convert the duration to hours
+        const totalHours = Math.round(duration.asHours());
+        console.log("totalhours",totalHours)
+        // const time_in_date = time_in_string.split('T')[0];
+        // const time_in_time = time_in_string.split('T')[1];
+        // const time_in = `${time_in_date}T${time_in_time}`
 
 
-        const type = this.getShift(new Date(currentDateTime));
-        const time_out_ND = this.getShiftTimeOut(new Date(currentDateTime));
-        const date = this.getDateType(new Date(currentDateTime));
+
+        // console.log("time in data shiitt",time_in_date , time_in_time)
+        // console.log(`what type: ${type}`);
+        // console.log("ssssssssssssssssss",timeIn,timeOut , "formatedd",formattedTimeIn, formattedTimeOut)
+      // console.log(user);
+
+
+        // const dataTimeOut = {
+        //     type: type,
+        //     time_in:time_in_string,
+        //     time_out: time_out,
+        //     date: date,
+        //     total_hours:totalHours
+        // }
+        // console.log("siya toh",dataTimeOut)
+
+
         
-        const dataTimeOut = {
-            type: type,
-            time_out_ND: time_out_ND,
-            date: date
-        }
-        console.log("siya toh",dataTimeOut)
-
-
-        const time_in = this.filterData;
-       
-
-
 
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -206,12 +226,16 @@ export class AttendanceComponent implements OnInit, OnDestroy {
             fetch(nominatimUrl)
             .then(response => response.json())
             .then(data => {
-                console.log('Reverse Geocoding Result:', data.display_name);
+                // console.log('Reverse Geocoding Result:', data.display_name);
+                const location = data.display_name
                 const dataAttendance = {
-                    time_out: time_out_ND,
-                    time_out_location: data.display_name,
+                    time_out: time_out,
+                    time_out_location: location,
+                    total_hours:totalHours
                 };
-                console.log(data);
+                // console.log(data);
+
+
                 this.attendanceService.updateAllAttendanceData(user, date, type, dataAttendance).subscribe({
                 next: (response: any) => {
                     console.log("Time out successfully:", response);
@@ -219,6 +243,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 },
                 error: (error: any) => {
                     console.error("Error creating entry:", error);
+                    this.timeOutTypeChange(dataAttendance, date)
                 }
                 });
                 })
@@ -233,7 +258,17 @@ export class AttendanceComponent implements OnInit, OnDestroy {
           }
         );
       }
-      
+    timeOutTypeChange(data: any, date: any){
+        const descriptionDialog = this.dialog.open(AttendanceTypeComponent, {
+            data: {
+                date:date,
+                time_out: data.time_out,
+                time_out_location: data.time_out_location,
+                total_hours: data.total_hours
+            },
+        });
+        return descriptionDialog.afterClosed();
+    } 
     //time out click end
 
     // history table start
@@ -241,7 +276,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         const user = this.encrypt.getItem("id");
         this.attendanceService.getAllAttendanceData().subscribe((res: any) => {
             const ds = res;
-            console.log(ds);
+            // console.log(ds);
 
             this.dataSource = new MatTableDataSource<AttedanceModel>(ds);
 
@@ -258,14 +293,14 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
 
             const dateString = this.datePipe.transform(firstdate, "yyyy-MM-dd", "Asia/Manila");
-            console.log(dateString)
+            // console.log(dateString)
             const findTimeIn = ds.find((attendanceData: any) => 
                 attendanceData.date === dateString && attendanceData.user.id === user
               );
             
             this.filterData = findTimeIn.time_in
             
-            console.log(findTimeIn.time_in)
+            // console.log(findTimeIn.time_in)
         });
     }
 
