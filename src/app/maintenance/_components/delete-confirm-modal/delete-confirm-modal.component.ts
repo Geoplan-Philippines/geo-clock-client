@@ -5,6 +5,7 @@ import { MaintenanceService } from "../../_service/maintenance.service";
 
 export interface DeleteData {
     id: any;
+    table: any;
 }
 
 @Component({
@@ -19,16 +20,18 @@ export class DeleteConfirmModalComponent {
         private snackBarService: SnackBarService,
         private dialogRef: MatDialogRef<DeleteConfirmModalComponent>,
     ) {}
+
     deleteEntry() {
-        this.maintenanceService.deleteDepartmentData(this.data.id).subscribe({
-            next: (response) => {
-                console.log("Entry successfully:", response);
-                this.dialogRef.close();
-                this.snackBarService.openSnackBar("Entry has been deleted", "okay");
-            },
-            error: (error) => {
-                console.error("Error creating entry:", error);
-            },
-        });
+        console.log(this.data.id, this.data.table);
+            this.maintenanceService.deleteDepartmentData(this.data.id, this.data.table).subscribe({
+                next: (response) => {
+                    console.log("Entry successfully:", response);
+                    this.dialogRef.close();
+                    this.snackBarService.openSnackBar("Entry has been deleted", "okay");
+                },
+                error: (error) => {
+                    console.error("Error creating entry:", error);
+                },
+            });
     }
 }
