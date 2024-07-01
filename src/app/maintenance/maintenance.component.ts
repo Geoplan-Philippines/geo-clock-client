@@ -18,10 +18,7 @@ export class MaintenanceComponent {
 
     @Output() refreshEmployees: EventEmitter<void> = new EventEmitter<void>();
 
-
     formDataHoliday!: FormGroup;
-
-
 
     formDataDep!: FormGroup; // Using definite assignment assertion
     displayedColumns: string[] = ["department_name", "action"];
@@ -62,15 +59,13 @@ export class MaintenanceComponent {
         });
     }
 
-
     submitFormHoliday(): void {
         if (this.formDataHoliday.valid) {
-            const addedDepartment = this.formDataHoliday.value;
-            this.maintenanceService.postAllHolidayData(addedDepartment).subscribe({
+            const addedHoliday = this.formDataHoliday.value;
+            this.maintenanceService.postAllHolidayData(addedHoliday).subscribe({
                 next: (response) => {
                     console.log("Holiday created successfully:", response);
                     this.formDataHoliday.reset();
-                    this.refreshEmployees.emit();
                     this.loadHolidayData();
                 },
                 error: (error) => {
@@ -83,8 +78,6 @@ export class MaintenanceComponent {
             Object.values(this.formDataDep.controls).forEach((control) => control.markAsTouched());
         }
     }
-
-
 
     createFormDep(): void {
         this.formDataDep = this.fb.group({
@@ -99,8 +92,7 @@ export class MaintenanceComponent {
                 next: (response) => {
                     console.log("Department created successfully:", response);
                     this.formDataDep.reset();
-                    
-
+                    this.loadDepartmentData(); // Adjusted call to pass the date object
                 },
                 error: (error) => {
                     console.error("Error creating department:", error);
@@ -111,7 +103,6 @@ export class MaintenanceComponent {
             console.log("Form is invalid. Please fill in all required fields.");
             Object.values(this.formDataDep.controls).forEach((control) => control.markAsTouched());
         }
-        this.loadDepartmentData(); // Adjusted call to pass the date object
     }
 
     scrollToSection(sectionId: string) {
@@ -120,10 +111,12 @@ export class MaintenanceComponent {
             element.scrollIntoView({ behavior: "smooth" });
         }
     }
+
     deleteData(id: number) {
         this.dialogRef = this.dialog.open(DeleteConfirmModalComponent, {
             data: {
                 id: id,
+                table: "department",
             },
         });
 
@@ -131,6 +124,21 @@ export class MaintenanceComponent {
             // Handle result here
             console.log("Dialog closed with result:", result);
             this.loadDepartmentData(); // Adjusted call to pass the date object
+        });
+    }
+
+    deleteDataHoliday(id: number) {
+        this.dialogRef = this.dialog.open(DeleteConfirmModalComponent, {
+            data: {
+                id: id,
+                table: "holiday",
+            },
+        });
+
+        this.dialogRef.afterClosed().subscribe((result: any) => {
+            // Handle result here
+            console.log("Dialog closed with result:", result);
+            this.loadHolidayData(); // Adjusted call to pass the date object
         });
     }
 }

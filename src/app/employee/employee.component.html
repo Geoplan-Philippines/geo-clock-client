@@ -1,9 +1,9 @@
 <app-header></app-header>
-<div class="flex">
+<div class="flex h-full max-h-[93vh]">
     <div>
         <app-aside></app-aside>
     </div>
-    <div class="static z-0 mt-10 flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
+    <div class="static z-0 mt-10 flex-1 overflow-x-hidden overflow-y-scroll p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
         <div class="flex overflow-hidden whitespace-nowrap">
             <mat-form-field class="h-20 w-full">
                 <mat-label>Filter</mat-label>
@@ -82,7 +82,7 @@
                 </table>
             </div>
         </div>
-        <mat-paginator [pageSizeOptions]="[4, 5, 6]" showFirstLastButtons aria-label="Select page of periodic elements">
+        <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons aria-label="Select page of periodic elements">
         </mat-paginator>
     </div>
 </div>

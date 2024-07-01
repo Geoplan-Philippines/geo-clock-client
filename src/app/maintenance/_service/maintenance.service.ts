@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/internal/Observable";
-import { config } from 'src/config/config.local';
+import { config } from "src/config/config.local";
 
 @Injectable({
     providedIn: "root",
@@ -14,19 +14,28 @@ export class MaintenanceService {
         return this._http.get(`${this.apiUrl}/department`);
     }
 
-    postAllHolidayData(addedHoliday: any): Observable<any>{
-        return this._http.post(`${this.apiUrl}/holiday`,addedHoliday);
+    postAllHolidayData(addedHoliday: any): Observable<any> {
+        return this._http.post(`${this.apiUrl}/holiday`, addedHoliday);
     }
 
-    postAllDepartmentData(addedDepartment: any): Observable<any>{
-        return this._http.post(`${this.apiUrl}/department`,addedDepartment);
+    postAllDepartmentData(addedDepartment: any): Observable<any> {
+        return this._http.post(`${this.apiUrl}/department`, addedDepartment);
     }
 
     getAllHolidayData() {
         return this._http.get(`${this.apiUrl}/holiday`);
-    }    
-    deleteDepartmentData(id: any){
-        return this._http.delete(`${this.apiUrl}/department/${id}`)
     }
-}
 
+    deleteDepartmentData(id: any, table: any) {
+        if (table === "holiday") {
+            return this._http.delete(`${this.apiUrl}/holiday/${id}`);
+            console.log("pogi");
+        } else {
+            return this._http.delete(`${this.apiUrl}/department/${id}`);
+            console.log("pogi2");
+        }
+    }
+    // deleteHoliday(id: any){
+    //     return this._http.delete(`${this.apiUrl}/holidayTable/${id}`)
+    // }
+}
