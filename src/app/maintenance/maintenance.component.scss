@@ -25,11 +25,15 @@ $secondary-text-color: white;
     }
 }
 :host ::ng-deep {
-    .example-full-width {
+    .example-full-width-department {
         width: 100%;
     }
     .submit-Btn {
         background-color: $geo-color;
         color: $secondary-text-color !important;
+    }
+    .example-full-width-holiday {
+        width: 100%;
+        margin: 0px 5px;
     }
 }

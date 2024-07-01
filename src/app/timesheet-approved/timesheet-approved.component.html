@@ -1,16 +1,16 @@
 <app-header></app-header>
-<div class="flex">
+<div class="flex h-full max-h-[93vh]">
     <div>
         <app-aside></app-aside>
     </div>
-    <div class="static z-0 mt-10 h-screen flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:p-10 sm:pt-10">
+    <div class="static z-0 h-full flex-1 overflow-x-hidden overflow-y-scroll p-0 pt-10 shadow-lg sm:p-10 sm:pt-10">
         <div class="filters block justify-between sm:flex">
             <mat-form-field class="w-[100%] sm:w-80">
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input class="custom-input" />
             </mat-form-field>
-             <!-- renan year start -->
-             <mat-form-field class="w-[100%] sm:w-80">
+            <!-- renan year start -->
+            <mat-form-field class="w-[100%] sm:w-80">
                 <mat-label>Year</mat-label>
                 <mat-select [(value)]="latestYearNumber" (selectionChange)="selectYearNumber($event)">
                     <mat-option [value]="null">Clear</mat-option>
@@ -22,16 +22,15 @@
             <!-- renan year end -->
             <mat-form-field class="w-[100%] sm:w-80">
                 <mat-label>Week no.</mat-label>
-                <mat-select  [(value)]="latestWeekNumber" (selectionChange)="selectWeekNumber($event)">
+                <mat-select [(value)]="latestWeekNumber" (selectionChange)="selectWeekNumber($event)">
                     <mat-option [value]="null">Clear</mat-option>
                     <mat-option *ngFor="let data of weekNumber" [value]="data.value.toString()">
                         {{ data.wk_name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-           
         </div>
-        <div class="static overflow-auto">
+        <div class="static h-[40rem] overflow-y-scroll">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
                     <ng-container matColumnDef="week_no">

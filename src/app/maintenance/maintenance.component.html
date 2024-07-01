@@ -1,69 +1,55 @@
 <app-header></app-header>
-<div class="flex">
+<div class="flex h-full max-h-[93vh]">
     <div>
         <app-aside></app-aside>
     </div>
-    <div
-        class="static z-0 mt-10 h-[91vh] flex-1 overflow-x-hidden overflow-y-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10"
-    >
+    <div class="static z-10 mt-10 h-full flex-1 overflow-x-hidden overflow-y-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
         <div class="mx-1 grid grid-cols-[100px_1fr] gap-4 sm:mx-40">
             <div>
                 <ul class="category">
                     <li (click)="scrollToSection('section1')"><p>Holidays</p></li>
                     <li (click)="scrollToSection('section2')"><p>Department</p></li>
+                    <li (click)="scrollToSection('section3')"><p>Classification</p></li>
                 </ul>
             </div>
             <div class="selected h-[80vh] overflow-y-scroll border-l-2 border-solid border-l-[#0a54a0] px-5">
-                <div class="h-auto">
-                    <p>Holidays</p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
-                    consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus nulla
-                    soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos ut
-                    eligendi a in maiores saepe quia impedit!
-                </div>
-                <div class="h-auto">
-                    <p>example1</p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
-                    consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus nulla
-                    soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos ut
-                    eligendi a in maiores saepe quia impedit!
-                </div>
                 <div id="section1" class="h-auto">
                     <p>Holidays</p>
-
                     <form [formGroup]="formDataHoliday" (ngSubmit)="submitFormHoliday()">
                         <div class="block w-[100%] sm:flex">
-                            <div class="sm:ml-1">
-                                <mat-form-field class="example-full-width">
-                                    <mat-label>Holiday Name</mat-label>
-                                    <input matInput formControlName="holiday_name" placeholder="Enter Holiday Name" />
-                                </mat-form-field>
-                            </div>
-                            <div class="sm:ml-1">
-                                <mat-form-field class="example-full-width">
-                                    <mat-label>Holiday Category</mat-label>
-                                    <mat-select formControlName="type" placeholder="Enter Holiday Category">
-                                        <mat-option value="SH">Special Holiday</mat-option>
-                                        <mat-option value="RH">Regular Holiday</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div class="sm:ml-1">
-                                <mat-form-field class="example-full-width" appearance="fill">
-                                    <mat-label>Holiday Date</mat-label>
-                                    <input matInput [matDatepicker]="picker" formControlName="holiday_date" placeholder="Enter Holiday Date" />
-                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                            <div class="mb-8 ml-0 mt-3 sm:ml-5 sm:mt-3">
-                                <button mat-stroked-button class="submit-Btn bg w-full sm:w-32" [disabled]="!formDataHoliday.valid">
+                            <mat-form-field class="example-full-width-holiday">
+                                <mat-label>Holiday Name</mat-label>
+                                <input matInput formControlName="holiday_name" placeholder="Enter Holiday Name" />
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width-holiday">
+                                <mat-label>Holiday Category</mat-label>
+                                <mat-select formControlName="type" placeholder="Enter Holiday Category">
+                                    <mat-option value="SH">Special Holiday</mat-option>
+                                    <mat-option value="RH">Regular Holiday</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width-holiday" appearance="fill">
+                                <mat-label>Holiday Date</mat-label>
+                                <input
+                                    matInput
+                                    [matDatepicker]="picker"
+                                    formControlName="holiday_date"
+                                    placeholder="Enter Holiday Date"
+                                />
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                            <div class="mb-8 ml-0 mt-3 sm:mt-3">
+                                <button
+                                    mat-stroked-button
+                                    class="submit-Btn bg w-full sm:w-32"
+                                    [disabled]="!formDataHoliday.valid"
+                                >
                                     Submit
                                 </button>
                             </div>
                         </div>
                     </form>
-                    
                     <table mat-table [dataSource]="dataSourceHolidays" class="mat-elevation-z8">
                         <ng-container matColumnDef="holiday_name">
                             <th mat-header-cell *matHeaderCellDef>
@@ -86,7 +72,13 @@
                             <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Action</h1></th>
                             <td mat-cell *matCellDef="let element">
                                 <div class="flex justify-center">
-                                    <button mat-stroked-button class="submit-Btn bg w-full text-center sm:w-32">Delete</button>
+                                    <button
+                                        mat-stroked-button
+                                        (click)="deleteDataHoliday(element.id)"
+                                        class="submit-Btn bg w-full text-center sm:w-32"
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </td>
                         </ng-container>
@@ -99,7 +91,7 @@
                     <p>Department</p>
                     <form [formGroup]="formDataDep" (ngSubmit)="submitFormDep()">
                         <div class="block w-[100%] sm:flex">
-                            <mat-form-field class="example-full-width">
+                            <mat-form-field class="example-full-width-department">
                                 <mat-label>Department Name</mat-label>
                                 <input matInput formControlName="department_name" placeholder="Enter Employee Code" />
                             </mat-form-field>
@@ -135,12 +127,8 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </div>
-                <div class="h-screen">
-                    <p>example2</p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel consequuntur omnis commodi odit labore
-                    consequatur neque reprehenderit id aut totam. Pariatur, nisi obcaecati laborum, quam ad ipsa temporibus nulla
-                    soluta impedit ratione recusandae odit vero quia suscipit, eligendi vel consectetur! Inventore quos ut
-                    eligendi a in maiores saepe quia impedit!
+                <div id="section3" class="h-screen">
+                    <p>Classification</p>
                 </div>
             </div>
         </div>
