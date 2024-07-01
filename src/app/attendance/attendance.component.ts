@@ -273,36 +273,71 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
     // history table start
     loadAttendance() {
-        const user = this.encrypt.getItem("id");
-        this.attendanceService.getAllAttendanceData().subscribe((res: any) => {
-            const ds = res;
-            // console.log(ds);
+        const userId = Number(this.encrypt.getItem("id"));
+    
+        // Load user's department
+        this.attendanceService.getAllemployeetData().subscribe((employeeData: any) => {
+            const currentUser = employeeData.find((emp: any) => emp.id === userId);
+    
+            if (currentUser) {
+                const userRole = currentUser.role;
+                const userDepartment = currentUser.department;
+                const isOwner = userDepartment === "owner";
+    
+                this.attendanceService.getAllAttendanceData().subscribe((res: any) => {
+                    const ds = res;
+    
+                    if (isOwner) {
+                        this.dataSource = new MatTableDataSource<AttedanceModel>(ds);
+    
+                        ds.map((item: any, index: number) => ({ ...item, id: index + 1 }));
+                        const filteredData = ds.filter((data: any) => {
+                            const matchesGeneralFilter = this.generalFilter
+                                ? JSON.stringify(data).toLowerCase().includes(this.generalFilter)
+                                : true;
+                            return matchesGeneralFilter;
+                        });
+                        this.dataSource.data = filteredData;
+    
+                        const firstdate = new Date();
+                        const dateString = this.datePipe.transform(firstdate, "yyyy-MM-dd", "Asia/Manila");
+    
+                        const findTimeIn = ds.find((attendanceData: any) =>
+                            attendanceData.date === dateString && attendanceData.user.id === userId
+                        );
+    
+                        this.filterData = findTimeIn ? findTimeIn.time_in : null;
+    
+                    } else {
+                        // Filter timesheets based on user's department
+                        let filteredattendance;
 
-            this.dataSource = new MatTableDataSource<AttedanceModel>(ds);
-
-            ds.map((item: any, index: number) => ({ ...item, id: index + 1 }));
-            const filteredData = ds.filter((data: any) => {
-                const matchesGeneralFilter = this.generalFilter
-                    ? JSON.stringify(data).toLowerCase().includes(this.generalFilter)
-                    : true;
-                return matchesGeneralFilter;
-            });
-            this.dataSource.data = filteredData;
-            const firstdate = new Date()
-         
-
-
-            const dateString = this.datePipe.transform(firstdate, "yyyy-MM-dd", "Asia/Manila");
-            // console.log(dateString)
-            const findTimeIn = ds.find((attendanceData: any) => 
-                attendanceData.date === dateString && attendanceData.user.id === user
-              );
-            
-            this.filterData = findTimeIn.time_in
-            
-            // console.log(findTimeIn.time_in)
+                        if (userRole === 'admin') {
+                            filteredattendance = ds.filter(
+                                (timesheet: any) => timesheet.user.department === userDepartment
+                            );
+                        } else if(userRole === 'user') {
+                            filteredattendance = ds.filter(
+                                (timesheet: any) => timesheet.user.id === userId
+                            );
+                        }
+    
+                        const updatedFilteredAttedance = filteredattendance.map((item: any, index: number) => ({ ...item, id: index + 1 }));
+                        const filteredData = updatedFilteredAttedance.filter((data: any) => {
+                            const matchesGeneralFilter = this.generalFilter
+                                ? JSON.stringify(data).toLowerCase().includes(this.generalFilter)
+                                : true;
+                            return matchesGeneralFilter;
+                        });
+    
+                        this.dataSource.data = filteredData;
+                    }
+                });
+            }
         });
     }
+    
+    
 
     // history table end
 

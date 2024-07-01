@@ -36,6 +36,11 @@ const routes: Routes = [
     {
         path: "projects",
         component: ProjectsComponent,
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
+        data: {
+            authGuardPipe: redirectUnauthorizedToLogin,
+            role: ["admin", "superAdmin", "user"],
+        },
     },
     {
         path: "register",
@@ -45,16 +50,31 @@ const routes: Routes = [
         path: "profile",
         // component: LoginComponent,
         component: ProfileComponent,
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
+        data: {
+            authGuardPipe: redirectUnauthorizedToLogin,
+            role: ["admin", "superAdmin", "user"],
+        },
     },
     {
         path: "maintenance",
         // component: LoginComponent,
         component: MaintenanceComponent,
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
+        data: {
+            authGuardPipe: redirectUnauthorizedToLogin,
+            role: ["superAdmin"],
+        },
     },
     {
         path: "timesheet-summary",
         // component: LoginComponent,
         component: TimesheetSummaryComponent,
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
+        data: {
+            authGuardPipe: redirectUnauthorizedToLogin,
+            role: ["superAdmin"],
+        },
     },
     {
         path: "timesheet-approved",
@@ -70,10 +90,12 @@ const routes: Routes = [
         path: "timesheet",
         component: TimesheetComponent,
         // firebase auth
-        canActivate: [AngularFireAuthGuard],
+        canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
+            role: ["admin", "superAdmin", "user"],
         },
+        
     },
     {
         path: "dashboard",
@@ -108,7 +130,7 @@ const routes: Routes = [
         canActivate: [AngularFireAuthGuard, RoleAuthGuard],
         data: {
             authGuardPipe: redirectUnauthorizedToLogin,
-            role: ["admin", "superAdmin"],
+            role: ["admin", "superAdmin", "user"],
         },
     },
 ];
