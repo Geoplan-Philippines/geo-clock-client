@@ -68,11 +68,15 @@ export class TimesheetSummaryComponent {
         } else {
             this.filterWeek = event.value;
             const weekFilterValue = event.value.toString();
-    
+
+            let filterYear = this.filterYear || this.latestYearNumber;
+
+
             console.log(weekFilterValue);
-            console.log(this.filterYear);
+            console.log(filterYear);
+            console.log("a",this.latestYearNumber)
     
-            this.timesheetSummaryService.getFilteringYearAndWeek(weekFilterValue, this.filterYear).subscribe((res: TimesheetSummaryModel[]) => {
+            this.timesheetSummaryService.getFilteringYearAndWeek(weekFilterValue, filterYear).subscribe((res: TimesheetSummaryModel[]) => {
                 const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
                 this.dataSource.data = ds;
     
@@ -96,8 +100,14 @@ export class TimesheetSummaryComponent {
             const yearFilterValue = event.value.toString();
             console.log(event);
             console.log(this.filterWeek);
-    
-            this.timesheetSummaryService.getFilteringYearAndWeek(this.filterWeek, yearFilterValue).subscribe((res: TimesheetSummaryModel[]) => {
+            
+
+            let filterWeek = this.filterWeek || this.latestWeekNumber;
+
+              console.log(filterWeek);
+              console.log("a", this.latestWeekNumber)
+
+            this.timesheetSummaryService.getFilteringYearAndWeek(filterWeek, yearFilterValue).subscribe((res: TimesheetSummaryModel[]) => {
                 const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
                 this.dataSource.data = ds;
     

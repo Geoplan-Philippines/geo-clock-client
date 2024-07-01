@@ -190,7 +190,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         const duration = moment.duration(timeOut.diff(timeIn));
 
         // Convert the duration to hours
-        const totalHours = Math.round(duration.asHours());
+        const totalHours = duration.asMinutes() < 60 ? 0 : Math.round(duration.asHours());
         console.log("totalhours",totalHours)
         // const time_in_date = time_in_string.split('T')[0];
         // const time_in_time = time_in_string.split('T')[1];

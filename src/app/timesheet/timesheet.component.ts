@@ -29,6 +29,7 @@ import { WholeDeleteModalComponent } from "./_components/whole-delete-modal/whol
 
 
 import { EncryptionService } from "../authentication/_guards/encrpytion.service";
+import * as moment from "moment";
 @Component({
     selector: "app-timesheet",
     templateUrl: "./timesheet.component.html",
@@ -910,32 +911,41 @@ export class TimesheetComponent {
     }
 
     getTimesheetApproved(weekNo: number, date: any) {
-        var dateinput = new Date(date);
-        const year = dateinput.getFullYear();
-        var weekNumber = weekNo;
-        var startDate = new Date(year, 0, 1);
-        var dayOfWeek = startDate.getDay();
-        // Adjust the start date to the first Monday of the year
-        startDate.setDate(startDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -5 : 1));
-        // Adjust the start date to the first day of the specified week
-        startDate.setDate(startDate.getDate() + (weekNumber - 1) * 7);
+        // var dateinput = new Date(date);
+        // const year = dateinput.getFullYear();
+      
+        // var startDate = new Date(year, 0, 1);
+        // var dayOfWeek = startDate.getDay();
+        // // Adjust the start date to the first Monday of the year
+        // startDate.setDate(startDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -5 : 1));
+        // // Adjust the start date to the first day of the specified week
+        // startDate.setDate(startDate.getDate() + (weekNumber - 1) * 7);
 
-        // Set time components of startDate to 00:00:00
-        startDate.setHours(0, 0, 0, 0);
+        // // Set time components of startDate to 00:00:00
+        // startDate.setHours(0, 0, 0, 0);
 
-        // Calculate the end date by adding 6 days to the start date
-        var endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 7);
+        // // Calculate the end date by adding 6 days to the start date
+        // var endDate = new Date(startDate);
+        // endDate.setDate(endDate.getDate() + 7);
 
-        // Set time components of endDate to 00:00:00
-        endDate.setHours(0, 0, 0, 0);
+        // // Set time components of endDate to 00:00:00
+        // endDate.setHours(0, 0, 0, 0);
 
-        // Convert start date and end date to string representation in "YYYY-MM-DD" format
-        const startDateString = startDate.toISOString().split("T")[0] + "T00:00:00Z";
-        const endDateString = endDate.toISOString().split("T")[0] + "T00:00:00Z";
-
+        // // Convert start date and end date to string representation in "YYYY-MM-DD" format
+        // const startDateString = startDate.toISOString().split("T")[0] + "T00:00:00Z";
+        // const endDateString = endDate.toISOString().split("T")[0] + "T00:00:00Z";
+        const weekNumber = weekNo;
         const userId = Number(this.encrypt.getItem("id"));
-
+        const dateinput = moment.tz(date, "Asia/Manila");
+        
+        // Get the year from the date
+        const year = dateinput.year();
+        // const startDate = moment.tz("Asia/Manila");
+        
+        const startDate = dateinput.clone().startOf('isoWeek');
+        const endDate = dateinput.clone().endOf('isoWeek');
+        console.log("monday",startDate.format());
+        console.log("sunday",endDate.format());
         let employeeName: string;
         this.timesheetService.getUserLoadById(userId).subscribe((res: any) => {
             const ds = res;
@@ -964,11 +974,12 @@ export class TimesheetComponent {
                     week_no: weekNumber,
                     user_id: userId,
                     approved: "",
-                    start_date: startDateString,
-                    end_date: endDateString,
+                    start_date: startDate,
+                    end_date: endDate,
                     employee_name: employeeName,
                 };
                 this.postTimesheetApproved(ApprovedData);
+                // console.log(startDate)
             }
         });
     }

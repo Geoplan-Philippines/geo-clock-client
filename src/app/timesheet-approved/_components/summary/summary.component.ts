@@ -7,6 +7,7 @@ import { ClipboardModule, ClipboardService } from "ngx-clipboard";
 import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.service";
 
 import { EncryptionService } from "src/app/authentication/_guards/encrpytion.service";
+import * as moment from "moment";
 export interface DialogData {
     id: number;
     week_number: number;
@@ -44,6 +45,14 @@ export class SummaryComponent implements OnInit {
         this.loadTimesheet();
         this.loadAdminUser();
         this.loadEmployedUser();
+        const data={
+            id: this.data.id,
+            week_number:this.data.week_number,
+            user_id:this.data.user_id,
+            start_date: this.data.start_date, 
+            end_date:this.data.end_date
+        }
+        console.log("data of user",data)
     }
 
     loadAdminUser() {
@@ -78,7 +87,7 @@ export class SummaryComponent implements OnInit {
         this.SummaryService.getAllTimesheetDaily(weekNumber, userId, startDate, endDate).subscribe((res: any) => {
             const ds = res;
             this.employeeEntry = ds;
-
+            console.log("daraSource", ds)
             const timesheetEntries = ds[0]?.timesheetEntries || [];
             this.timesheetId = timesheetEntries.id;
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
@@ -134,7 +143,12 @@ export class SummaryComponent implements OnInit {
         const approvedForm = {
             approved: status,
         };
-        this.SummaryService.patchTimesheetApproved(ApprovedId, approvedForm).subscribe({
+        const weekNumber = this.data.week_number;
+        const userId = this.data.user_id;
+        const startDate = this.data.start_date;
+        // const formattedDate = startDate.format('YYYY-MM-DD');
+
+        this.SummaryService.patchTimesheetApproved(userId, startDate ,weekNumber, approvedForm).subscribe({
             next: (response) => {
                 // console.log("Edit successfully:", response);
 

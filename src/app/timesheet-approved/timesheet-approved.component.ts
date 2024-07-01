@@ -44,6 +44,7 @@ export class TimesheetApprovedComponent {
     ) {}
 
     openDialog(approvedId: number, weekNo: number, userId: number, startDate: Date, endDate: Date) {
+        console.log("id",approvedId)
         const dialogRef = this.dialog.open(SummaryComponent, {
             data: {
                 id: approvedId,
@@ -143,6 +144,8 @@ export class TimesheetApprovedComponent {
                             return  matchesGeneralFilter;
                         });
                         this.dataSource.data = filteredData;
+
+                        console.log("datasource",ds)
                     } else {
                         // Filter timesheets based on user's department
                         const filteredTimesheets = timesheetData.filter(
@@ -236,6 +239,8 @@ export class TimesheetApprovedComponent {
                             return  matchesGeneralFilter;
                         });
                         this.dataSource.data = filteredData;
+                        console.log("datasource2",ds)
+
                     } else {
                         // Filter timesheets based on user's department
                         const filteredTimesheets = timesheetData.filter(

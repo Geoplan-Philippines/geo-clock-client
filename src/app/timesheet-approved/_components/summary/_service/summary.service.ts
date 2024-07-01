@@ -20,8 +20,8 @@ export class SummaryService {
         return this._http.patch(`http://localhost:3000/timesheet-entry/${entryId}`,data)
 
     }
-    patchTimesheetApproved(ApprovedId: number, data: any):Observable <any>{
-        return this._http.patch(`http://localhost:3000/timesheet-approved/${ApprovedId}`, data)
+    patchTimesheetApproved(userNumber:number,yearNumber: any, week_number: number, data: any):Observable <any>{
+        return this._http.patch(`http://localhost:3000/timesheet-approved/${userNumber}/${yearNumber}/${week_number}`, data)
     }
 
     //Data Timesheet Summary
