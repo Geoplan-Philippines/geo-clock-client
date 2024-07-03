@@ -32,6 +32,10 @@ export class AttendanceService {
     
     getAllemployeetData() {
       return this._http.get(`${this.apiUrl}/users`);
-  }
+    }
+
+    updateTimeInAttenadance(userId: number, date: any ,type:string, data:any){
+      return this._http.patch(`${this.apiUrl}/attendance/timeInUpdate/${userId}/${date}/${type}`, data)
+    }
 
 }

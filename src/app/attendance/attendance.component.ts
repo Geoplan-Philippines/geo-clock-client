@@ -8,6 +8,8 @@ import { EncryptionService } from "../authentication/_guards/encrpytion.service"
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import * as moment from 'moment-timezone';
 import { AttendanceTypeComponent } from "./_components/attendance-type/attendance-type.component";
+import { TimeInValidationComponent } from "./_components/time-in-validation/time-in-validation.component";
+import { SnackBarService } from "../shared/service/snack-bar/snack-bar.service";
 
 @Component({
     selector: "app-attendance",
@@ -38,6 +40,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
     constructor(
         private datePipe: DatePipe,
+        private _snackBarService: SnackBarService,
         private attendanceService: AttendanceService,
         private encrypt: EncryptionService,
         private dialog: MatDialog
@@ -68,11 +71,11 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
     // time in click start
 
-    getShift(currentTime: Date): string {
+    getShiftTimeInType(currentTime: Date): string {
         const hour = currentTime.getHours();
-        if (hour >= 22 || hour < 8) {
+        if (hour >= 21 || hour < 6) {
           return "ND";
-        } else if (hour >= 8 && hour < 22) {
+        } else if (hour >= 7 && hour < 21) {
           return "DW";
         } else {
           return "Undefined Shift";
@@ -82,7 +85,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     timeIn() {
         const currentDateTime = moment().tz("Asia/Manila");
         const date = currentDateTime.format("YYYY-MM-DD");
-        const type = this.getShift(currentDateTime.toDate());
+        const type = this.getShiftTimeInType(currentDateTime.toDate());
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`
 
@@ -96,31 +99,53 @@ export class AttendanceComponent implements OnInit, OnDestroy {
             const longitude = position.coords.longitude;
             
             const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
-
+        
 
             fetch(nominatimUrl)
             .then(response => response.json())
             .then(data => {
-                console.log('Reverse Geocoding Result:', data.display_name);
-                const dataAttendance = {
-                    user_id: user,
-                    date: date,
-                    attendance_type: type,
-                    time_in: dateTime,
-                    time_in_location: data.display_name,
-                };
-                console.log(data);
-                this.attendanceService.postAllAttendanceData(dataAttendance).subscribe({
-                next: (response: any) => {
-                    console.log("Time In successfully:", response);
-                    this.loadAttendance();
-                },
-                error: (error: any) => {
-                    console.error("Error creating entry:", error);
-                }
-                });
-                })
 
+                console.log('Reverse Geocoding Result:', data.display_name);
+
+            
+                const dateTimeValidation = `${date}T07:00:00.000Z`
+                const dateValidationIn = moment(dateTimeValidation).set({ hour: 7, minute: 0, second: 0, millisecond: 0 }).format('MMMM D YYYY HH:mm A');
+
+                if(type === "Undefined Shift"){
+                    this._snackBarService.openSnackBar(`You can wait at ${dateValidationIn}`, "okay");
+                }else{    
+                    const dataAttendance = {
+                        user_id: user,
+                        date: date,
+                        attendance_type: type,
+                        time_in: dateTime,
+                        time_in_location: data.display_name,
+                    };
+                    console.log(data);
+                    this.attendanceService.postAllAttendanceData(dataAttendance).subscribe({
+                    next: (response: any) => {
+                        this._snackBarService.openSnackBar("Time In Successfully", "okay");
+                        this.loadAttendance();
+                    },
+                    error: (error: any) => {
+                        // console.error("Error creating entry:", error);
+                       const timeInValidate = this.dialog.open(TimeInValidationComponent, {
+                            data: {
+                                user_id: user,
+                                date: date,
+                                attendance_type: type,
+                                time_in: dateTime,
+                                time_in_location: data.display_name,
+                            },
+                        });
+                        return timeInValidate.afterClosed().subscribe(() => {
+                            this.loadAttendance();
+                          });
+                    }
+                    });
+                }
+            })
+                    
             .catch(error => {
               console.error('Error fetching geocoding data:', error);
             }); 
@@ -137,7 +162,16 @@ export class AttendanceComponent implements OnInit, OnDestroy {
       }
     // time in click end
     // time out click start
-
+    getShiftTimeOutType(currentTime: Date): string {
+        const hour = currentTime.getHours();
+        if (hour >= 22 || hour < 7) {
+          return "ND";
+        } else if (hour >= 7 && hour < 22) {
+          return "DW";
+        } else {
+          return "Undefined Shift";
+        }
+    }
      getShiftTimeOut(currentTime: Date): string {
             const currentMoment = moment(currentTime).tz("Asia/Manila");
             const hour = currentMoment.hour();
@@ -175,7 +209,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
       timeOut() {
         const currentDateTime = moment().tz("Asia/Manila")
-        const type = this.getShift(moment(currentDateTime).toDate());
+        const type = this.getShiftTimeOutType(moment(currentDateTime).toDate());
         const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
 
@@ -238,11 +272,10 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
                 this.attendanceService.updateAllAttendanceData(user, date, type, dataAttendance).subscribe({
                 next: (response: any) => {
-                    console.log("Time out successfully:", response);
+                    this._snackBarService.openSnackBar("Time Out Successfully", "okay");
                     this.loadAttendance();
                 },
                 error: (error: any) => {
-                    console.error("Error creating entry:", error);
                     this.timeOutTypeChange(dataAttendance, date)
                 }
                 });
@@ -267,7 +300,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 total_hours: data.total_hours
             },
         });
-        return descriptionDialog.afterClosed();
+       return descriptionDialog.afterClosed().subscribe(() => {
+           this.loadAttendance();
+          });
     } 
     //time out click end
 

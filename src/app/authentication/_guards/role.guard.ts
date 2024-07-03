@@ -31,10 +31,10 @@ export class RoleAuthGuard implements CanActivate {
         switch(roleToken){
             case "admin":
             case "superAdmin":
-                this.router.navigate(['/timesheet']);  
+                this.router.navigate(['/attendance']);  
                 break;
             case "user":
-                this.router.navigate(['/timesheet']); 
+                this.router.navigate(['/attendance']); 
                 break;
             default:
                 console.log("error in role");

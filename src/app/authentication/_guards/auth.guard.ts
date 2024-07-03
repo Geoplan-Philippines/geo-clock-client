@@ -43,13 +43,13 @@ export class authGuard implements CanActivate {
           //condition role
           switch(this.users[i].role){
             case "superAdmin":
-                    this.router.navigate(['/timesheet']); 
+                    this.router.navigate(['/attendance']); 
                     break;
             case "admin":
-                    this.router.navigate(['/timesheet']); 
+                    this.router.navigate(['/attendance']); 
                     break;
             case "user":
-                    this.router.navigate(['/timesheet']); 
+                    this.router.navigate(['/attendance']); 
                     break;
           }
         }
