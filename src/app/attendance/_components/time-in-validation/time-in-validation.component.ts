@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { AttendanceService } from "../../_service/attendance.service";
 import { EncryptionService } from "src/app/authentication/_guards/encrpytion.service";
 import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.service";
+import { ExistingValidationComponent } from "../existing-validation/existing-validation.component";
 
 export interface DialogData {
     user_id: any;
@@ -26,6 +27,7 @@ export class TimeInValidationComponent implements OnInit {
         private encrypt: EncryptionService,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
         private dialogRef: MatDialogRef<TimeInValidationComponent>,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -56,7 +58,9 @@ export class TimeInValidationComponent implements OnInit {
             },
             error: (error: any) => {
                 console.error("Error creating entry:", error);
-                this.dialogRef.close();
+                this.dialog.open(ExistingValidationComponent, {});
+
+                // this.dialogRef.close();
             },
         });
     }

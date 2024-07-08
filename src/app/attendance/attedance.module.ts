@@ -8,11 +8,13 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AttendanceTypeComponent } from './_components/attendance-type/attendance-type.component';
 import { TimeInValidationComponent } from './_components/time-in-validation/time-in-validation.component';
+import { ExistingValidationComponent } from './_components/existing-validation/existing-validation.component';
+import { TimeOutValidationComponent } from './_components/time-out-validation/time-out-validation.component';
 
 
 
 @NgModule({
-  declarations: [AttendanceComponent, AttendanceTypeComponent, TimeInValidationComponent],
+  declarations: [AttendanceComponent, AttendanceTypeComponent, TimeInValidationComponent, ExistingValidationComponent, TimeOutValidationComponent],
   imports: [
     CommonModule, 
     SharedModule, 

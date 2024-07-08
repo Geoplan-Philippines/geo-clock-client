@@ -38,4 +38,8 @@ export class AttendanceService {
       return this._http.patch(`${this.apiUrl}/attendance/timeInUpdate/${userId}/${date}/${type}`, data)
     }
 
+    updateAlreadyDataAttenadance(userId: number, date: any ,type:string, data:any){
+      return this._http.patch(`${this.apiUrl}/attendance/alreadyData/${userId}/${date}/${type}`, data)
+    }
+
 }

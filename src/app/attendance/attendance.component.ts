@@ -10,6 +10,7 @@ import * as moment from 'moment-timezone';
 import { AttendanceTypeComponent } from "./_components/attendance-type/attendance-type.component";
 import { TimeInValidationComponent } from "./_components/time-in-validation/time-in-validation.component";
 import { SnackBarService } from "../shared/service/snack-bar/snack-bar.service";
+import { TimeOutValidationComponent } from "./_components/time-out-validation/time-out-validation.component";
 
 @Component({
     selector: "app-attendance",
@@ -164,13 +165,13 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     // time out click start
     getShiftTimeOutType(currentTime: Date): string {
         const hour = currentTime.getHours();
-        if (hour >= 22 || hour < 7) {
-          return "ND";
-        } else if (hour >= 7 && hour < 22) {
-          return "DW";
-        } else {
-          return "Undefined Shift";
-        }
+        if (hour >= 21 || hour < 6) {
+            return "ND";
+          } else if (hour >= 7 && hour < 21) {
+            return "DW";
+          } else {
+            return "Undefined Shift";
+          }
     }
      getShiftTimeOut(currentTime: Date): string {
             const currentMoment = moment(currentTime).tz("Asia/Manila");
@@ -188,24 +189,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
             return "Undefined Shift";
             }
         }
-
-        // getDateType(currentTime: Date): string {
-        //     const currentMoment = moment(currentTime).tz("Asia/Manila");
-        //     const hour = currentMoment.hour();
-
-        //     if (hour >= 22 || hour < 6) {
-        //     // Night shift
-        //     if (hour >= 1 && hour < 6) {
-        //         currentMoment.subtract(1, 'day');
-        //     }
-        //     return currentMoment.format("YYYY-MM-DD");
-        //     } else if (hour >= 8 && hour < 18) {
-        //     // Day shift
-        //     return currentMoment.format("YYYY-MM-DD");
-        //     } else {
-        //     return "Undefined Shift";
-        //     }
-        // }
 
       timeOut() {
         const currentDateTime = moment().tz("Asia/Manila")
@@ -226,27 +209,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         // Convert the duration to hours
         const totalHours = duration.asMinutes() < 60 ? 0 : Math.round(duration.asHours());
         console.log("totalhours",totalHours)
-        // const time_in_date = time_in_string.split('T')[0];
-        // const time_in_time = time_in_string.split('T')[1];
-        // const time_in = `${time_in_date}T${time_in_time}`
-
-
-
-        // console.log("time in data shiitt",time_in_date , time_in_time)
-        // console.log(`what type: ${type}`);
-        // console.log("ssssssssssssssssss",timeIn,timeOut , "formatedd",formattedTimeIn, formattedTimeOut)
-      // console.log(user);
-
-
-        // const dataTimeOut = {
-        //     type: type,
-        //     time_in:time_in_string,
-        //     time_out: time_out,
-        //     date: date,
-        //     total_hours:totalHours
-        // }
-        // console.log("siya toh",dataTimeOut)
-
 
         
 
@@ -265,7 +227,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 const dataAttendance = {
                     time_out: time_out,
                     time_out_location: location,
-                    total_hours:totalHours
                 };
                 // console.log(data);
 
@@ -276,7 +237,24 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                     this.loadAttendance();
                 },
                 error: (error: any) => {
+                 
+                      // Log the error to the console for debugging purposes
+                    console.error('Error from server:', error);
+
+                    // Extract error message from response
+                    const errorMessage = error.error?.message || "Failed to time out. Please try again.";
+        
+                    if (errorMessage === 'Record already exists for the previous date with default time_out.') {
+                    this._snackBarService.openSnackBar("Record already exists with default time_out.", "okay");
+                    this.updatetimeOut(dataAttendance, date, type)
+
+                    } else if (errorMessage === 'No attendance record found for the given user and dates.') {
+                    this._snackBarService.openSnackBar("No record found for the given user and dates.", "okay");
                     this.timeOutTypeChange(dataAttendance, date)
+
+                    } else {
+                    this._snackBarService.openSnackBar(errorMessage, "okay");
+                    }
                 }
                 });
                 })
@@ -300,6 +278,21 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 total_hours: data.total_hours
             },
         });
+       return descriptionDialog.afterClosed().subscribe(() => {
+           this.loadAttendance();
+          });
+    } 
+    updatetimeOut(data: any, date: any, type: string){
+        const descriptionDialog = this.dialog.open(TimeOutValidationComponent, {
+            data: {
+                date:date,
+                attendance_type: type,
+                time_out: data.time_out,
+                time_out_location: data.time_out_location,
+                total_hours: data.total_hours
+            },
+        });
+        
        return descriptionDialog.afterClosed().subscribe(() => {
            this.loadAttendance();
           });

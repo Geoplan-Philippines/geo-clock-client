@@ -525,6 +525,7 @@ export class TimesheetComponent {
         const dayOfWeek = (new Date(date)).getDay();
         const isWeekend = dayOfWeek === 6 || dayOfWeek === 0;
         const isSaturday = dayOfWeek === 6;
+        const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
         
         const holiday = holidayByDate.find(item => item.holiday_date === date);
         console.log(date);
@@ -537,6 +538,9 @@ export class TimesheetComponent {
             } else if (holiday.type === 'RH' && isWeekend) {
                 console.log("Regular holiday and weekend detected");
                 return 'RHRD';
+            }else if (holiday.type === 'RH' && isWeekday) {
+                console.log("Regular holiday and weekday detected");
+                return 'RG';
             }
             return holiday.type; 
         }
@@ -549,7 +553,7 @@ export class TimesheetComponent {
             return 'RD';
         }
     
-        return 'RG'; 
+        return 'RG';
     }
 
     saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {

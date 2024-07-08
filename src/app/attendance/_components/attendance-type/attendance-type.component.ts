@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { AttendanceService } from "../../_service/attendance.service";
 import { EncryptionService } from "src/app/authentication/_guards/encrpytion.service";
 import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.service";
@@ -28,6 +28,7 @@ export class AttendanceTypeComponent implements OnInit {
     private encrypt: EncryptionService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private dialogRef: MatDialogRef<AttendanceTypeComponent>,
+    public dialog: MatDialog
 ) {}
 
   ngOnInit(): void {
@@ -55,15 +56,15 @@ export class AttendanceTypeComponent implements OnInit {
     // console.log(`user: ${user}, type: ${type}, date: ${date}`)
 
     // console.log("data sheet",data)
-    this.attendanceService.updateAllAttendanceData(user, date, type, data).subscribe({
+    this.attendanceService.updateAlreadyDataAttenadance(user, date, type, data).subscribe({
       next: (response: any) => {
           // console.log("Time out successfully:", response);
           this._snackBarService.openSnackBar("Time Out Update Successfully", "okay");
-          this.dialogRef.close();
+          this.dialog.closeAll();
       },
       error: (error: any) => {
           console.error("Error creating entry:", error);
-          this.dialogRef.close();
+          this.dialog.closeAll();
       }
   });
  
