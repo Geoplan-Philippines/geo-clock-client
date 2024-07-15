@@ -12,18 +12,22 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
     styleUrls: ["./maintenance.component.scss"],
 })
 export class MaintenanceComponent {
-    dataSource = new MatTableDataSource<MaintenanceModel>();
+
+    dataSourceDepartment = new MatTableDataSource<any>();
     dataSourceHolidays = new MatTableDataSource<any>();
+    dataSourceClassification = new MatTableDataSource<any>();
     dialogRef: any = MatDialogRef<any>;
 
     @Output() refreshEmployees: EventEmitter<void> = new EventEmitter<void>();
 
     formDataHoliday!: FormGroup;
+    formDataDep!: FormGroup; 
+    formDataClass!: FormGroup; 
 
-    formDataDep!: FormGroup; // Using definite assignment assertion
-    displayedColumns: string[] = ["department_name", "action"];
+    displayedColumnsDepartment: string[] = ["department_name", "action"];
     displayedColumnsHolliday: string[] = ["holiday_name", "date", "type", "action"];
-
+    displayedColumnsClassification: string[] = ["classification_name", "action"];
+    generalFilter: string = '';
     constructor(
         private el: ElementRef,
         private fb: FormBuilder,
@@ -33,23 +37,69 @@ export class MaintenanceComponent {
     ngOnInit(): void {
         this.loadDepartmentData();
         this.loadHolidayData();
+        this.loadClassificationData();
         this.createFormDep();
         this.createFormHoliday();
+        this.createFormClass();
+    }
+
+    applyFilterHoliday(event: any) {
+        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+        this.generalFilter = filterValue; 
+        this.loadHolidayData();
+    }
+    
+    loadHolidayData() {
+        this.maintenanceService.getAllHolidayData().subscribe((res: any) => {
+            this.dataSourceHolidays.data = res;
+    
+            this.dataSourceHolidays.filterPredicate = (data: any, filter: string) => {
+                const dataStr = JSON.stringify(data).toLowerCase();
+                return dataStr.includes(filter);
+            };
+    
+            this.dataSourceHolidays.filter = this.generalFilter;
+        });
+    }
+
+    applyFilterDepartment(event: any) {
+        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+        this.generalFilter = filterValue; 
+        this.loadDepartmentData();
     }
 
     loadDepartmentData() {
         this.maintenanceService.getAllDepartmentData().subscribe((res: any) => {
-            const ds = res;
-            this.dataSource = ds;
+            this.dataSourceDepartment.data = res;
+    
+            this.dataSourceDepartment.filterPredicate = (data: any, filter: string) => {
+                const dataStr = JSON.stringify(data).toLowerCase();
+                return dataStr.includes(filter);
+            };
+    
+            this.dataSourceDepartment.filter = this.generalFilter;
         });
     }
 
-    loadHolidayData() {
-        this.maintenanceService.getAllHolidayData().subscribe((res: any) => {
-            const ds = res;
-            this.dataSourceHolidays = ds;
+    applyFilterClassification(event: any) {
+        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+        this.generalFilter = filterValue; 
+        this.loadClassificationData();
+    }
+    
+    loadClassificationData() {
+        this.maintenanceService.getAllClassificationData().subscribe((res: any) => {
+            this.dataSourceClassification.data = res;
+        
+            this.dataSourceClassification.filterPredicate = (data: any, filter: string) => {
+                const dataStr = JSON.stringify(data).toLowerCase();
+                return dataStr.includes(filter);
+            };
+    
+            this.dataSourceClassification.filter = this.generalFilter;
         });
     }
+    
 
     createFormHoliday(): void {
         this.formDataHoliday = this.fb.group({
@@ -104,27 +154,36 @@ export class MaintenanceComponent {
             Object.values(this.formDataDep.controls).forEach((control) => control.markAsTouched());
         }
     }
+    createFormClass(): void {
+        this.formDataClass = this.fb.group({
+            classification_name: ["", Validators.required],
+        });
+    }
+    submitFormClass() {
+        if (this.formDataClass.valid) {
+            const addedClassification = this.formDataClass.value;
+            this.maintenanceService.postAllClassificationData(addedClassification).subscribe({
+                next: (response) => {
+                    console.log("Classification created successfully:", response);
+                    this.formDataClass.reset();
+                    this.loadClassificationData(); // Adjusted call to pass the date object
+                },
+                error: (error) => {
+                    console.error("Error creating Classificatrio:", error);
+                    // this.openSnackBar("User already exist", "okay");
+                },
+            });
+        } else {
+            console.log("Form is invalid. Please fill in all required fields.");
+            Object.values(this.formDataClass.controls).forEach((control) => control.markAsTouched());
+        }
+    }
 
     scrollToSection(sectionId: string) {
         const element = this.el.nativeElement.querySelector(`#${sectionId}`);
         if (element) {
             element.scrollIntoView({ behavior: "smooth" });
         }
-    }
-
-    deleteData(id: number) {
-        this.dialogRef = this.dialog.open(DeleteConfirmModalComponent, {
-            data: {
-                id: id,
-                table: "department",
-            },
-        });
-
-        this.dialogRef.afterClosed().subscribe((result: any) => {
-            // Handle result here
-            console.log("Dialog closed with result:", result);
-            this.loadDepartmentData(); // Adjusted call to pass the date object
-        });
     }
 
     deleteDataHoliday(id: number) {
@@ -141,4 +200,36 @@ export class MaintenanceComponent {
             this.loadHolidayData(); // Adjusted call to pass the date object
         });
     }
+
+
+    deleteDataDep(id: number) {
+        this.dialogRef = this.dialog.open(DeleteConfirmModalComponent, {
+            data: {
+                id: id,
+                table: "department",
+            },
+        });
+
+        this.dialogRef.afterClosed().subscribe((result: any) => {
+            // Handle result here
+            console.log("Dialog closed with result:", result);
+            this.loadDepartmentData(); // Adjusted call to pass the date object
+        });
+    }
+
+    deleteDataClass(id: number) {
+        this.dialogRef = this.dialog.open(DeleteConfirmModalComponent, {
+            data: {
+                id: id,
+                table: "classification",
+            },
+        });
+
+        this.dialogRef.afterClosed().subscribe((result: any) => {
+            // Handle result here
+            console.log("Dialog closed with result:", result);
+            this.loadClassificationData(); // Adjusted call to pass the date object
+        });
+    }
+   
 }

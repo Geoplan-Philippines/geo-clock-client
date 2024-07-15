@@ -29,4 +29,23 @@
             cursor: pointer;
         }
     }
+    .full-text-on-hover {
+        position: relative;
+    }
+    
+    .full-text-on-hover .hover-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 100%;
+        transition: white-space 1s ease, max-width 1s ease;
+    }
+    
+    .full-text-on-hover:hover .hover-text {
+        white-space: normal;
+        max-width: none;
+    }
+    
+    
 }

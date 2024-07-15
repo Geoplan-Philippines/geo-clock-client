@@ -11,7 +11,7 @@
             </mat-form-field> -->
 
             <mat-form-field>
-                <mat-label>Year no.</mat-label>
+                <mat-label>Year</mat-label>
                 <mat-select [(value)]="latestYearNumber" (selectionChange)="selectYearNumber($event)">
                     <mat-option [value]="null">Clear</mat-option>
                     <mat-option *ngFor="let year of yearNumber" [value]="year.toString()">
@@ -21,7 +21,7 @@
             </mat-form-field>
 
             <mat-form-field>
-                <mat-label>Week no. API</mat-label>
+                <mat-label>Week</mat-label>
                 <mat-select [(value)]="latestWeekNumber" (selectionChange)="selectWeekNumber($event)">
                     <mat-option [value]="null">Clear</mat-option>
                     <mat-option *ngFor="let data of weekNumber" [value]="data.value.toString()">

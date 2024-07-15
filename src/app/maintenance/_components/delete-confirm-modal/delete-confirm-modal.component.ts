@@ -22,16 +22,22 @@ export class DeleteConfirmModalComponent {
     ) {}
 
     deleteEntry() {
-        console.log(this.data.id, this.data.table);
-            this.maintenanceService.deleteDepartmentData(this.data.id, this.data.table).subscribe({
+        if (this.data && this.data.id && this.data.table) {
+            console.log(this.data.id, this.data.table);
+            this.maintenanceService.deleteData(this.data.id, this.data.table).subscribe({
                 next: (response) => {
                     console.log("Entry successfully:", response);
                     this.dialogRef.close();
                     this.snackBarService.openSnackBar("Entry has been deleted", "okay");
                 },
                 error: (error) => {
-                    console.error("Error creating entry:", error);
+                    console.error("Error deleting entry:", error);
                 },
             });
+        } else {
+            console.error("Invalid data: id or table is missing");
+            this.snackBarService.openSnackBar("Invalid data: id or table is missing", "error");
+        }
     }
+    
 }

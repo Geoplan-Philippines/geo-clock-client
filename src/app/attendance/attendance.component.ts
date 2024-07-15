@@ -98,7 +98,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
           (position) => {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-            
+            console.log(`longtitude ${longitude}, latitude ${latitude}`)
             const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
         
 
@@ -154,7 +154,14 @@ export class AttendanceComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.error('Error getting location', error);
-          }
+          },
+
+          {
+            enableHighAccuracy: true, // Request high accuracy
+            timeout: 40000, // Timeout after 10 seconds
+            maximumAge: 0 // Do not use a cached position
+        }
+          
         );
       }
       formatDateToString(currentDateTime: Date): string {
@@ -266,7 +273,12 @@ export class AttendanceComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.error('Error getting location', error);
-          }
+          },
+          {
+            enableHighAccuracy: true, // Request high accuracy
+            timeout: 10000, // Timeout after 10 seconds
+            maximumAge: 0 // Do not use a cached position
+        }
         );
       }
     timeOutTypeChange(data: any, date: any){

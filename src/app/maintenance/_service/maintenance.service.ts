@@ -10,8 +10,16 @@ export class MaintenanceService {
     private apiUrl = config.apiUrl;
     constructor(private _http: HttpClient) {}
 
+    getAllHolidayData() {
+        return this._http.get(`${this.apiUrl}/holiday`);
+    }
+
     getAllDepartmentData() {
         return this._http.get(`${this.apiUrl}/department`);
+    }
+
+    getAllClassificationData() {
+        return this._http.get(`${this.apiUrl}/classification`);
     }
 
     postAllHolidayData(addedHoliday: any): Observable<any> {
@@ -22,18 +30,21 @@ export class MaintenanceService {
         return this._http.post(`${this.apiUrl}/department`, addedDepartment);
     }
 
-    getAllHolidayData() {
-        return this._http.get(`${this.apiUrl}/holiday`);
+    postAllClassificationData(addedClassification: any): Observable<any> {
+        return this._http.post(`${this.apiUrl}/classification`, addedClassification);
     }
 
-    deleteDepartmentData(id: any, table: any) {
+    deleteData(id: any, table: any) {
         if (table === "holiday") {
+            // console.log("pogi");
             return this._http.delete(`${this.apiUrl}/holiday/${id}`);
-            console.log("pogi");
-        } else {
+        } else if (table === "department") {
+            // console.log("pogi2");
             return this._http.delete(`${this.apiUrl}/department/${id}`);
-            console.log("pogi2");
-        }
+        } else {
+            // console.log("pogi3");
+            return this._http.delete(`${this.apiUrl}/classification/${id}`);
+        } 
     }
     // deleteHoliday(id: any){
     //     return this._http.delete(`${this.apiUrl}/holidayTable/${id}`)

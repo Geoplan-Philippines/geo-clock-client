@@ -64,8 +64,12 @@
 
                         <!-- Time In Location Column -->
                         <ng-container matColumnDef="time_in_location">
-                            <th mat-header-cell *matHeaderCellDef>Time In Location</th>
-                            <td mat-cell *matCellDef="let element">{{ element.time_in_location }}</td>
+                            <th mat-header-cell *matHeaderCellDef class="p-2">Time In Location</th>
+                            <td mat-cell *matCellDef="let element" class="p-2 max-w-xs" [ngClass]="'full-text-on-hover'" [attr.title]="element.time_in_location">
+                                <span class="hover-text">
+                                    {{ element.time_in_location }}
+                                </span>
+                            </td>
                         </ng-container>
 
                         <!-- Time Out Column -->
@@ -81,8 +85,12 @@
 
                         <!-- Time Out Location Column -->
                         <ng-container matColumnDef="time_out_location">
-                            <th mat-header-cell *matHeaderCellDef>Time Out Location</th>
-                            <td mat-cell *matCellDef="let element">{{ element.time_out_location }}</td>
+                            <th mat-header-cell *matHeaderCellDef class="p-2">Time Out Location</th>
+                            <td mat-cell *matCellDef="let element" class="p-2 max-w-xs" [ngClass]="'full-text-on-hover'" [attr.title]="element.time_out_location">
+                                <span class="hover-text">
+                                    {{ element.time_out_location }}
+                                </span>
+                            </td>
                         </ng-container>
 
                         <!-- Total Hour Column -->

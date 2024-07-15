@@ -15,7 +15,12 @@
             <div class="selected h-[80vh] overflow-y-scroll border-l-2 border-solid border-l-[#0a54a0] px-5">
                 <div id="section1" class="h-auto">
                     <p>Holidays</p>
+                    <mat-form-field class="w-[100%] sm:w-80">
+                        <mat-label>Search</mat-label>
+                        <input matInput (keyup)="applyFilterHoliday($event)" placeholder="Ex. ium" #input class="custom-input" />
+                    </mat-form-field>
                     <form [formGroup]="formDataHoliday" (ngSubmit)="submitFormHoliday()">
+                        <p>Adding Holiday</p>
                         <div class="block w-[100%] sm:flex">
                             <mat-form-field class="example-full-width-holiday">
                                 <mat-label>Holiday Name</mat-label>
@@ -89,7 +94,12 @@
                 </div>
                 <div id="section2" class="h-auto">
                     <p>Department</p>
+                    <mat-form-field class="w-[100%] sm:w-80">
+                        <mat-label>Search</mat-label>
+                        <input matInput (keyup)="applyFilterDepartment($event)" placeholder="Ex. ium" #input class="custom-input" />
+                    </mat-form-field>
                     <form [formGroup]="formDataDep" (ngSubmit)="submitFormDep()">
+                        <p>Adding Department</p>
                         <div class="block w-[100%] sm:flex">
                             <mat-form-field class="example-full-width-department">
                                 <mat-label>Department Name</mat-label>
@@ -102,7 +112,7 @@
                             </div>
                         </div>
                     </form>
-                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSourceDepartment" class="mat-elevation-z8">
                         <ng-container matColumnDef="department_name">
                             <th mat-header-cell *matHeaderCellDef>
                                 <h1 class="font-bold">Departments</h1>
@@ -116,19 +126,63 @@
                                     <button
                                         mat-stroked-button
                                         class="submit-Btn bg w-full text-center sm:w-32"
-                                        (click)="deleteData(element.id)"
+                                        (click)="deleteDataDep(element.id)"
                                     >
                                         Delete
                                     </button>
                                 </div>
                             </td>
                         </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsDepartment"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsDepartment"></tr>
                     </table>
                 </div>
                 <div id="section3" class="h-screen">
                     <p>Classification</p>
+
+                    <mat-form-field class="w-[100%] sm:w-80">
+                        <mat-label>Search</mat-label>
+                        <input matInput (keyup)="applyFilterDepartment($event)" placeholder="Ex. ium" #input class="custom-input" />
+                    </mat-form-field>
+                    <form [formGroup]="formDataClass" (ngSubmit)="submitFormClass()">
+                        <p>Adding Classification</p>
+                        <div class="block w-[100%] sm:flex">
+                            <mat-form-field class="example-full-width-department">
+                                <mat-label>Classification Name</mat-label>
+                                <input matInput formControlName="classification_name" placeholder="Enter Employee Code" />
+                            </mat-form-field>
+                            <div class="mb-8 ml-0 mt-3 sm:ml-5 sm:mt-3">
+                                <button mat-stroked-button class="submit-Btn bg w-full sm:w-32" [disabled]="!formDataClass.valid">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <table mat-table [dataSource]="dataSourceClassification" class="mat-elevation-z8">
+                        <ng-container matColumnDef="classification_name">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Classification</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.classification_name }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Action</h1></th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="flex justify-center">
+                                    <button
+                                        mat-stroked-button
+                                        class="submit-Btn bg w-full text-center sm:w-32"
+                                        (click)="deleteDataClass(element.id)"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsClassification"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsClassification"></tr>
+                    </table>
+
                 </div>
             </div>
         </div>
