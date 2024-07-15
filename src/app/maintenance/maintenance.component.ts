@@ -5,6 +5,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MaintenanceModel } from "../models/maintenance.model";
 import { DeleteConfirmModalComponent } from "./_components/delete-confirm-modal/delete-confirm-modal.component";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: "app-maintenance",
@@ -112,7 +113,21 @@ export class MaintenanceComponent {
     submitFormHoliday(): void {
         if (this.formDataHoliday.valid) {
             const addedHoliday = this.formDataHoliday.value;
-            this.maintenanceService.postAllHolidayData(addedHoliday).subscribe({
+            const holidayDateValue = this.formDataHoliday.get('holiday_date')?.value;
+            const holidayName = this.formDataHoliday.get('holiday_name')?.value;
+            const holiday_type = this.formDataHoliday.get('type')?.value;
+
+            const momentDatePHT = moment.tz(holidayDateValue, 'Asia/Manila').format('YYYY-MM-DD');
+            const stringDateFormant = `${momentDatePHT}T00:00:00.000Z`
+            
+            const data = {
+                holiday_date: stringDateFormant,
+                holiday_name: holidayName,
+                type: holiday_type
+            }
+
+
+            this.maintenanceService.postAllHolidayData(data).subscribe({
                 next: (response) => {
                     console.log("Holiday created successfully:", response);
                     this.formDataHoliday.reset();
