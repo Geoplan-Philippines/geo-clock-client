@@ -12,8 +12,10 @@
         </p>
 
         <div class="mt-7 flex items-start justify-center space-x-4 text-6xl">
-            <button mat-raised-button color="primary" (click)="timeIn()">Time In</button>
-            <button mat-raised-button color="warn" (click)="timeOut()">Time Out</button>
+            <button mat-raised-button color="primary" (click)="initialTimeIn()">Time In</button>
+            <button mat-raised-button color="primary" (click)="subsequentTimeIn()">Field In</button>
+            <button mat-raised-button color="warn" (click)="subsequentTimeOut()">Field Out</button>
+            <button mat-raised-button color="warn" (click)="InitialTimeOut()">Time Out</button>
         </div>
 
         <div class="static mt-11 overflow-auto">
@@ -41,7 +43,10 @@
                         <!-- type name Column -->
                         <ng-container matColumnDef="type">
                             <th mat-header-cell *matHeaderCellDef>Type</th>
-                            <td mat-cell *matCellDef="let element">{{ element.attendance_type }}</td>
+                            <td mat-cell *matCellDef="let element" [ngClass]="{ 'status-red': element.statuses === 'Initial', 'status-yellow': element.statuses !== 'Initial' }">
+                                {{element.statuses === 'Initial' ? element.statuses : 'Field'}}
+                              </td>
+                              
                         </ng-container>
 
                         <!-- employee name Column -->
@@ -92,7 +97,16 @@
                                 </span>
                             </td>
                         </ng-container>
-
+                        <!-- Total Hour Column -->
+                        <ng-container matColumnDef="day_hours">
+                            <th mat-header-cell *matHeaderCellDef>Day Hours</th>
+                            <td mat-cell *matCellDef="let element">{{ element.day_hours }}</td>
+                        </ng-container>
+                        <!-- Total Hour Column -->
+                        <ng-container matColumnDef="night_hours">
+                            <th mat-header-cell *matHeaderCellDef>Night Hours</th>
+                            <td mat-cell *matCellDef="let element">{{ element.night_hours }}</td>
+                        </ng-container>
                         <!-- Total Hour Column -->
                         <ng-container matColumnDef="total_hours">
                             <th mat-header-cell *matHeaderCellDef>Total Hour</th>

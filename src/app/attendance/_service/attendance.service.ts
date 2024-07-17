@@ -22,14 +22,34 @@ export class AttendanceService {
     //   return this._http.get(`${this.apiUrl}/attendance/${type}`);
     // }
 
-    postAllAttendanceData(data: any){
+    postAllDataInitialTimeIn(data: any){
+      return this._http.post(`${this.apiUrl}/attendance/initial`, data)
+    }
+
+    postAllDataTimeIn(data: any){
       return this._http.post(`${this.apiUrl}/attendance`, data)
     }
 
-    updateAllAttendanceData(userId: number, dateTime: any ,type:string, data: any){
-      return this._http.patch(`${this.apiUrl}/attendance/${userId}/${dateTime}/${type}`, data)
-    }
+    // postAllAttendanceData(data: any){
+    //   return this._http.post(`${this.apiUrl}/attendance`, data)
+    // }
+
+    // updateAllAttendanceData(userId: number, dateTime: any ,type:string, data: any){
+    //   return this._http.patch(`${this.apiUrl}/attendance/${userId}/${dateTime}/${type}`, data)
+    // }
     
+    updateAllDataInitialTimeOut(userId: number, dateTime: any ,statuses:string, data: any){
+      return this._http.patch(`${this.apiUrl}/attendance/initial/${userId}/${dateTime}/${statuses}`, data)
+    }
+    updateAllDataTimeOut(userId: number, dateTime: any ,statuses:string, data: any){
+      return this._http.patch(`${this.apiUrl}/attendance/${userId}/${dateTime}/${statuses}`, data)
+    }
+
+    getAllDataDiff(){
+      return this._http.get(`${this.apiUrl}/attendance/diff`);
+    };
+
+// gg
     getAllemployeetData() {
       return this._http.get(`${this.apiUrl}/users`);
     }
