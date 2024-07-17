@@ -34,54 +34,54 @@ export class TimeOutValidationComponent implements OnInit{
   ngOnInit(): void {
     throw new Error("Method not implemented.");
   }
-  dataTimeout(){
-    const dataTimeOut = {
-      date: this.data.date,
-      attendance_type: this.data.attendance_type,
-      time_out: this.data.time_out,
-      time_out_location: this.data.time_out_location,
-      total_hours: this.data.total_hours
-    }
-    return dataTimeOut;
-  }
-    timeInUpdate() {
-      const user = this.encrypt.getItem("id");
-    const type = this.data.attendance_type;
-    const date = this.data.date
+//   dataTimeout(){
+//     const dataTimeOut = {
+//       date: this.data.date,
+//       attendance_type: this.data.attendance_type,
+//       time_out: this.data.time_out,
+//       time_out_location: this.data.time_out_location,
+//       total_hours: this.data.total_hours
+//     }
+//     return dataTimeOut;
+//   }
+//     timeInUpdate() {
+//       const user = this.encrypt.getItem("id");
+//     const type = this.data.attendance_type;
+//     const date = this.data.date
 
-    const data = this.dataTimeout();
-      // console.log(`type ${type}`)
-      // console.log(`date ${date}`)
-      // console.log(`user ${user}`)
-      // console.log("data time in",dataTimeIn)
+//     const data = this.dataTimeout();
+//       // console.log(`type ${type}`)
+//       // console.log(`date ${date}`)
+//       // console.log(`user ${user}`)
+//       // console.log("data time in",dataTimeIn)
 
-      this.attendanceService.updateAlreadyDataAttenadance(user, date, type, data).subscribe({
-          next: (response: any) => {
-              // console.log("Time In updated successfully:", response);
-              this._snackBarService.openSnackBar("Time Out Update Successfully", "okay");
-              this.dialogRef.close();
-          },
-          error: (error: any) => {
-              console.error("Error creating entry:", error);
-              this.timeOutTypeChange(data, date)
+//       this.attendanceService.updateAlreadyDataAttenadance(user, date, type, data).subscribe({
+//           next: (response: any) => {
+//               // console.log("Time In updated successfully:", response);
+//               this._snackBarService.openSnackBar("Time Out Update Successfully", "okay");
+//               this.dialogRef.close();
+//           },
+//           error: (error: any) => {
+//               console.error("Error creating entry:", error);
+//               this.timeOutTypeChange(data, date)
 
-              // this.dialogRef.close();
-          },
-      });
-  }
-  closeDialog(): void {
-      this.dialogRef.close();
-  }
+//               // this.dialogRef.close();
+//           },
+//       });
+//   }
+//   closeDialog(): void {
+//       this.dialogRef.close();
+//   }
 
-  timeOutTypeChange(data: any, date: any){
-    const descriptionDialog = this.dialog.open(AttendanceTypeComponent, {
-        data: {
-            date:date,
-            time_out: data.time_out,
-            time_out_location: data.time_out_location,
-            total_hours: data.total_hours
-        },
-    });
-    return descriptionDialog
-} 
+//   timeOutTypeChange(data: any, date: any){
+//     const descriptionDialog = this.dialog.open(AttendanceTypeComponent, {
+//         data: {
+//             date:date,
+//             time_out: data.time_out,
+//             time_out_location: data.time_out_location,
+//             total_hours: data.total_hours
+//         },
+//     });
+//     return descriptionDialog
+// } 
 }

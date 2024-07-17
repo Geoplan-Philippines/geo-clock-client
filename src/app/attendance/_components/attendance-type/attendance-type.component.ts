@@ -56,17 +56,17 @@ export class AttendanceTypeComponent implements OnInit {
     // console.log(`user: ${user}, type: ${type}, date: ${date}`)
 
     // console.log("data sheet",data)
-    this.attendanceService.updateAlreadyDataAttenadance(user, date, type, data).subscribe({
-      next: (response: any) => {
-          // console.log("Time out successfully:", response);
-          this._snackBarService.openSnackBar("Time Out Update Successfully", "okay");
-          this.dialog.closeAll();
-      },
-      error: (error: any) => {
-          console.error("Error creating entry:", error);
-          this.dialog.closeAll();
-      }
-  });
+  //   this.attendanceService.updateAlreadyDataAttenadance(user, date, type, data).subscribe({
+  //     next: (response: any) => {
+  //         // console.log("Time out successfully:", response);
+  //         this._snackBarService.openSnackBar("Time Out Update Successfully", "okay");
+  //         this.dialog.closeAll();
+  //     },
+  //     error: (error: any) => {
+  //         console.error("Error creating entry:", error);
+  //         this.dialog.closeAll();
+  //     }
+  // });
  
   }
 

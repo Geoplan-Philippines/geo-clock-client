@@ -11,6 +11,7 @@ import { AttendanceTypeComponent } from "./_components/attendance-type/attendanc
 import { TimeInValidationComponent } from "./_components/time-in-validation/time-in-validation.component";
 import { SnackBarService } from "../shared/service/snack-bar/snack-bar.service";
 import { TimeOutValidationComponent } from "./_components/time-out-validation/time-out-validation.component";
+import { MatSelectChange } from "@angular/material/select";
 
 @Component({
     selector: "app-attendance",
@@ -18,12 +19,30 @@ import { TimeOutValidationComponent } from "./_components/time-out-validation/ti
     styleUrls: ["./attendance.component.scss"],
 })
 export class AttendanceComponent implements OnInit, OnDestroy {
+//         date: date,
+//         attendance_type: type,
+//         time_in: dateTime,
+//         time_in_location: data.display_name,
+//     },
+// });
+// return timeInValidate.afterClosed().subscribe(() => {
+//     this.loadAttendance();
+// });
+selectShift //         user_id: user,
+($event: MatSelectChange) {
+throw new Error('Method not implemented.');
+}
     currentTime: string = "";
     currentDate: string = "";
+
+    allShiftTIme: string[] = []; // Array to store shift types
+  shiftTime: string | null = null; // Variable to bind selected shift type
+
     private timerSubscription: Subscription | undefined;
 
     dataSource = new MatTableDataSource<AttedanceModel>();
     displayedColumns: string[] = [
+        "shift",
         "type",
         "employee_name",
         "date",
@@ -31,16 +50,15 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         "time_in_location",
         "time_out",
         "time_out_location",
-        "day_hours",
-        "night_hours",
         "total_hours",
+        "status"
     ];
 
     generalFilter: string = "";
     filterDate: string = "";
 
     filterData: any;
-
+    todayDate: Date = new Date();
     constructor(
         private datePipe: DatePipe,
         private _snackBarService: SnackBarService,
@@ -57,6 +75,8 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         });
 
         this.loadAttendance();
+        this.getShiftTimeInType();
+        
     }
     // Clock time and date start
     ngOnDestroy(): void {
@@ -74,25 +94,26 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
     // time in click start
 
-    getShiftTimeInType(currentTime: Date): string {
-        const hour = currentTime.getHours();
-        if (hour >= 21 || hour < 6) {
-            return "ND";
-        } else if (hour >= 7 && hour < 21) {
-            return "DW";
-        } else {
-            return "Undefined Shift";
-        }
-    }
+    getShiftTimeInType() {
+        this.attendanceService.getAllDataDiff().subscribe(
+          (res: any[]) => { // Use any[] if you don't have a model
+            // Extract unique shift types
+            this.allShiftTIme = [...new Set(res.map((item) => item.diff_name))];
+          },
+          (error) => {
+            console.error('Error fetching shift data:', error);
+          }
+        );
+      }
+    
 
     initialTimeIn() {
         const currentDateTime = moment().tz("Asia/Manila");
         const date = currentDateTime.format("YYYY-MM-DD");
-        const type = this.getShiftTimeInType(currentDateTime.toDate());
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`;
 
-        console.log({ date, type, dateTime });
+       
         const user = this.encrypt.getItem("id");
         console.log(user);
 
@@ -108,12 +129,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                     .then((data) => {
                         console.log("Reverse Geocoding Result:", data.display_name);
 
-                        // const dateTimeValidation = `${date}T07:00:00.000Z`
-                        // const dateValidationIn = moment(dateTimeValidation).set({ hour: 7, minute: 0, second: 0, millisecond: 0 }).format('MMMM D YYYY HH:mm A');
-
-                        // if(type === "Undefined Shift"){
-                        //     this._snackBarService.openSnackBar(`You can wait at ${dateValidationIn}`, "okay");
-                        // }else{
 
                         const dataAttendance = {
                             user_id: user,
@@ -129,19 +144,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                                 this.loadAttendance();
                             },
                             error: (error: any) => {
-                                // console.error("Error creating entry:", error);
-                                // const timeInValidate = this.dialog.open(TimeInValidationComponent, {
-                                //     data: {
-                                //         user_id: user,
-                                //         date: date,
-                                //         attendance_type: type,
-                                //         time_in: dateTime,
-                                //         time_in_location: data.display_name,
-                                //     },
-                                // });
-                                // return timeInValidate.afterClosed().subscribe(() => {
-                                //     this.loadAttendance();
-                                // });
+                              
                                 this._snackBarService.openSnackBar("Error", "okay");
                             },
                         });
@@ -167,11 +170,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     subsequentTimeIn() {
         const currentDateTime = moment().tz("Asia/Manila");
         const date = currentDateTime.format("YYYY-MM-DD");
-        const type = this.getShiftTimeInType(currentDateTime.toDate());
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`;
 
-        console.log({ date, type, dateTime });
         const user = this.encrypt.getItem("id");
         console.log(user);
 
@@ -187,12 +188,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                     .then((data) => {
                         console.log("Reverse Geocoding Result:", data.display_name);
 
-                        // const dateTimeValidation = `${date}T07:00:00.000Z`
-                        // const dateValidationIn = moment(dateTimeValidation).set({ hour: 7, minute: 0, second: 0, millisecond: 0 }).format('MMMM D YYYY HH:mm A');
-
-                        // if(type === "Undefined Shift"){
-                        //     this._snackBarService.openSnackBar(`You can wait at ${dateValidationIn}`, "okay");
-                        // }else{
 
                         const dataAttendance = {
                             user_id: user,
@@ -209,22 +204,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                             },
                             error: (error: any) => {
                                 this._snackBarService.openSnackBar("Error", "okay");
-                                // console.error("Error creating entry:", error);
-                                // const timeInValidate = this.dialog.open(TimeInValidationComponent, {
-                                //     data: {
-                                //         user_id: user,
-                                //         date: date,
-                                //         attendance_type: type,
-                                //         time_in: dateTime,
-                                //         time_in_location: data.display_name,
-                                //     },
-                                // });
-                                // return timeInValidate.afterClosed().subscribe(() => {
-                                //     this.loadAttendance();
-                                // });
+                              
                             },
                         });
-                        // }
                     })
 
                     .catch((error) => {
@@ -252,33 +234,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     }
     // time in click end
 
-    // time out click start
-    // getShiftTimeOutType(currentTime: Date): string {
-    //     const hour = currentTime.getHours();
-    //     if (hour >= 21 || hour < 6) {
-    //         return "ND";
-    //     } else if (hour >= 7 && hour < 21) {
-    //         return "DW";
-    //     } else {
-    //         return "Undefined Shift";
-    //     }
-    // }
-    // getShiftTimeOut(currentTime: Date): string {
-    //     const currentMoment = moment(currentTime).tz("Asia/Manila");
-    //     const hour = currentMoment.hour();
-    //     const adjustedMoment = currentMoment.clone().add(8, "hours");
-
-    //     if (hour >= 22 || hour < 8) {
-    //         // // Night shift
-    //         // adjustedMoment.subtract(1, 'day');
-    //         return adjustedMoment.toISOString();
-    //     } else if (hour >= 8 && hour < 22) {
-    //         // Day shift
-    //         return adjustedMoment.toISOString();
-    //     } else {
-    //         return "Undefined Shift";
-    //     }
-    // }
 
     InitialTimeOut() {
         const currentDateTime = moment().tz("Asia/Manila");
@@ -313,20 +268,8 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                             },
                             error: (error: any) => {
                                 // Log the error to the console for debugging purposes
+                                this._snackBarService.openSnackBar("Error", "okay");
                                 console.error("Error from server:", error);
-
-                                // // Extract error message from response
-                                // const errorMessage = error.error?.message || "Failed to time out. Please try again.";
-
-                                // if (errorMessage === "Record already exists for the previous date with default time_out.") {
-                                //     this._snackBarService.openSnackBar("Record already exists with default time_out.", "okay");
-                                //     this.updatetimeOut(dataAttendance, date, type);
-                                // } else if (errorMessage === "No attendance record found for the given user and dates.") {
-                                //     this._snackBarService.openSnackBar("No record found for the given user and dates.", "okay");
-                                //     this.timeOutTypeChange(dataAttendance, date);
-                                // } else {
-                                //     this._snackBarService.openSnackBar(errorMessage, "okay");
-                                // }
                             },
                         });
                     })
@@ -379,20 +322,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                             },
                             error: (error: any) => {
                                 // Log the error to the console for debugging purposes
+                                this._snackBarService.openSnackBar("Error", "okay");
                                 console.error("Error from server:", error);
 
-                                // // Extract error message from response
-                                // const errorMessage = error.error?.message || "Failed to time out. Please try again.";
-
-                                // if (errorMessage === "Record already exists for the previous date with default time_out.") {
-                                //     this._snackBarService.openSnackBar("Record already exists with default time_out.", "okay");
-                                //     this.updatetimeOut(dataAttendance, date, type);
-                                // } else if (errorMessage === "No attendance record found for the given user and dates.") {
-                                //     this._snackBarService.openSnackBar("No record found for the given user and dates.", "okay");
-                                //     this.timeOutTypeChange(dataAttendance, date);
-                                // } else {
-                                //     this._snackBarService.openSnackBar(errorMessage, "okay");
-                                // }
                             },
                         });
                     })
@@ -411,8 +343,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
             },
         );
     }
-
-
 
     timeOutTypeChange(data: any, date: any) {
         const descriptionDialog = this.dialog.open(AttendanceTypeComponent, {
@@ -447,7 +377,8 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     // history table start
     loadAttendance() {
         const userId = Number(this.encrypt.getItem("id"));
-
+        const currentDateTime = moment().tz("Asia/Manila");
+        const date = currentDateTime.format("YYYY-MM-DD");
         // Load user's department
         this.attendanceService.getAllemployeetData().subscribe((employeeData: any) => {
             const currentUser = employeeData.find((emp: any) => emp.id === userId);
@@ -457,7 +388,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 const userDepartment = currentUser.department;
                 const isOwner = userDepartment === "owner";
 
-                this.attendanceService.getAllAttendanceData().subscribe((res: any) => {
+                this.attendanceService.getAllAttendanceData(date).subscribe((res: any) => {
                     const ds = res;
 
                     if (isOwner) {
@@ -533,7 +464,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     }
 
     loadFilteringWithDate() {
-        this.attendanceService.getAllAttendanceData().subscribe((res: any) => {
+        // const currentDateTime = moment().tz("Asia/Manila");
+        // const date = currentDateTime.format("YYYY-MM-DD");
+        this.attendanceService.getAllAttendanceData(this.filterDate).subscribe((res: any) => {
             const ds = res;
             console.log(ds);
 

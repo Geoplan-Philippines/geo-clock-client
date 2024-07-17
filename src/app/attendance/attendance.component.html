@@ -26,12 +26,24 @@
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input class="custom-input" />
                     </mat-form-field>
+
+                    <!-- <mat-form-field class="w-[100%] sm:w-80">
+                        <mat-label>Shift Type</mat-label>
+                        <mat-select [(value)]="shiftTime" (selectionChange)="selectShift($event)">
+                          <mat-option [value]="null">Clear</mat-option>
+                          <mat-option *ngFor="let shift of allShiftTIme" [value]="shift.toString()">
+                            {{ shift }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field> -->
+
                     <mat-form-field class="w-[100%] sm:w-80">
                         <mat-label>Date</mat-label>
                         <input
                             matInput
                             [matDatepicker]="picker"
                             placeholder="Choose a date"
+                            [(ngModel)]="todayDate"
                             (dateInput)="selectDate($event.value)"
                         />
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -40,13 +52,19 @@
                 </div>
                 <div class="max-h-80 overflow-y-auto">
                     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                        <!-- shift name Column -->
+                        <ng-container matColumnDef="shift">
+                            <th mat-header-cell *matHeaderCellDef>Shift</th>
+                            <td mat-cell *matCellDef="let element">{{element.attendance_type}}</td>
+                        </ng-container>
+
                         <!-- type name Column -->
                         <ng-container matColumnDef="type">
                             <th mat-header-cell *matHeaderCellDef>Type</th>
                             <td mat-cell *matCellDef="let element" [ngClass]="{ 'status-red': element.statuses === 'Initial', 'status-yellow': element.statuses !== 'Initial' }">
                                 {{element.statuses === 'Initial' ? element.statuses : 'Field'}}
                               </td>
-                              
                         </ng-container>
 
                         <!-- employee name Column -->
@@ -98,21 +116,16 @@
                             </td>
                         </ng-container>
                         <!-- Total Hour Column -->
-                        <ng-container matColumnDef="day_hours">
-                            <th mat-header-cell *matHeaderCellDef>Day Hours</th>
-                            <td mat-cell *matCellDef="let element">{{ element.day_hours }}</td>
-                        </ng-container>
-                        <!-- Total Hour Column -->
-                        <ng-container matColumnDef="night_hours">
-                            <th mat-header-cell *matHeaderCellDef>Night Hours</th>
-                            <td mat-cell *matCellDef="let element">{{ element.night_hours }}</td>
-                        </ng-container>
-                        <!-- Total Hour Column -->
                         <ng-container matColumnDef="total_hours">
                             <th mat-header-cell *matHeaderCellDef>Total Hour</th>
                             <td mat-cell *matCellDef="let element">{{ element.total_hours }}</td>
                         </ng-container>
 
+                        <!-- status Column -->
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef>Total Hour</th>
+                            <td mat-cell *matCellDef="let element">{{ element.remarks }}</td>
+                        </ng-container>
                         <!-- Header Row -->
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <!-- Data Row -->
