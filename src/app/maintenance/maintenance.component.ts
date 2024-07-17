@@ -6,6 +6,7 @@ import { MaintenanceModel } from "../models/maintenance.model";
 import { DeleteConfirmModalComponent } from "./_components/delete-confirm-modal/delete-confirm-modal.component";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import * as moment from 'moment-timezone';
+import { UpdateModalComponent } from "./_components/update-modal/update-modal.component";
 
 @Component({
     selector: "app-maintenance",
@@ -17,6 +18,7 @@ export class MaintenanceComponent {
     dataSourceDepartment = new MatTableDataSource<any>();
     dataSourceHolidays = new MatTableDataSource<any>();
     dataSourceClassification = new MatTableDataSource<any>();
+    dataSourceDifferential = new MatTableDataSource<any>();
     dialogRef: any = MatDialogRef<any>;
 
     @Output() refreshEmployees: EventEmitter<void> = new EventEmitter<void>();
@@ -28,6 +30,7 @@ export class MaintenanceComponent {
     displayedColumnsDepartment: string[] = ["department_name", "action"];
     displayedColumnsHolliday: string[] = ["holiday_name", "date", "type", "action"];
     displayedColumnsClassification: string[] = ["classification_name", "action"];
+    displayColumnsDifferential: string[] = ["diff_name", "start_time","end_start","action"];
     generalFilter: string = '';
     constructor(
         private el: ElementRef,
@@ -42,6 +45,7 @@ export class MaintenanceComponent {
         this.createFormDep();
         this.createFormHoliday();
         this.createFormClass();
+        this.loadDifferentialData();
     }
 
     applyFilterHoliday(event: any) {
@@ -100,7 +104,29 @@ export class MaintenanceComponent {
             this.dataSourceClassification.filter = this.generalFilter;
         });
     }
+
+    applyFilterDifferential(event: any) {
+        const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+        this.generalFilter = filterValue; 
+        this.loadDifferentialData();
+    }
     
+    loadDifferentialData() {
+        this.maintenanceService.getAllDifferentialData().subscribe((res: any) => {
+            this.dataSourceDifferential.data = res;
+        
+            this.dataSourceDifferential.filterPredicate = (data: any, filter: string) => {
+                const dataStr = JSON.stringify(data).toLowerCase();
+                return dataStr.includes(filter);
+            };
+    
+            this.dataSourceDifferential.filter = this.generalFilter;
+
+            console.log(this.dataSourceDifferential)
+        });
+    }
+
+
 
     createFormHoliday(): void {
         this.formDataHoliday = this.fb.group({
@@ -246,5 +272,22 @@ export class MaintenanceComponent {
             this.loadClassificationData(); // Adjusted call to pass the date object
         });
     }
+
+    updateDataClass(id: number, start_time: any, out_time: any){
+        this.dialogRef = this.dialog.open(UpdateModalComponent, {
+            data: {
+                id: id,
+                start_time: start_time,
+                out_time: out_time
+            },
+        });
+
+        this.dialogRef.afterClosed().subscribe((result: any) => {
+            // Handle result here
+            console.log("Dialog closed with result:", result);
+            this.loadDifferentialData(); // Adjusted call to pass the date object
+        });
+    }
+
    
 }

@@ -22,6 +22,10 @@ export class MaintenanceService {
         return this._http.get(`${this.apiUrl}/classification`);
     }
 
+    getAllDifferentialData() {
+        return this._http.get(`${this.apiUrl}/differential-hours`);
+    }
+
     postAllHolidayData(addedHoliday: any): Observable<any> {
         return this._http.post(`${this.apiUrl}/holiday`, addedHoliday);
     }
