@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { interval, Subscription } from "rxjs";
 import { MatTableDataSource } from "@angular/material/table";
@@ -12,6 +12,7 @@ import { TimeInValidationComponent } from "./_components/time-in-validation/time
 import { SnackBarService } from "../shared/service/snack-bar/snack-bar.service";
 import { TimeOutValidationComponent } from "./_components/time-out-validation/time-out-validation.component";
 import { MatSelectChange } from "@angular/material/select";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
     selector: "app-attendance",
@@ -19,24 +20,24 @@ import { MatSelectChange } from "@angular/material/select";
     styleUrls: ["./attendance.component.scss"],
 })
 export class AttendanceComponent implements OnInit, OnDestroy {
-//         date: date,
-//         attendance_type: type,
-//         time_in: dateTime,
-//         time_in_location: data.display_name,
-//     },
-// });
-// return timeInValidate.afterClosed().subscribe(() => {
-//     this.loadAttendance();
-// });
-selectShift //         user_id: user,
-($event: MatSelectChange) {
-throw new Error('Method not implemented.');
-}
+    //         date: date,
+    //         attendance_type: type,
+    //         time_in: dateTime,
+    //         time_in_location: data.display_name,
+    //     },
+    // });
+    // return timeInValidate.afterClosed().subscribe(() => {
+    //     this.loadAttendance();
+    // });
+    selectShift($event: MatSelectChange) {
+        //         user_id: user,
+        throw new Error("Method not implemented.");
+    }
     currentTime: string = "";
     currentDate: string = "";
 
     allShiftTIme: string[] = []; // Array to store shift types
-  shiftTime: string | null = null; // Variable to bind selected shift type
+    shiftTime: string | null = null; // Variable to bind selected shift type
 
     private timerSubscription: Subscription | undefined;
 
@@ -51,7 +52,7 @@ throw new Error('Method not implemented.');
         "time_out",
         "time_out_location",
         "total_hours",
-        "status"
+        "status",
     ];
 
     generalFilter: string = "";
@@ -76,7 +77,6 @@ throw new Error('Method not implemented.');
 
         this.loadAttendance();
         this.getShiftTimeInType();
-        
     }
     // Clock time and date start
     ngOnDestroy(): void {
@@ -84,6 +84,9 @@ throw new Error('Method not implemented.');
             this.timerSubscription.unsubscribe();
         }
     }
+
+    @ViewChild(MatPaginator)
+    paginator!: MatPaginator;
 
     private updateTimeAndDate(): void {
         const now = new Date();
@@ -96,16 +99,16 @@ throw new Error('Method not implemented.');
 
     getShiftTimeInType() {
         this.attendanceService.getAllDataDiff().subscribe(
-          (res: any[]) => { // Use any[] if you don't have a model
-            // Extract unique shift types
-            this.allShiftTIme = [...new Set(res.map((item) => item.diff_name))];
-          },
-          (error) => {
-            console.error('Error fetching shift data:', error);
-          }
+            (res: any[]) => {
+                // Use any[] if you don't have a model
+                // Extract unique shift types
+                this.allShiftTIme = [...new Set(res.map((item) => item.diff_name))];
+            },
+            (error) => {
+                console.error("Error fetching shift data:", error);
+            },
         );
-      }
-    
+    }
 
     initialTimeIn() {
         const currentDateTime = moment().tz("Asia/Manila");
@@ -113,7 +116,6 @@ throw new Error('Method not implemented.');
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`;
 
-       
         const user = this.encrypt.getItem("id");
         console.log(user);
 
@@ -129,7 +131,6 @@ throw new Error('Method not implemented.');
                     .then((data) => {
                         console.log("Reverse Geocoding Result:", data.display_name);
 
-
                         const dataAttendance = {
                             user_id: user,
                             date: date,
@@ -144,7 +145,6 @@ throw new Error('Method not implemented.');
                                 this.loadAttendance();
                             },
                             error: (error: any) => {
-                              
                                 this._snackBarService.openSnackBar("Error", "okay");
                             },
                         });
@@ -188,7 +188,6 @@ throw new Error('Method not implemented.');
                     .then((data) => {
                         console.log("Reverse Geocoding Result:", data.display_name);
 
-
                         const dataAttendance = {
                             user_id: user,
                             date: date,
@@ -204,7 +203,6 @@ throw new Error('Method not implemented.');
                             },
                             error: (error: any) => {
                                 this._snackBarService.openSnackBar("Error", "okay");
-                              
                             },
                         });
                     })
@@ -225,23 +223,19 @@ throw new Error('Method not implemented.');
         );
     }
 
-
-
-
     formatDateToString(currentDateTime: Date): string {
         const dateString = this.datePipe.transform(currentDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
         return dateString || "";
     }
     // time in click end
 
-
     InitialTimeOut() {
         const currentDateTime = moment().tz("Asia/Manila");
-        const statuses = 'Initial'
+        const statuses = "Initial";
         const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
 
-        const formattedDateTime = moment(currentDateTime).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+        const formattedDateTime = moment(currentDateTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -291,11 +285,11 @@ throw new Error('Method not implemented.');
 
     subsequentTimeOut() {
         const currentDateTime = moment().tz("Asia/Manila");
-        const statuses = 'Subsequent'
+        const statuses = "Subsequent";
         const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
 
-        const formattedDateTime = moment(currentDateTime).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+        const formattedDateTime = moment(currentDateTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -324,7 +318,6 @@ throw new Error('Method not implemented.');
                                 // Log the error to the console for debugging purposes
                                 this._snackBarService.openSnackBar("Error", "okay");
                                 console.error("Error from server:", error);
-
                             },
                         });
                     })
@@ -502,4 +495,7 @@ throw new Error('Method not implemented.');
         });
     }
     //  search bar end
+    ngAfterViewInit() {
+        this.dataSource.paginator = this.paginator;
+    }
 }
