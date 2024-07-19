@@ -903,12 +903,12 @@ export class TimesheetComponent {
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Action revert", "okay");
+                    // this._snackBarService.openSnackBar("Action revert", "okay");
                 } else {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                    // this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
                 }
             });
         }

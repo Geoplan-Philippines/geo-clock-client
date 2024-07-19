@@ -141,7 +141,7 @@
 
                         <!-- status Column -->
                         <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef>Total Hour</th>
+                            <th mat-header-cell *matHeaderCellDef>Remarks</th>
                             <td mat-cell *matCellDef="let element">{{ element.remarks }}</td>
                         </ng-container>
                         <!-- Header Row -->
@@ -158,5 +158,7 @@
                 </div>
             </div>
         </div>
+        <mat-paginator [pageSizeOptions]="[5, 6, 7]" showFirstLastButtons aria-label="Select page of periodic elements">
+        </mat-paginator>
     </div>
 </div>

@@ -60,6 +60,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
     filterData: any;
     todayDate: Date = new Date();
+
+    @ViewChild(MatPaginator)
+    paginator!: MatPaginator;
     constructor(
         private datePipe: DatePipe,
         private _snackBarService: SnackBarService,
@@ -85,8 +88,6 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         }
     }
 
-    @ViewChild(MatPaginator)
-    paginator!: MatPaginator;
 
     private updateTimeAndDate(): void {
         const now = new Date();
@@ -395,6 +396,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                             return matchesGeneralFilter;
                         });
                         this.dataSource.data = filteredData;
+                        this.dataSource.paginator = this.paginator;
 
                         const firstdate = new Date();
                         const dateString = this.datePipe.transform(firstdate, "yyyy-MM-dd", "Asia/Manila");
@@ -426,6 +428,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                         });
 
                         this.dataSource.data = filteredData;
+                        this.dataSource.paginator = this.paginator;
                     }
                 });
             }
@@ -476,6 +479,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 });
 
                 this.dataSource.data = filteredData;
+                this.dataSource.paginator = this.paginator;
             } else {
                 ds.map((item: any, index: number) => ({ ...item, id: index + 1 }));
                 const filteredData = ds.filter((data: any) => {
@@ -491,11 +495,12 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 });
 
                 this.dataSource.data = filteredData;
+                this.dataSource.paginator = this.paginator;
             }
         });
     }
-    //  search bar end
-    ngAfterViewInit() {
-        this.dataSource.paginator = this.paginator;
-    }
+    // //  search bar end
+    // ngAfterViewInit() {
+    //     this.dataSource.paginator = this.paginator;
+    // }
 }
