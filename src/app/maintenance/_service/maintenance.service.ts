@@ -38,6 +38,10 @@ export class MaintenanceService {
         return this._http.post(`${this.apiUrl}/classification`, addedClassification);
     }
 
+    updateAllDifferentialData(id: number, updateDifferential: any): Observable<any> {
+        return this._http.patch(`${this.apiUrl}/differential-hours/${id}`, updateDifferential);
+    }
+
     deleteData(id: any, table: any) {
         if (table === "holiday") {
             // console.log("pogi");

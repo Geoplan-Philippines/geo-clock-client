@@ -65,13 +65,13 @@
                         </ng-container>
 
                         <ng-container matColumnDef="date">
-                            <th mat-header-cell *matHeaderCellDef><h1 class="font-bold">Action</h1></th>
+                            <th mat-header-cell *matHeaderCellDef><h1 class="font-bold">Date</h1></th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element.holiday_date }}
+                                {{ element.holiday_date | date: "EEE, MMM d"}}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="type">
-                            <th mat-header-cell *matHeaderCellDef><h1 class="font-bold">Action</h1></th>
+                            <th mat-header-cell *matHeaderCellDef><h1 class="font-bold">Type</h1></th>
                             <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                         </ng-container>
                         <ng-container matColumnDef="action">
@@ -203,7 +203,7 @@
                     <table mat-table [dataSource]="dataSourceDifferential" class="mat-elevation-z8">
                         <ng-container matColumnDef="diff_name">
                             <th mat-header-cell *matHeaderCellDef>
-                                <h1 class="font-bold">Classification</h1>
+                                <h1 class="font-bold">Differential</h1>
                             </th>
                             <td mat-cell *matCellDef="let element">{{ element.diff_name }}</td>
                         </ng-container>
@@ -217,7 +217,7 @@
                             <th mat-header-cell *matHeaderCellDef>
                                 <h1 class="font-bold">End Time</h1>
                             </th>
-                            <td mat-cell *matCellDef="let element">{{ element.out_time | date: "h:mm a" : "UTC" }}</td>
+                            <td mat-cell *matCellDef="let element">{{ element.end_time | date: "h:mm a" : "UTC" }}</td>
                         </ng-container>
                         <ng-container matColumnDef="action">
                             <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Action</h1></th>
@@ -226,7 +226,7 @@
                                     <button
                                         mat-stroked-button
                                         class="submit-Btn bg w-full text-center sm:w-32"
-                                        (click)="updateDataClass(element.id, element.start_time, element.out_time)"
+                                        (click)="updateDataClass(element.id, element.start_time, element.end_time)"
                                     >
                                         Update
                                     </button>
