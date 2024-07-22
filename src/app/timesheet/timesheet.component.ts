@@ -586,7 +586,6 @@ export class TimesheetComponent {
 
             if (approval) {
                 console.log("Approval found:", approval);
-            
                 if (approval.approved_check === true) {
                     console.log("Timesheet is approved. Cannot be changed.");
                     this._snackBarService.openSnackBar("Approved Timesheet cannot be changed", "okay");
@@ -638,7 +637,11 @@ export class TimesheetComponent {
                             };
                             this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                         }
-                    }
+                    }else{
+                        this._snackBarService.openSnackBar("Cannot exceed 20hours", "okay");
+                        this.dateRefresher();
+
+                 }
                 }
             } else {
                 console.log("No data found for the selected date.");
@@ -686,6 +689,10 @@ export class TimesheetComponent {
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     }
+                }else{
+                    this._snackBarService.openSnackBar("Cannot exceed 20hours", "okay");
+                    this.dateRefresher();
+                    
                 }
             }
             
