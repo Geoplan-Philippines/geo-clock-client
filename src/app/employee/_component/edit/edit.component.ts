@@ -11,7 +11,7 @@ export interface DialogData {
     first_name: "";
     employee_code: "";
     email: "";
-    password: "";
+    // password: "";
     department: "";
     classification: "";
     role: "";
@@ -77,7 +77,7 @@ export class EditComponent {
             last_name: [this.data.last_name, Validators.required],
             employee_code: [this.data.employee_code, Validators.required],
             email: [this.data.email, Validators.required],
-            password: [this.data.password, Validators.required],
+            // password: [this.data.password, Validators.required],
             department: [this.data.department, Validators.required],
             classification: [this.data.classification, Validators.required],
             role: [this.data.role, Validators.required],

@@ -10,7 +10,7 @@
                     <li (click)="scrollToSection('section1')"><p>Holidays</p></li>
                     <li (click)="scrollToSection('section2')"><p>Department</p></li>
                     <li (click)="scrollToSection('section3')"><p>Classification</p></li>
-                    <li (click)="scrollToSection('section4')"><p>Differential</p></li>
+                    <li (click)="scrollToSection('section4')"><p>Shifts</p></li>
                 </ul>
             </div>
             <div class="selected h-[80vh] overflow-y-scroll border-l-2 border-solid border-l-[#0a54a0] px-5">
@@ -199,11 +199,11 @@
 
 
                 <div id="section4" class="h-screen">
-                    <p>Differential Hours</p>
+                    <p>Shifts</p>
                     <table mat-table [dataSource]="dataSourceDifferential" class="mat-elevation-z8">
                         <ng-container matColumnDef="diff_name">
                             <th mat-header-cell *matHeaderCellDef>
-                                <h1 class="font-bold">Differential</h1>
+                                <h1 class="font-bold">Shifts</h1>
                             </th>
                             <td mat-cell *matCellDef="let element">{{ element.diff_name }}</td>
                         </ng-container>
