@@ -460,44 +460,67 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     }
 
     loadFilteringWithDate() {
-        // const currentDateTime = moment().tz("Asia/Manila");
-        // const date = currentDateTime.format("YYYY-MM-DD");
-        this.attendanceService.getAllAttendanceData(this.filterDate).subscribe((res: any) => {
-            const ds = res;
-            console.log(ds);
+            const userId = Number(this.encrypt.getItem("id"));
 
-            this.dataSource = new MatTableDataSource<AttedanceModel>(ds);
-            if (this.generalFilter === null || "") {
-                ds.map((item: any, index: number) => ({ ...item, id: index + 1 }));
-                const filteredData = ds.filter((data: any) => {
-                    console.log(this.filterDate);
-                    if (data.date) {
-                        const matchesDate = data.date.toString().toLowerCase().includes(this.filterDate.toLowerCase());
-                        return matchesDate;
-                    }
-                    return false;
-                });
-
-                this.dataSource.data = filteredData;
-                this.dataSource.paginator = this.paginator;
-            } else {
-                ds.map((item: any, index: number) => ({ ...item, id: index + 1 }));
-                const filteredData = ds.filter((data: any) => {
-                    console.log(this.filterDate);
-                    if (data.date) {
-                        const matchesDate = data.date.toString().toLowerCase().includes(this.filterDate.toLowerCase());
-                        const matchesGeneralFilter = this.generalFilter
-                            ? JSON.stringify(data).toLowerCase().includes(this.generalFilter)
-                            : true;
-                        return matchesDate && matchesGeneralFilter;
-                    }
-                    return false;
-                });
-
-                this.dataSource.data = filteredData;
-                this.dataSource.paginator = this.paginator;
-            }
-        });
+            this.attendanceService.getAllemployeetData().subscribe((employeeData: any) => {
+                const currentUser = employeeData.find((emp: any) => emp.id === userId);
+    
+                if (currentUser) {
+                    const userRole = currentUser.role;
+                    const userDepartment = currentUser.department;
+                    const isOwner = userDepartment === "owner";
+    
+                    this.attendanceService.getAllAttendanceData(this.filterDate).subscribe((res: any) => {
+                        const ds = res;
+    
+                        if (isOwner) {
+                            this.dataSource = new MatTableDataSource<AttedanceModel>(ds);
+    
+                            ds.map((item: any, index: number) => ({ ...item, id: index + 1 }));
+                            const filteredData = ds.filter((data: any) => {
+                                const matchesGeneralFilter = this.generalFilter
+                                    ? JSON.stringify(data).toLowerCase().includes(this.generalFilter)
+                                    : true;
+                                return matchesGeneralFilter;
+                            });
+                            this.dataSource.data = filteredData;
+                            this.dataSource.paginator = this.paginator;
+    
+                            const firstdate = new Date();
+                            const dateString = this.datePipe.transform(firstdate, "yyyy-MM-dd", "Asia/Manila");
+    
+                            const findTimeIn = ds.find(
+                                (attendanceData: any) => attendanceData.date === dateString && attendanceData.user.id === userId,
+                            );
+    
+                            this.filterData = findTimeIn ? findTimeIn.time_in : null;
+                        } else {
+                            // Filter timesheets based on user's department
+                            let filteredattendance;
+    
+                            if (userRole === "admin") {
+                                filteredattendance = ds.filter((timesheet: any) => timesheet.user.department === userDepartment);
+                            } else if (userRole === "user") {
+                                filteredattendance = ds.filter((timesheet: any) => timesheet.user.id === userId);
+                            }
+    
+                            const updatedFilteredAttedance = filteredattendance.map((item: any, index: number) => ({
+                                ...item,
+                                id: index + 1,
+                            }));
+                            const filteredData = updatedFilteredAttedance.filter((data: any) => {
+                                const matchesGeneralFilter = this.generalFilter
+                                    ? JSON.stringify(data).toLowerCase().includes(this.generalFilter)
+                                    : true;
+                                return matchesGeneralFilter;
+                            });
+    
+                            this.dataSource.data = filteredData;
+                            this.dataSource.paginator = this.paginator;
+                        }
+                    });
+                }
+            });
     }
     // //  search bar end
     // ngAfterViewInit() {
