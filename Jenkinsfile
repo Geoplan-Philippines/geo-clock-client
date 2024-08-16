@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'geoplanoperation/clockgeo-client'
+        DOCKER_USERNAME = 'geoplanoperation'
+        DOCKER_IMAGE = 'clockgeo-client'
         DOCKER_TAG = 'latest'
     }
 
@@ -16,7 +17,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
                 }
             }
         }
@@ -24,9 +25,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                        docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
-                    }
+                    sh "docker tag ${DOCKER_IMAGE} ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    sh "docker push ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
