@@ -33,4 +33,11 @@
             }
         }
     }
+    .mat-button-copy-clipboard {
+        background-color: #0a54a0;
+        .mdc-button__label {
+            color: white;
+            font-weight: bold;
+        }
+    }
 }

@@ -1,5 +1,4 @@
 <div id="chart">
-    <p class="text-xl font-semibold text-[#0a54a0]">Work From Home Analytics</p>
     <apx-chart
         [series]="chartOptions.series"
         [chart]="chartOptions.chart"
@@ -7,7 +6,9 @@
         [plotOptions]="chartOptions.plotOptions"
         [yaxis]="chartOptions.yaxis"
         [xaxis]="chartOptions.xaxis"
+        [stroke]="chartOptions.stroke"
+        [grid]="chartOptions.grid"
         [fill]="chartOptions.fill"
-        [title]="chartOptions.title"
+        [annotations]="chartOptions.annotations"
     ></apx-chart>
 </div>

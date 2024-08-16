@@ -1,7 +1,25 @@
 {
-    "tabWidth": 4,
-    "semicolon": true,
-    "singleQuote": false,
-    "printWidth": 130,
-    "plugins": ["prettier-plugin-tailwindcss"]
+"printWidth": 100,
+"tabWidth": 4,
+"useTabs": false,
+"semi": true,
+"singleQuote": true,
+"quoteProps": "as-needed",
+"jsxSingleQuote": false,
+"trailingComma": "es5",
+"bracketSpacing": true,
+"jsxBracketSameLine": false,
+"arrowParens": "always",
+"rangeStart": 0,
+"rangeEnd": 9999999,
+"requirePragma": false,
+"insertPragma": false,
+"proseWrap": "always",
+"htmlWhitespaceSensitivity": "css",
+"vueIndentScriptAndStyle": false,
+"endOfLine": "auto",
+"embeddedLanguageFormatting": "auto",
+"plugins": [
+"prettier-plugin-tailwindcss"
+]
 }

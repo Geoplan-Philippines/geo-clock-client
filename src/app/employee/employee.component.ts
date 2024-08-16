@@ -1,16 +1,16 @@
-import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
-import { EmployeeService } from "./_service/employee.service";
-import { EmployeeModel } from "../models/employee.model";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatDialog } from "@angular/material/dialog";
-import { AddComponent } from "./_component/add/add.component";
-import { EditComponent } from "./_component/edit/edit.component";
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { EmployeeService } from './_service/employee.service';
+import { EmployeeModel } from '../models/employee.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { AddComponent } from './_component/add/add.component';
+import { EditComponent } from './_component/edit/edit.component';
 
 @Component({
-    selector: "app-employee",
-    templateUrl: "./employee.component.html",
-    styleUrls: ["./employee.component.scss"],
+    selector: 'app-employee',
+    templateUrl: './employee.component.html',
+    styleUrls: ['./employee.component.scss'],
 })
 export class EmployeeComponent {
     employeeEntry: any[] = [];
@@ -21,7 +21,7 @@ export class EmployeeComponent {
     element: any;
     constructor(
         private employeeService: EmployeeService,
-        public dialog: MatDialog,
+        public dialog: MatDialog
     ) {}
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -45,23 +45,23 @@ export class EmployeeComponent {
                 const allIdsAlt = this.dataSource.data.map((employee) => employee.id);
                 this.employeeId = allIdsAlt;
             } else {
-                console.log("Data source is empty");
+                console.log('Data source is empty');
             }
         } catch (error) {
-            console.error("Error:", error); // Check if any error occurs during execution
+            console.error('Error:', error); // Check if any error occurs during execution
         }
     }
 
     displayedColumns: any[] = [
-        "is_active",
-        "employee_code",
-        "first_name",
-        "last_name",
-        "email",
-        "password",
-        "role",
-        "last_update",
-        "action",
+        'is_active',
+        'employee_code',
+        'first_name',
+        'last_name',
+        'email',
+        'role',
+        'classification',
+        'last_update',
+        'action',
     ];
 
     applyFilter(event: Event) {
@@ -87,10 +87,10 @@ export class EmployeeComponent {
         first_name: string,
         last_name: string,
         email: string,
-        password: string,
         department: string,
+        classification: string,
         role: string,
-        is_active: boolean,
+        is_active: boolean
     ) {
         const dialogRef = this.dialog.open(EditComponent, {
             data: {
@@ -99,8 +99,8 @@ export class EmployeeComponent {
                 last_name: last_name,
                 employee_code: employee_code,
                 email: email,
-                password: password,
                 department: department,
+                classification: classification,
                 role: role,
                 is_active: is_active,
             },

@@ -1,18 +1,28 @@
 <app-header></app-header>
 <div class="flex">
     <div class="flex-0"><app-aside></app-aside></div>
-    <div class="static z-0 mt-10 flex-1 p-0 pt-10 overflow-x-hidden shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
+    <div
+        class="static z-0 mt-10 flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10"
+    >
         <div class="flex grid-cols-4 flex-wrap gap-[40px] sm:grid">
             <mat-card class="example-card" *ngFor="let entry of trainingEntry">
                 <mat-card-header>
                     <div class="flex w-full items-center justify-between">
                         <mat-card-title>{{ entry.employee_code }}</mat-card-title>
-                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                        <button
+                            mat-icon-button
+                            [matMenuTriggerFor]="menu"
+                            aria-label="Example icon-button with a menu"
+                        >
                             <mat-icon>more_vert</mat-icon>
                         </button>
                     </div>
                 </mat-card-header>
-                <img mat-card-image src="../../assets/images/tommy_shelby_4k.png" alt="Photo of training site" />
+                <img
+                    mat-card-image
+                    src="../../assets/images/tommy_shelby_4k.png"
+                    alt="Photo of training site"
+                />
                 <mat-card-content>
                     <div class="flex justify-between">
                         <p>{{ entry.duration }} Hours</p>
@@ -28,10 +38,10 @@
                 </mat-card-actions>
             </mat-card>
 
-            <mat-card class="example-card-plus" >
-                <div class="flex justify-center items-center h-full" (click)="openDialog()">
+            <mat-card class="example-card-plus">
+                <div class="flex h-full items-center justify-center" (click)="openDialog()">
                     <mat-icon>add</mat-icon>
-                </div>    
+                </div>
             </mat-card>
         </div>
     </div>

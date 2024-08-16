@@ -1,25 +1,50 @@
 <app-header></app-header>
-<div class="flex">
+<div class="flex h-full max-h-[93vh]">
     <div>
         <app-aside></app-aside>
     </div>
-    <div class="static z-0 mt-10 h-screen flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:p-10 sm:pt-10">
+    <div
+        class="static z-0 h-full flex-1 overflow-x-hidden overflow-y-scroll p-0 pt-10 shadow-lg sm:p-10 sm:pt-10"
+    >
         <div class="filters block justify-between sm:flex">
             <mat-form-field class="w-[100%] sm:w-80">
-                <mat-label>Filter</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input class="custom-input" />
+                <mat-label>Search</mat-label>
+                <input
+                    matInput
+                    (keyup)="applyFilter($event)"
+                    placeholder="Ex. ium"
+                    #input
+                    class="custom-input"
+                />
             </mat-form-field>
+            <!-- renan year start -->
             <mat-form-field class="w-[100%] sm:w-80">
-                <mat-label>Week no. API</mat-label>
-                <mat-select (valueChange)="selectWeekNumber($event)">
+                <mat-label>Year</mat-label>
+                <mat-select
+                    [(value)]="latestYearNumber"
+                    (selectionChange)="selectYearNumber($event)"
+                >
                     <mat-option [value]="null">Clear</mat-option>
-                    <mat-option *ngFor="let data of weekNumber" [value]="data.value">
+                    <mat-option *ngFor="let year of yearNumber" [value]="year.toString()">
+                        {{ year }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <!-- renan year end -->
+            <mat-form-field class="w-[100%] sm:w-80">
+                <mat-label>Week</mat-label>
+                <mat-select
+                    [(value)]="latestWeekNumber"
+                    (selectionChange)="selectWeekNumber($event)"
+                >
+                    <mat-option [value]="null">Clear</mat-option>
+                    <mat-option *ngFor="let data of weekNumber" [value]="data.value.toString()">
                         {{ data.wk_name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
-        <div class="static overflow-auto">
+        <div class="static h-[40rem] overflow-y-scroll">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
                     <ng-container matColumnDef="week_no">
@@ -28,7 +53,13 @@
                             mat-cell
                             *matCellDef="let element"
                             (click)="
-                                openDialog(element.id, element.week_no, element.user.id, element.start_date, element.end_date)
+                                openDialog(
+                                    element.id,
+                                    element.week_no,
+                                    element.user.id,
+                                    element.start_date,
+                                    element.end_date
+                                )
                             "
                         >
                             {{ element.week_no }}
@@ -40,10 +71,16 @@
                             mat-cell
                             *matCellDef="let element"
                             (click)="
-                                openDialog(element.id, element.week_no, element.user.id, element.start_date, element.end_date)
+                                openDialog(
+                                    element.id,
+                                    element.week_no,
+                                    element.user.id,
+                                    element.start_date,
+                                    element.end_date
+                                )
                             "
                         >
-                            {{ element.employee_name }}
+                            {{ element.user?.first_name }} {{ element.user?.last_name }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="approved">
@@ -52,7 +89,13 @@
                             mat-cell
                             *matCellDef="let element"
                             (click)="
-                                openDialog(element.id, element.week_no, element.user.id, element.start_date, element.end_date)
+                                openDialog(
+                                    element.id,
+                                    element.week_no,
+                                    element.user.id,
+                                    element.start_date,
+                                    element.end_date
+                                )
                             "
                         >
                             {{ element.approved }}
@@ -64,10 +107,16 @@
                             mat-cell
                             *matCellDef="let element"
                             (click)="
-                                openDialog(element.id, element.week_no, element.user.id, element.start_date, element.end_date)
+                                openDialog(
+                                    element.id,
+                                    element.week_no,
+                                    element.user.id,
+                                    element.start_date,
+                                    element.end_date
+                                )
                             "
                         >
-                            {{ element.start_date | date: "EEE, MMM d" }}
+                            {{ element.start_date | date: 'EEE, MMM d' }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="end_date">
@@ -76,10 +125,16 @@
                             mat-cell
                             *matCellDef="let element"
                             (click)="
-                                openDialog(element.id, element.week_no, element.user.id, element.start_date, element.end_date)
+                                openDialog(
+                                    element.id,
+                                    element.week_no,
+                                    element.user.id,
+                                    element.start_date,
+                                    element.end_date
+                                )
                             "
                         >
-                            {{ element.end_date | date: "EEE, MMM d" }}
+                            {{ element.end_date | date: 'EEE, MMM d' }}
                         </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -87,7 +142,11 @@
                 </table>
             </div>
         </div>
-        <mat-paginator [pageSizeOptions]="[5, 6, 7]" showFirstLastButtons aria-label="Select page of periodic elements">
+        <mat-paginator
+            [pageSizeOptions]="[5, 6, 7]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+        >
         </mat-paginator>
     </div>
 </div>

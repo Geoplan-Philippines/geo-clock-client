@@ -23,18 +23,39 @@
                     <input matInput formControlName="email" />
                 </mat-form-field>
 
-                <mat-form-field class="example-full-width">
+                <!-- <mat-form-field class="example-full-width">
                     <mat-label>Password</mat-label>
                     <input matInput formControlName="password" />
-                </mat-form-field>
+                </mat-form-field> -->
 
                 <mat-form-field class="example-full-width">
                     <mat-label>Department</mat-label>
                     <mat-select formControlName="department">
                         <mat-option>None</mat-option>
-                        <mat-option value="System Developer">System Developer</mat-option>
+                        <mat-option *ngFor="let dep of departments" [value]="dep.department_name">
+                            {{ dep.department_name }}
+                        </mat-option>
+
+                        <!-- <mat-option value="System Developer">System Developer</mat-option>
                         <mat-option value="Marketing Department">Marketing Department</mat-option>
-                        <mat-option value="Sales Department">Sales Department</mat-option>
+                        <mat-option value="Sales Department">Sales Department</mat-option> -->
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>classification</mat-label>
+                    <mat-select formControlName="classification">
+                        <mat-option>None</mat-option>
+
+                        <mat-option
+                            *ngFor="let clas of classification"
+                            [value]="clas.classification_name"
+                            >{{ clas.classification_name }}
+                        </mat-option>
+                        <!-- <mat-option value="Regular">Regular </mat-option>
+                        <mat-option value="Provisionary">Probationary </mat-option>
+                        <mat-option value="Casual">Consultant </mat-option>
+                         -->
                     </mat-select>
                 </mat-form-field>
 
@@ -43,7 +64,7 @@
                     <mat-select formControlName="role">
                         <mat-option>None</mat-option>
                         <mat-option value="superAdmin">Super Admin</mat-option>
-                        <mat-option value="admin">Admin</mat-option>
+                        <mat-option value="admin">Department Manager</mat-option>
                         <mat-option value="user">Employee</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -54,11 +75,15 @@
             </mat-form-field> -->
 
                 <div class="flex justify-center">
-                    <mat-checkbox class="example-margin" formControlName="is_active">Is Active</mat-checkbox>
+                    <mat-checkbox class="example-margin" formControlName="is_active"
+                        >Is Active</mat-checkbox
+                    >
                 </div>
 
                 <div class="mt-4">
-                    <button mat-stroked-button class="submitBtn" [disabled]="!formData.valid">Submit</button>
+                    <button mat-stroked-button class="submitBtn" [disabled]="!formData.valid">
+                        Submit
+                    </button>
                     <!-- Disable button if form is invalid -->
                 </div>
             </div>

@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    // API_BASEURL: 'http://localhost:4200',
+    // API_BASEURL: 'https://clockgeo.geoplanph.com',
 };

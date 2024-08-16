@@ -1,55 +1,51 @@
 <div class="p-40">
     <form [formGroup]="formData" (ngSubmit)="submitForm()">
-  
-      <div class="mb-4">
-        <input type="file" name="file" id="file" /> 
-      </div>
-  
-      <mat-form-field class="example-full-width">
-        <mat-label>Employee Code</mat-label>
-        <input matInput formControlName="employeeCode" placeholder="Enter Employee Code" /> 
-    
-      </mat-form-field>
-  
-      <mat-form-field class="example-full-width">
-        <mat-label>Type</mat-label>
-        <input matInput formControlName="type" placeholder="Enter Type" /> 
-        
-      </mat-form-field>
-  
-      <mat-form-field class="example-full-width">
-        <mat-label>Cover</mat-label>
-        <input matInput formControlName="cover" placeholder="Enter Cover" />
+        <div class="mb-4">
+            <input type="file" name="file" id="file" />
+        </div>
 
-      </mat-form-field>
-  
-      <mat-form-field class="example-full-width">
-        <mat-label>Date</mat-label>
-        <input matInput formControlName="date" placeholder="Enter Date" /> 
-        
-      </mat-form-field>
-  
-      <mat-form-field class="example-full-width">
-        <mat-label>Duration</mat-label>
-        <input matInput formControlName="duration" placeholder="Enter Duration" /> 
-        
-      </mat-form-field>
-  
-      <mat-form-field class="example-full-width">
-        <mat-label>District Partner</mat-label>
-        <input matInput formControlName="districtPartner" placeholder="Enter District Partner" /> 
-     
-      </mat-form-field>
-  
-      <mat-form-field class="example-full-width">
-        <mat-label>Details</mat-label>
-        <input matInput formControlName="details" placeholder="Enter Details" /> 
-       
-      </mat-form-field>
-  
-      <div class="mt-4">
-        <button mat-stroked-button [disabled]="!formData.valid">Submit</button> <!-- Disable button if form is invalid -->
-      </div>
+        <mat-form-field class="example-full-width">
+            <mat-label>Employee Code</mat-label>
+            <input matInput formControlName="employeeCode" placeholder="Enter Employee Code" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Type</mat-label>
+            <input matInput formControlName="type" placeholder="Enter Type" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Cover</mat-label>
+            <input matInput formControlName="cover" placeholder="Enter Cover" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Date</mat-label>
+            <input matInput formControlName="date" placeholder="Enter Date" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Duration</mat-label>
+            <input matInput formControlName="duration" placeholder="Enter Duration" />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>District Partner</mat-label>
+            <input
+                matInput
+                formControlName="districtPartner"
+                placeholder="Enter District Partner"
+            />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Details</mat-label>
+            <input matInput formControlName="details" placeholder="Enter Details" />
+        </mat-form-field>
+
+        <div class="mt-4">
+            <button mat-stroked-button [disabled]="!formData.valid">Submit</button>
+            <!-- Disable button if form is invalid -->
+        </div>
     </form>
-  </div>
-  
+</div>

@@ -1,0 +1,39 @@
+$geo-color: #0a54a0;
+$secondary-text-color: white;
+.category {
+    li {
+        &:hover {
+            text-decoration: underline;
+            font-weight: bold;
+            color: $geo-color;
+        }
+    }
+}
+.selected {
+    scroll-behavior: smooth;
+    > div {
+        margin-top: 2rem;
+        p {
+            font-weight: bold;
+            font-size: x-large;
+            color: $geo-color;
+            top: 0;
+            position: sticky;
+            background-color: white;
+            z-index: 1000;
+        }
+    }
+}
+:host ::ng-deep {
+    .example-full-width-department {
+        width: 100%;
+    }
+    .submit-Btn {
+        background-color: $geo-color;
+        color: $secondary-text-color !important;
+    }
+    .example-full-width-holiday {
+        width: 100%;
+        margin: 0px 5px;
+    }
+}

@@ -1,6 +1,7 @@
 export interface TimesheetSummaryModel {
-    id: number;
+    // id: number;
     Week_no: number;
+    Date: string;
     Employee: string;
     Code: string;
     RG: number;

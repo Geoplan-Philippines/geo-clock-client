@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>No Record</h1>
+<div mat-dialog-content>Would you like to change the type?</div>
+<div class="flex justify-center">
+    <div mat-dialog-actions>
+        <button mat-raised-button color="warn" (click)="submitFormButton('ND')">Night Shift</button>
+        <button mat-raised-button color="primary" (click)="submitFormButton('DW')">
+            Day Shift
+        </button>
+    </div>
+</div>

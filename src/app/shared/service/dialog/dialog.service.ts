@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { DeleteConfirmationModalComponent } from "src/app/timesheet/_components/delete-confirmation-modal/delete-confirmation-modal.component";
-import { DescriptionComponent } from "src/app/timesheet/_components/description/description.component";
+import { Injectable } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DeleteConfirmationModalComponent } from 'src/app/timesheet/_components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { DescriptionComponent } from 'src/app/timesheet/_components/description/description.component';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class DialogService {
     dialogRef: any = MatDialogRef<any>;
@@ -16,8 +16,9 @@ export class DialogService {
             data: {
                 id: entryData.id,
                 description: entryData.description,
+                working_location: entryData.working_location,
                 working_type: entryData.working_type,
-                ot_number: entryData.ot_number
+                ot_number: entryData.ot_number,
             },
         });
         return descriptionDialog.afterClosed();
@@ -30,7 +31,7 @@ export class DialogService {
             },
         });
         this.dialogRef.afterClosed().subscribe((result: any) => {
-            console.log("Dialog was closed", result);
+            console.log('Dialog was closed', result);
         });
     }
 }

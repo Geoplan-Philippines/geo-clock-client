@@ -8,28 +8,32 @@
             <div class="secondFormContainer w-[100%] sm:w-80">
                 <mat-form-field class="example-full-width">
                     <mat-label>Employee Code</mat-label>
-                    <input matInput formControlName="employee_code" placeholder="Enter Employee Code" />
+                    <input
+                        matInput
+                        formControlName="employee_code"
+                        placeholder="Enter Employee Code"
+                    />
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
                     <mat-label>First Name</mat-label>
-                    <input matInput formControlName="first_name" placeholder="Enter Type" />
+                    <input matInput formControlName="first_name" placeholder="Enter First Name" />
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
                     <mat-label>Last Name</mat-label>
-                    <input matInput formControlName="last_name" placeholder="Enter Cover" />
+                    <input matInput formControlName="last_name" placeholder="Enter Last Name" />
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
                     <mat-label>Email</mat-label>
-                    <input matInput formControlName="email" placeholder="Enter Date" />
+                    <input matInput formControlName="email" placeholder="Enter Email" />
                 </mat-form-field>
 
-                <mat-form-field class="example-full-width">
+                <!-- <mat-form-field class="example-full-width">
                     <mat-label>Password</mat-label>
-                    <input matInput formControlName="password" placeholder="Enter Duration" />
-                </mat-form-field>
+                    <input matInput formControlName="password" placeholder="Enter Password" />
+                </mat-form-field> -->
 
                 <!-- <mat-form-field class="example-full-width">
                     <mat-label>Department</mat-label>
@@ -39,9 +43,26 @@
                     <mat-label>Department</mat-label>
                     <mat-select formControlName="department">
                         <mat-option>None</mat-option>
-                        <mat-option value="System Developer">System Developer</mat-option>
-                        <mat-option value="Marketing Department">Marketing Department</mat-option>
-                        <mat-option value="Sales Department">Sales Department</mat-option>
+                        <mat-option *ngFor="let dep of departments" [value]="dep.department_name">
+                            {{ dep.department_name }}
+                        </mat-option>
+                        <!-- <mat-option value="Marketing Department">Marketing Department</mat-option>
+                        <mat-option value="Sales Department">Sales Department</mat-option> -->
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Classification</mat-label>
+                    <mat-select formControlName="classification">
+                        <mat-option>None</mat-option>
+                        <mat-option
+                            *ngFor="let clas of classification"
+                            [value]="clas.classification_name"
+                        >
+                            {{ clas.classification_name }}
+                        </mat-option>
+                        <!-- <mat-option value="Provisionary">Probationary </mat-option>
+                        <mat-option value="Consultant">Consultant </mat-option> -->
                     </mat-select>
                 </mat-form-field>
 
@@ -56,7 +77,9 @@
                 </mat-form-field>
 
                 <div class="mt-4">
-                    <button mat-stroked-button class="submitBtn" [disabled]="!formData.valid">Submit</button>
+                    <button mat-stroked-button class="submitBtn" [disabled]="!formData.valid">
+                        Submit
+                    </button>
                     <!-- Disable button if form is invalid -->
                 </div>
             </div>

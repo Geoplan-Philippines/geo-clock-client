@@ -1,16 +1,16 @@
-import { Component, ViewChild } from "@angular/core";
-import { ProjectsService } from "./_service/projects.service";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
+import { Component, ViewChild } from '@angular/core';
+import { ProjectsService } from './_service/projects.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
-    selector: "app-projects",
-    templateUrl: "./projects.component.html",
-    styleUrls: ["./projects.component.scss"],
+    selector: 'app-projects',
+    templateUrl: './projects.component.html',
+    styleUrls: ['./projects.component.scss'],
 })
 export class ProjectsComponent {
     timesheetEntry: any[] = []; // table filter
-    displayedColumns: string[] = ["work_order_number", "projectName", "project_description"];
+    displayedColumns: string[] = ['work_order_number', 'projectName', 'project_description'];
 
     dataSource = new MatTableDataSource<any>(); // for table
 

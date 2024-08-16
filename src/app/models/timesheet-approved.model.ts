@@ -1,8 +1,8 @@
 export interface TimesheetApprovedModel {
     week_no: number;
-    employee: String;
-    approved: boolean;
-    aproved_by: String;
+    user_id: number;
+    approved: string;
     start_date: number;
     end_date: Date;
+    employee_name: string;
 }

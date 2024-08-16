@@ -1,16 +1,17 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
-import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { MatDialog } from "@angular/material/dialog";
-import { HeadsupDialogComponent } from "src/app/shared/ui/headsup-dialog/headsup-dialog.component";
-import { HeaderService } from "./_service/header.service";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { MatDialog } from '@angular/material/dialog';
+import { HeadsupDialogComponent } from 'src/app/shared/ui/headsup-dialog/headsup-dialog.component';
+import { HeaderService } from './_service/header.service';
+import { EncryptionService } from 'src/app/authentication/_guards/encrpytion.service';
 
 @Component({
-    selector: "app-header",
-    templateUrl: "./header.component.html",
-    styleUrls: ["./header.component.scss"],
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit {
     mobileMenuOpen: boolean = false;
     headerCategory: any;
     sidebarLinks: any;
@@ -19,18 +20,19 @@ export class HeaderComponent implements OnInit{
         private router: Router,
         private angularAuth: AngularFireAuth,
         public dialog: MatDialog,
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        private encrypt: EncryptionService
     ) {}
 
-    ngOnInit(){
+    ngOnInit() {
         this.loadHeaderBarData();
         // const role = localStorage.getItem("role");
         // console.log(role)
     }
 
-    @ViewChild("userMenuWrapper")
+    @ViewChild('userMenuWrapper')
     userMenuWrapper!: ElementRef;
-    @ViewChild("sidemenu")
+    @ViewChild('sidemenu')
     menuside!: ElementRef;
 
     toggleMobileMenu() {
@@ -39,18 +41,18 @@ export class HeaderComponent implements OnInit{
 
     openDialog() {
         const dialogRef = this.dialog.open(HeadsupDialogComponent, {
-            data: { key: "Are you sure you want to log out?" }, // Replace key, value with your actual data
+            data: { key: 'Are you sure you want to log out?' }, // Replace key, value with your actual data
         });
     }
 
     loadHeaderBarData() {
-        const siderole = localStorage.getItem("role");
+        const siderole = this.encrypt.getItem('role');
         if (siderole !== null) {
             this.headerService.getSidebarModule(siderole).subscribe((res: any) => {
                 const ds = res;
-                this.headerCategory = ds.map((category: { category_name: any; items: any; }) => ({
+                this.headerCategory = ds.map((category: { category_name: any; items: any }) => ({
                     category_name: category.category_name,
-                    sidebarLinks: category.items 
+                    sidebarLinks: category.items,
                 }));
                 this.headerFunction();
             });
@@ -60,11 +62,11 @@ export class HeaderComponent implements OnInit{
     }
 
     headerFunction() {
-        this.sidebarLinks = []; 
-        for(let head of this.headerCategory){
-            for(let asideItems of head.sidebarLinks){ 
-                this.sidebarLinks.push(asideItems); 
+        this.sidebarLinks = [];
+        for (let head of this.headerCategory) {
+            for (let asideItems of head.sidebarLinks) {
+                this.sidebarLinks.push(asideItems);
+            }
         }
     }
- }
 }

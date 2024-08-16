@@ -1,20 +1,38 @@
 <app-header></app-header>
-<div class="flex">
+<div class="flex h-full max-h-[93vh]">
     <div>
         <app-aside></app-aside>
     </div>
-    <div class="static z-0 mt-10 h-screen flex-1 overflow-x-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
+    <div
+        class="static z-0 mt-10 h-full flex-1 overflow-x-hidden overflow-y-scroll p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10"
+    >
         <div class="justify-between sm:flex">
-            <mat-form-field>
+            <!-- <mat-form-field>
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
+            </mat-form-field> -->
+
+            <mat-form-field>
+                <mat-label>Year</mat-label>
+                <mat-select
+                    [(value)]="latestYearNumber"
+                    (selectionChange)="selectYearNumber($event)"
+                >
+                    <mat-option [value]="null">Clear</mat-option>
+                    <mat-option *ngFor="let year of yearNumber" [value]="year.toString()">
+                        {{ year }}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
 
             <mat-form-field>
-                <mat-label>Week no. API</mat-label>
-                <mat-select (valueChange)="selectWeekNumber($event)">
+                <mat-label>Week</mat-label>
+                <mat-select
+                    [(value)]="latestWeekNumber"
+                    (selectionChange)="selectWeekNumber($event)"
+                >
                     <mat-option [value]="null">Clear</mat-option>
-                    <mat-option *ngFor="let data of weekNumber" [value]="data.value">
+                    <mat-option *ngFor="let data of weekNumber" [value]="data.value.toString()">
                         {{ data.wk_name }}
                     </mat-option>
                 </mat-select>
@@ -29,9 +47,8 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field> -->
-
         </div>
-        <div class="h-96 overflow-y-scroll">
+        <div class="h-[40rem] overflow-y-scroll">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                 <!-- Position Column -->
                 <ng-container matColumnDef="id">
@@ -112,10 +129,11 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
                 <!-- Row shown when there is no matching data. -->
-                <tr class="mat-row" *matNoDataRow>
+                <!-- <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell" colspan="4">No data matching the filter "{{ input.value }}"</td>
-                </tr>
+                </tr> -->
             </table>
         </div>
+        <button mat-button class="mat-button-copy-clipboard" (click)="copyClipboard()">COPY</button>
     </div>
 </div>

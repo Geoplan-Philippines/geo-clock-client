@@ -1,0 +1,104 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-20",
+            "time_in": "2024-06-20T08:00:00Z",
+            "time_in_location": "New York, NY",
+            "time_out": "2024-06-20T16:00:00Z",
+            "time_out_location": "New York, NY",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-21",
+            "time_in": "2024-06-21T09:00:00Z",
+            "time_in_location": "Los Angeles, CA",
+            "time_out": "2024-06-21T17:00:00Z",
+            "time_out_location": "Los Angeles, CA",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-22",
+            "time_in": "2024-06-22T07:30:00Z",
+            "time_in_location": "Chicago, IL",
+            "time_out": "2024-06-22T15:30:00Z",
+            "time_out_location": "Chicago, IL",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-23",
+            "time_in": "2024-06-23T10:00:00Z",
+            "time_in_location": "Miami, FL",
+            "time_out": "2024-06-23T18:00:00Z",
+            "time_out_location": "Miami, FL",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-23",
+            "time_in": "2024-06-23T10:00:00Z",
+            "time_in_location": "Miami, FL",
+            "time_out": "2024-06-23T18:00:00Z",
+            "time_out_location": "Miami, FL",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-23",
+            "time_in": "2024-06-23T10:00:00Z",
+            "time_in_location": "Miami, FL",
+            "time_out": "2024-06-23T18:00:00Z",
+            "time_out_location": "Miami, FL",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-23",
+            "time_in": "2024-06-23T10:00:00Z",
+            "time_in_location": "Miami, FL",
+            "time_out": "2024-06-23T18:00:00Z",
+            "time_out_location": "Miami, FL",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-23",
+            "time_in": "2024-06-23T10:00:00Z",
+            "time_in_location": "Miami, FL",
+            "time_out": "2024-06-23T18:00:00Z",
+            "time_out_location": "Miami, FL",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-23",
+            "time_in": "2024-06-23T10:00:00Z",
+            "time_in_location": "Miami, FL",
+            "time_out": "2024-06-23T18:00:00Z",
+            "time_out_location": "Miami, FL",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-23",
+            "time_in": "2024-06-23T10:00:00Z",
+            "time_in_location": "Miami, FL",
+            "time_out": "2024-06-23T18:00:00Z",
+            "time_out_location": "Miami, FL",
+            "total_hours": 8
+        },
+        {
+            "employee_name": "joe david",
+            "date": "2024-06-23",
+            "time_in": "2024-06-23T10:00:00Z",
+            "time_in_location": "Miami, FL",
+            "time_out": "2024-06-23T18:00:00Z",
+            "time_out_location": "Miami, FL",
+            "total_hours": 8
+        }
+    ]
+}

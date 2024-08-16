@@ -1,0 +1,38 @@
+<p class="ml-5 mt-5 text-center text-2xl font-bold text-[#0a54a0]">Update Time</p>
+<mat-dialog-content class="mat-typography text-center">
+    <form [formGroup]="formData" class="formContainer" (ngSubmit)="submitForm()">
+        <div class="secondFormContainer mx-auto w-[100%] sm:w-80">
+            <mat-form-field class="example-full-width">
+                <mat-label>Start Time</mat-label>
+                <input
+                    matInput
+                    type="time"
+                    formControlName="start_time"
+                    placeholder="Enter Employee Code"
+                />
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>End Time</mat-label>
+                <input
+                    matInput
+                    type="time"
+                    formControlName="end_time"
+                    placeholder="Enter Employee Code"
+                />
+            </mat-form-field>
+
+            <div class="mt-4 text-center">
+                <!-- <button mat-stroked-button class="submitBtn" [disabled]="!formData.valid">Update</button> -->
+                <button
+                    mat-raised-button
+                    color="primary"
+                    class="submitBtn"
+                    [disabled]="!formData.valid"
+                >
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild, OnInit } from '@angular/core';
 import {
     ApexAxisChartSeries,
     ApexChart,
@@ -6,10 +6,13 @@ import {
     ApexDataLabels,
     ApexPlotOptions,
     ApexYAxis,
-    ApexTitleSubtitle,
     ApexXAxis,
+    ApexAnnotations,
     ApexFill,
-} from "ng-apexcharts";
+    ApexStroke,
+    ApexGrid,
+} from 'ng-apexcharts';
+import { SharedAnalyticsService } from '../shared-analytics.service';
 
 export type ChartOptions = {
     series: ApexAxisChartSeries;
@@ -18,113 +21,115 @@ export type ChartOptions = {
     plotOptions: ApexPlotOptions;
     yaxis: ApexYAxis;
     xaxis: ApexXAxis;
+    annotations: ApexAnnotations;
     fill: ApexFill;
-    title: ApexTitleSubtitle;
+    stroke: ApexStroke;
+    grid: ApexGrid;
+};
+
+const defaultChartOptions: ChartOptions = {
+    series: [],
+    chart: {
+        height: 350,
+        type: 'bar',
+    },
+    dataLabels: {
+        enabled: false,
+    },
+    plotOptions: {
+        bar: {
+            columnWidth: '20%',
+        },
+    },
+    yaxis: {
+        title: {
+            text: 'Total Hours',
+        },
+    },
+    xaxis: {
+        labels: {
+            rotate: -45,
+        },
+        categories: [],
+        tickPlacement: 'on',
+    },
+    annotations: {
+        points: [],
+    },
+    fill: {
+        type: 'gradient',
+        gradient: {
+            shade: 'light',
+            type: 'horizontal',
+            shadeIntensity: 0.25,
+            gradientToColors: undefined,
+            inverseColors: true,
+            opacityFrom: 0.85,
+            opacityTo: 0.85,
+            stops: [50, 0, 100],
+        },
+    },
+    stroke: {
+        width: 2,
+    },
+    grid: {
+        row: {
+            colors: ['#fff', '#f2f2f2'],
+        },
+    },
 };
 
 @Component({
-    selector: "app-wfh-tracking",
-    templateUrl: "./wfh-tracking.component.html",
-    styleUrls: ["./wfh-tracking.component.scss"],
+    selector: 'app-wfh-tracking',
+    templateUrl: './wfh-tracking.component.html',
+    styleUrls: ['./wfh-tracking.component.scss'],
 })
-export class WfhTrackingComponent {
+export class WfhTrackingComponent implements OnInit {
+    @ViewChild('chart') chart!: ChartComponent;
     public chartOptions: ChartOptions;
-    public dataFromDatabase: any;
 
-    constructor() {
-        this.chartOptions = {
-            series: [
-                {
-                    name: "Inflation",
-                    data: [5, 10, 20, 15, 10],
-                },
-            ],
-            chart: {
-                height: 350,
-                type: "bar",
+    constructor(private sharedAnalyticsService: SharedAnalyticsService) {
+        this.chartOptions = { ...defaultChartOptions };
+    }
+
+    ngOnInit() {
+        this.fetchData();
+    }
+
+    fetchData() {
+        this.sharedAnalyticsService.getAllWorkFromHome().subscribe((data: any[]) => {
+            const userHours: { [key: string]: number } = {};
+            const userLabels: { [key: string]: string } = {};
+
+            data.forEach((item) => {
+                const userId = item.user_id;
+                const userName = `${item.user.first_name} ${item.user.last_name}`;
+
+                if (userHours[userId]) {
+                    userHours[userId] += item.actual_hours;
+                } else {
+                    userHours[userId] = item.actual_hours;
+                    userLabels[userId] = userName;
+                }
+            });
+
+            this.updateChart(userHours, userLabels);
+        });
+    }
+
+    updateChart(userHours: { [key: string]: number }, userLabels: { [key: string]: string }) {
+        const categories = Object.values(userLabels);
+        const data = Object.values(userHours);
+
+        this.chartOptions.series = [
+            {
+                name: 'Total Hours',
+                data: data,
             },
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        position: "top", // top, center, bottom
-                    },
-                },
-            },
-            dataLabels: {
-                enabled: true,
-                formatter: function (val) {
-                    return val + "%";
-                },
-                offsetY: -20,
-                style: {
-                    fontSize: "12px",
-                    colors: ["#304758"],
-                },
-            },
-            xaxis: {
-                categories: ["Prince Cipriano", "Ace Pasilio", "Joseph Naval", "Jayvee Empleo", "Renan Boniza"],
-                position: "top",
-                labels: {
-                    offsetY: -18,
-                },
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false,
-                },
-                crosshairs: {
-                    fill: {
-                        type: "gradient",
-                        gradient: {
-                            colorFrom: "#D8E3F0",
-                            colorTo: "#BED1E6",
-                            stops: [0, 100],
-                            opacityFrom: 0.4,
-                            opacityTo: 0.5,
-                        },
-                    },
-                },
-                tooltip: {
-                    enabled: true,
-                    offsetY: -35,
-                },
-            },
-            fill: {
-                type: "gradient",
-                gradient: {
-                    shade: "light",
-                    type: "horizontal",
-                    shadeIntensity: 0.25,
-                    gradientToColors: undefined,
-                    inverseColors: true,
-                    opacityFrom: 1,
-                    opacityTo: 1,
-                    stops: [50, 0, 100, 100],
-                },
-            },
-            yaxis: {
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false,
-                },
-                labels: {
-                    show: false,
-                    formatter: function (val) {
-                        return val + "%";
-                    },
-                },
-            },
-            title: {
-                text: "WFH",
-                offsetY: 320,
-                align: "center",
-                style: {
-                    color: "#444",
-                },
-            },
+        ];
+        this.chartOptions.xaxis = {
+            ...this.chartOptions.xaxis,
+            categories: categories,
         };
     }
 }

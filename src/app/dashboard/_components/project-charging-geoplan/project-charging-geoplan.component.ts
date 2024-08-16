@@ -1,6 +1,13 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
-import { ApexNonAxisChartSeries, ApexResponsive, ApexChart, ApexFill, ApexDataLabels, ApexLegend } from "ng-apexcharts";
+import {
+    ApexNonAxisChartSeries,
+    ApexResponsive,
+    ApexChart,
+    ApexFill,
+    ApexDataLabels,
+    ApexLegend,
+} from 'ng-apexcharts';
 
 export type ChartOptions = {
     series: ApexNonAxisChartSeries;
@@ -13,9 +20,9 @@ export type ChartOptions = {
 };
 
 @Component({
-    selector: "app-project-charging-geoplan",
-    templateUrl: "./project-charging-geoplan.component.html",
-    styleUrls: ["./project-charging-geoplan.component.scss"],
+    selector: 'app-project-charging-geoplan',
+    templateUrl: './project-charging-geoplan.component.html',
+    styleUrls: ['./project-charging-geoplan.component.scss'],
 })
 export class ProjectChargingGeoplanComponent {
     public chartOptions: ChartOptions;
@@ -25,18 +32,18 @@ export class ProjectChargingGeoplanComponent {
             series: [44, 55, 41, 17, 15],
             chart: {
                 width: 380,
-                type: "donut",
+                type: 'donut',
             },
-            labels: ["A", "B", "C", "D", "E"],
+            labels: ['A', 'B', 'C', 'D', 'E'],
             dataLabels: {
                 enabled: false,
             },
             fill: {
-                type: "gradient",
+                type: 'gradient',
             },
             legend: {
                 formatter: function (val, opts) {
-                    return val + " - " + opts.w.globals.series[opts.seriesIndex];
+                    return val + ' - ' + opts.w.globals.series[opts.seriesIndex];
                 },
             },
             responsive: [
@@ -47,7 +54,7 @@ export class ProjectChargingGeoplanComponent {
                             width: 200,
                         },
                         legend: {
-                            position: "bottom",
+                            position: 'bottom',
                         },
                     },
                 },

@@ -1,0 +1,311 @@
+<app-header></app-header>
+<div class="flex h-full max-h-[93vh]">
+    <div>
+        <app-aside></app-aside>
+    </div>
+    <div
+        class="static z-10 mt-10 h-full flex-1 overflow-x-hidden overflow-y-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10"
+    >
+        <div class="mx-1 grid grid-cols-[100px_1fr] gap-4 sm:mx-40">
+            <div>
+                <ul class="category">
+                    <li (click)="scrollToSection('section1')"><p>Holidays</p></li>
+                    <li (click)="scrollToSection('section2')"><p>Department</p></li>
+                    <li (click)="scrollToSection('section3')"><p>Classification</p></li>
+                    <li (click)="scrollToSection('section4')"><p>Shifts</p></li>
+                </ul>
+            </div>
+            <div
+                class="selected h-[80vh] overflow-y-scroll border-l-2 border-solid border-l-[#0a54a0] px-5"
+            >
+                <div id="section1" class="h-auto">
+                    <p>Holidays</p>
+                    <mat-form-field class="w-[100%] sm:w-80">
+                        <mat-label>Search</mat-label>
+                        <input
+                            matInput
+                            (keyup)="applyFilterHoliday($event)"
+                            placeholder="Ex. ium"
+                            #input
+                            class="custom-input"
+                        />
+                    </mat-form-field>
+                    <form [formGroup]="formDataHoliday" (ngSubmit)="submitFormHoliday()">
+                        <p>Adding Holiday</p>
+                        <div class="block w-[100%] sm:flex">
+                            <mat-form-field class="example-full-width-holiday">
+                                <mat-label>Holiday Name</mat-label>
+                                <input
+                                    matInput
+                                    formControlName="holiday_name"
+                                    placeholder="Enter Holiday Name"
+                                />
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width-holiday">
+                                <mat-label>Holiday Category</mat-label>
+                                <mat-select
+                                    formControlName="type"
+                                    placeholder="Enter Holiday Category"
+                                >
+                                    <mat-option value="SH">Special Holiday</mat-option>
+                                    <mat-option value="RH">Regular Holiday</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="example-full-width-holiday" appearance="fill">
+                                <mat-label>Holiday Date</mat-label>
+                                <input
+                                    matInput
+                                    [matDatepicker]="picker"
+                                    formControlName="holiday_date"
+                                    placeholder="Enter Holiday Date"
+                                />
+                                <mat-datepicker-toggle
+                                    matSuffix
+                                    [for]="picker"
+                                ></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                            <div class="mb-8 ml-0 mt-3 sm:mt-3">
+                                <button
+                                    mat-stroked-button
+                                    class="submit-Btn bg w-full sm:w-32"
+                                    [disabled]="!formDataHoliday.valid"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <table mat-table [dataSource]="dataSourceHolidays" class="mat-elevation-z8">
+                        <ng-container matColumnDef="holiday_name">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Holiday</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.holiday_name }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Date</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.holiday_date | date: 'EEE, MMM d' }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Type</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="text-center font-bold">Action</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="flex justify-center">
+                                    <button
+                                        mat-stroked-button
+                                        (click)="deleteDataHoliday(element.id)"
+                                        class="submit-Btn bg w-full text-center sm:w-32"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsHolliday"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsHolliday"></tr>
+                    </table>
+                </div>
+                <div id="section2" class="h-auto">
+                    <p>Department</p>
+                    <mat-form-field class="w-[100%] sm:w-80">
+                        <mat-label>Search</mat-label>
+                        <input
+                            matInput
+                            (keyup)="applyFilterDepartment($event)"
+                            placeholder="Ex. ium"
+                            #input
+                            class="custom-input"
+                        />
+                    </mat-form-field>
+                    <form [formGroup]="formDataDep" (ngSubmit)="submitFormDep()">
+                        <p>Adding Department</p>
+                        <div class="block w-[100%] sm:flex">
+                            <mat-form-field class="example-full-width-department">
+                                <mat-label>Department Name</mat-label>
+                                <input
+                                    matInput
+                                    formControlName="department_name"
+                                    placeholder="Enter Employee Code"
+                                />
+                            </mat-form-field>
+                            <div class="mb-8 ml-0 mt-3 sm:ml-5 sm:mt-3">
+                                <button
+                                    mat-stroked-button
+                                    class="submit-Btn bg w-full sm:w-32"
+                                    [disabled]="!formDataDep.valid"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <table mat-table [dataSource]="dataSourceDepartment" class="mat-elevation-z8">
+                        <ng-container matColumnDef="department_name">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Departments</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.department_name }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="text-center font-bold">Action</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="flex justify-center">
+                                    <button
+                                        mat-stroked-button
+                                        class="submit-Btn bg w-full text-center sm:w-32"
+                                        (click)="deleteDataDep(element.id)"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsDepartment"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsDepartment"></tr>
+                    </table>
+                </div>
+                <div id="section3" class="h-auto">
+                    <p>Classification</p>
+
+                    <mat-form-field class="w-[100%] sm:w-80">
+                        <mat-label>Search</mat-label>
+                        <input
+                            matInput
+                            (keyup)="applyFilterClassification($event)"
+                            placeholder="Ex. ium"
+                            #input
+                            class="custom-input"
+                        />
+                    </mat-form-field>
+                    <form [formGroup]="formDataClass" (ngSubmit)="submitFormClass()">
+                        <p>Adding Classification</p>
+                        <div class="block w-[100%] sm:flex">
+                            <mat-form-field class="example-full-width-department">
+                                <mat-label>Classification Name</mat-label>
+                                <input
+                                    matInput
+                                    formControlName="classification_name"
+                                    placeholder="Enter Classification"
+                                />
+                            </mat-form-field>
+                            <div class="mb-8 ml-0 mt-3 sm:ml-5 sm:mt-3">
+                                <button
+                                    mat-stroked-button
+                                    class="submit-Btn bg w-full sm:w-32"
+                                    [disabled]="!formDataClass.valid"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <table
+                        mat-table
+                        [dataSource]="dataSourceClassification"
+                        class="mat-elevation-z8"
+                    >
+                        <ng-container matColumnDef="classification_name">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Classification</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.classification_name }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="text-center font-bold">Action</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="flex justify-center">
+                                    <button
+                                        mat-stroked-button
+                                        class="submit-Btn bg w-full text-center sm:w-32"
+                                        (click)="deleteDataClass(element.id)"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsClassification"></tr>
+                        <tr
+                            mat-row
+                            *matRowDef="let row; columns: displayedColumnsClassification"
+                        ></tr>
+                    </table>
+                </div>
+
+                <div id="section4" class="h-screen">
+                    <p>Shifts</p>
+                    <table mat-table [dataSource]="dataSourceDifferential" class="mat-elevation-z8">
+                        <ng-container matColumnDef="diff_name">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Shifts</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.diff_name }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="start_time">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">Start Time</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.start_time | date: 'h:mm a' : 'UTC' }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="end_start">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="font-bold">End Time</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.end_time | date: 'h:mm a' : 'UTC' }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <h1 class="text-center font-bold">Action</h1>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="flex justify-center">
+                                    <button
+                                        mat-stroked-button
+                                        class="submit-Btn bg w-full text-center sm:w-32"
+                                        (click)="
+                                            updateDataClass(
+                                                element.id,
+                                                element.start_time,
+                                                element.end_time
+                                            )
+                                        "
+                                    >
+                                        Update
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayColumnsDifferential"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayColumnsDifferential"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
