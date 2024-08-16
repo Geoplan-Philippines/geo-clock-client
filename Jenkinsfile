@@ -9,14 +9,12 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out the code...'
                 checkout scm
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                echo 'Building Docker image...'
                 script {
                     docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
                 }
@@ -25,7 +23,6 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                echo 'Pushing Docker image to registry...'
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
                         docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
@@ -35,19 +32,17 @@ pipeline {
         }
 
         stage('Deploy') {
-            when {
-                branch 'main'
-            }
             steps {
-                echo 'Deploying the Docker container...'
-            // Add deployment steps, for example, updating a Kubernetes deployment or using Docker Compose
+                script {
+                    sh 'docker stop clock-geo-client || true && docker rm clock-geo-client || true'
+                    sh "docker run -d --name clock-geo-client --network vultr-network --ip 172.18.0.20 --restart always ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                }
             }
         }
     }
 
     post {
         always {
-            echo 'Cleaning up...'
             cleanWs()
         }
 
