@@ -11,8 +11,6 @@ RUN npm ci --legacy-peer-deps
 # Copy the Angular app source code
 COPY . .
 
-RUN npm i -D @angular/cli@16.2.12
-
 # Build the Angular app
 RUN npm run build
 
