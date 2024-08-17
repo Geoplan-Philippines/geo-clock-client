@@ -25,7 +25,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh "docker tag ${DOCKER_IMAGE} ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${DOCKER_TAG}"
                     sh "docker push ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
@@ -35,7 +35,14 @@ pipeline {
             steps {
                 script {
                     sh 'docker stop clock-geo-client || true && docker rm clock-geo-client || true'
-                    sh "docker run -d --name clock-geo-client --network vultr-network --ip 172.18.0.20 --restart always ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    sh """
+                    docker run -d --name clock-geo-client \
+                    --network vultr-network \
+                    --ip 172.18.0.20 \
+                    --restart always \
+                    -e NODE_ENV=production \
+                    ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${DOCKER_TAG}
+                    """
                 }
             }
         }
