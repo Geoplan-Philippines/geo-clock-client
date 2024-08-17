@@ -12,7 +12,7 @@ RUN npm ci --legacy-peer-deps
 COPY . .
 
 # Build the Angular app
-RUN npm run build
+RUN npx --max_old_space_size=4096 @angular/cli@16.2.12 build
 
 # Step 2: Serve the Angular application using Nginx
 FROM nginx:alpine
