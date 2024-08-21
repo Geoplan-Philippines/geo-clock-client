@@ -221,8 +221,9 @@ export class TimesheetApprovedComponent {
         this.TimesheetApprovedService.getAllemployeetData().subscribe((employeeData: any) => {
             const user = employeeData.find((emp: any) => emp.id === userId);
             if (user) {
+                const userRole = user.role;
                 const userDepartment = user.department;
-                const isOwner = user.department === "owner"; // Assuming 'owner' is the role for owners
+                const isOwner = userRole === "superAdmin";  // Assuming 'owner' is the role for owners
 
                 // Load all timesheet data
                 this.TimesheetApprovedService.getAllTimesheetApprovedDataByYearandWeek(this.filterYear, this.filterWeek).subscribe((timesheetData: any) => {

@@ -369,12 +369,12 @@ export class TimesheetComponent {
             const existingProjects = res.response;
             const existingProject = existingProjects.find(
                 (project: any) => project.work_order_number + " | " + project.project_name === projectNameValue,
-            );
+            ) || 'GEO';
             if (existingProject) {
                 console.log("go");
                 this.timesheetService.getProjectName().subscribe((res: any) => {
                     const existingProjects = res;
-                    const existingProject = existingProjects.find((project: any) => project.project_name === projectNameValue);
+                    const existingProject = existingProjects.find((project: any) => project.project_name === projectNameValue) || 'GEO';
 
                     if (existingProject) {
                         console.log("Project already exists.");
@@ -890,13 +890,14 @@ export class TimesheetComponent {
         const transformDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
         const matchEntry = timesheetEntries.find((entry: any) => entry.date == transformDate);
-        console.log(matchEntry);
+        // console.log(matchEntry.nd_number);
         const entryData = {
             id: matchEntry.id,
             description: matchEntry.description,
             working_location: matchEntry.working_location,
             working_type: matchEntry.working_type,
             ot_number: matchEntry.ot_number,
+            nd_number: matchEntry.nd_number,
             approved_check: matchEntry.approved_check,
         };
         console.log(matchEntry.approved_check);

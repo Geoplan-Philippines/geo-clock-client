@@ -18,7 +18,7 @@
                     <h2 mat-dialog-title>Location</h2>
                     <mat-form-field>
                         <mat-label>Location</mat-label>
-                        <mat-select [(value)]="selectedType" formControlName="working_location">
+                        <mat-select [(value)]="selectedWorking" formControlName="working_location">
                             <mat-option [value]="'OFC-DW'">OFC-DW</mat-option>
                             <mat-option [value]="'OFC-ND'">OFC-ND</mat-option>
                             <mat-option [value]="'WFH'">WFH</mat-option>
@@ -29,7 +29,15 @@
                 </div>
                 <div class="flex justify-between">
                     <h2 mat-dialog-title>Type</h2>
-                    <h2 mat-dialog-title>{{ formData.get("working_type")?.value}}</h2>
+                    <!-- <h2 mat-dialog-title>{{ formData.get("working_type")?.value}}</h2> -->
+                    <mat-form-field>
+                        <mat-label>Type</mat-label>
+                        <mat-select [(value)]="selectedType" formControlName="working_type">
+                            <mat-option [value]="'RG'">RG</mat-option>
+                            <mat-option [value]="'ND'">ND</mat-option>
+                           
+                        </mat-select>
+                    </mat-form-field>
                 </div>
 
 
@@ -42,6 +50,19 @@
                             type="number"
                             formControlName="ot_number" 
                             placeholder="Enter OT Number"
+                        />
+                    </mat-form-field>
+                </div>
+
+                <div class="flex justify-between" *ngIf="selectedType === 'RG'">
+                    <h2 mat-dialog-title>Night Differential</h2>
+                    <mat-form-field class="flex-item">
+                        <mat-label>Night Differential Hours</mat-label>
+                        <input 
+                            matInput 
+                            type="number"
+                            formControlName="nd_number" 
+                            placeholder="Enter ND Number"
                         />
                     </mat-form-field>
                 </div>

@@ -76,6 +76,10 @@
                         </div>
                         <datalist id="browsers">
                             <option
+                                value="GEO"
+                                class="datalist-option"
+                            ></option>
+                            <option
                                 *ngFor="let opt of projects"
                                 [value]="opt.work_order_number + ' | ' + opt.project_name"
                                 class="datalist-option"

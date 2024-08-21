@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { TimesheetService } from "../../_service/timesheet.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.service";
+import { Subscription } from "rxjs";
 
 export interface DialogData {
     // week_number: any;
@@ -11,6 +12,7 @@ export interface DialogData {
     working_location: string;
     working_type: string;
     ot_number: number;
+    nd_number:number;
 }
 
 @Component({
@@ -20,7 +22,10 @@ export interface DialogData {
 })
 export class DescriptionComponent implements OnInit {
     formData!: FormGroup; // Using definite assignment assertion
+    selectedWorking: string | undefined;
     selectedType: string | undefined;
+    subscription: Subscription | undefined;
+
 
     constructor(
         private fb: FormBuilder,
@@ -33,7 +38,17 @@ export class DescriptionComponent implements OnInit {
     ngOnInit(): void {
         this.createForm(); 
 
-        this.selectedType = this.data.working_location
+        this.selectedWorking = this.data.working_location
+        this.selectedType = this.data.working_type
+
+        this.subscription = this.formData.get('working_type')?.valueChanges.subscribe((value) => {
+            this.selectedType = value;
+            if (value === 'RG') {
+                this.formData.patchValue({ nd_number: this.data.nd_number || 0 });
+            } else {
+                this.formData.patchValue({ nd_number: 0 });
+            }
+        });
     }
 
     createForm(): void {
@@ -41,7 +56,8 @@ export class DescriptionComponent implements OnInit {
             description: [this.data.description, Validators.required],
             working_location: [this.data.working_location],
             working_type: [this.data.working_type],
-            ot_number: [this.data.ot_number]
+            ot_number: [this.data.ot_number],
+            nd_number: [this.data.nd_number]
 
         });
     }
