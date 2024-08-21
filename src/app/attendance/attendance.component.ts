@@ -376,11 +376,11 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         // Load user's department
         this.attendanceService.getAllemployeetData().subscribe((employeeData: any) => {
             const currentUser = employeeData.find((emp: any) => emp.id === userId);
-
+            console.log(currentUser)
             if (currentUser) {
                 const userRole = currentUser.role;
                 const userDepartment = currentUser.department;
-                const isOwner = userDepartment === "owner";
+                const isOwner = userRole === "superAdmin";
 
                 this.attendanceService.getAllAttendanceData(date).subscribe((res: any) => {
                     const ds = res;
@@ -468,7 +468,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 if (currentUser) {
                     const userRole = currentUser.role;
                     const userDepartment = currentUser.department;
-                    const isOwner = userDepartment === "owner";
+                    const isOwner = userRole === "superAdmin";
     
                     this.attendanceService.getAllAttendanceData(this.filterDate).subscribe((res: any) => {
                         const ds = res;

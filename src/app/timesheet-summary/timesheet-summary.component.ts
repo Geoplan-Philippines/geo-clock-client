@@ -56,6 +56,7 @@ export class TimesheetSummaryComponent {
         this.timesheetSummaryService.getFilteringYearAndWeek(this.latestWeekNumber, this.latestYearNumber).subscribe((res: TimesheetSummaryModel[]) =>{
             const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
             this.dataSource.data = ds;
+            console.log(ds)
         })
 
     }
@@ -84,7 +85,7 @@ export class TimesheetSummaryComponent {
                     return data.Week_no.toString().toLowerCase() === filter;
                 };
                 this.dataSource.filter = weekFilterValue;
-    
+
                 console.log("Week filter applied:", weekFilterValue);
                 console.log(this.dataSource.data);
             });
