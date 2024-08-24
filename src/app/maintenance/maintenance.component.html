@@ -74,12 +74,27 @@
                             <th mat-header-cell *matHeaderCellDef><h1 class="font-bold">Type</h1></th>
                             <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                         </ng-container>
-                        <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Action</h1></th>
+                        <ng-container matColumnDef="update">
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Update</h1></th>
                             <td mat-cell *matCellDef="let element">
                                 <div class="flex justify-center">
                                     <button
                                         mat-stroked-button
+                                        (click)="updateDataHoliday(element.id)"
+                                        class="submit-Btn bg w-full text-center sm:w-32"
+                                    >
+                                        Update
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="delete">
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Delete</h1></th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="flex justify-center">
+                                    <button
+                                        mat-flat-button 
+                                        color="warn"
                                         (click)="deleteDataHoliday(element.id)"
                                         class="submit-Btn bg w-full text-center sm:w-32"
                                     >

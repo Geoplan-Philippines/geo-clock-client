@@ -42,6 +42,10 @@ export class MaintenanceService {
         return this._http.patch(`${this.apiUrl}/differential-hours/${id}`, updateDifferential);
     }
 
+    updateAllHolidays(id: number, updateHoliday: any): Observable<any> {
+        return this._http.patch(`${this.apiUrl}/holiday/${id}`, updateHoliday);
+    }
+
     deleteData(id: any, table: any) {
         if (table === "holiday") {
             // console.log("pogi");

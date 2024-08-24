@@ -7,6 +7,7 @@ import { DeleteConfirmModalComponent } from "./_components/delete-confirm-modal/
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import * as moment from 'moment-timezone';
 import { UpdateModalComponent } from "./_components/update-modal/update-modal.component";
+import { UpdateHolidayModalComponent } from "./_components/update-holiday-modal/update-holiday-modal.component";
 
 @Component({
     selector: "app-maintenance",
@@ -28,7 +29,7 @@ export class MaintenanceComponent {
     formDataClass!: FormGroup; 
 
     displayedColumnsDepartment: string[] = ["department_name", "action"];
-    displayedColumnsHolliday: string[] = ["holiday_name", "date", "type", "action"];
+    displayedColumnsHolliday: string[] = ["holiday_name", "date", "type", "update", "delete"];
     displayedColumnsClassification: string[] = ["classification_name", "action"];
     displayColumnsDifferential: string[] = ["diff_name", "start_time","end_start","action"];
     generalFilter: string = '';
@@ -227,6 +228,21 @@ export class MaintenanceComponent {
         }
     }
 
+    updateDataHoliday(id: number) {
+        this.dialogRef = this.dialog.open(UpdateHolidayModalComponent, {
+            data: {
+                id: id,
+                table: "holiday",
+            },
+        });
+
+        this.dialogRef.afterClosed().subscribe((result: any) => {
+            // Handle result here
+            console.log("Dialog closed with result:", result);
+            this.loadHolidayData(); // Adjusted call to pass the date object
+        });
+    }
+
     deleteDataHoliday(id: number) {
         this.dialogRef = this.dialog.open(DeleteConfirmModalComponent, {
             data: {
@@ -241,6 +257,7 @@ export class MaintenanceComponent {
             this.loadHolidayData(); // Adjusted call to pass the date object
         });
     }
+
 
 
     deleteDataDep(id: number) {

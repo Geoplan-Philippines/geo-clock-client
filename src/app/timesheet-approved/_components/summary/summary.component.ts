@@ -29,6 +29,7 @@ export class SummaryComponent implements OnInit {
     employeeEntry: any;
 
     admin_name: any;
+    employee_department:any
     employed_name: any;
     employee_code: any;
     timesheetId: any;
@@ -52,7 +53,7 @@ export class SummaryComponent implements OnInit {
             start_date: this.data.start_date, 
             end_date:this.data.end_date
         }
-        console.log("data of user",data)
+        // console.log("data of user",data)
     }
 
     loadAdminUser() {
@@ -66,6 +67,7 @@ export class SummaryComponent implements OnInit {
     loadEmployedUser() {
         this.SummaryService.getAllDataUsers(this.data.user_id).subscribe((res: any) => {
             const ds = res;
+            this.employee_department = ds.department
             this.employed_name = ds.first_name + " " + ds.last_name;
             this.employee_code = ds.employee_code;
         });
@@ -87,12 +89,12 @@ export class SummaryComponent implements OnInit {
         this.SummaryService.getAllTimesheetDaily(weekNumber, userId, startDate, endDate).subscribe((res: any) => {
             const ds = res;
             this.employeeEntry = ds;
-            console.log("daraSource", ds)
+            // console.log("daraSource", ds)
             const timesheetEntries = ds[0]?.timesheetEntries || [];
             this.timesheetId = timesheetEntries.id;
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
-            console.log(filteredEntries);
+            // console.log(filteredEntries);
             this.clickboard = filteredEntries;
         });
     }
@@ -168,6 +170,7 @@ export class SummaryComponent implements OnInit {
             is_nd: element.is_nd,
             is_ot: element.is_ot,
             ot_number: element.ot_number,
+            nd_number: element.nd_number,
             description: element.description,
             working_location: element.working_location,
             approved_by: adminName,
@@ -180,11 +183,15 @@ export class SummaryComponent implements OnInit {
             }
             this.updateTimesheetEntry(entryId, updateValueApproved);
         } else if (field === "is_nd") {
-            updateValueApproved.is_nd = !element.is_nd;
-            if (element.approved_check === false) {
-                updateValueApproved.approved_by = "";
+            if (element.approved_check === true) {
+                this._snackBarService.openSnackBar("Cannot Update", "okay");
+                return;
             }
-            this.updateTimesheetEntry(entryId, updateValueApproved);
+
+            updateValueApproved.is_nd = !element.is_nd;
+            updateValueApproved.approved_by = "";
+            this.updateNightDiff(entryId, updateValueApproved);
+
         } else if (field === "is_ot") {
             if (element.approved_check === true) {
                 this._snackBarService.openSnackBar("Cannot Update", "okay");
@@ -198,6 +205,18 @@ export class SummaryComponent implements OnInit {
     }
 
     updateOverTime(entryId: number, entriesValue: any) {
+        this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
+            next: (response) => {
+                this._snackBarService.openSnackBar("Update successfully", "okay");
+                this.loadTimesheetForLength();
+            },
+            error: (error) => {
+                console.error("Error creating entry:", error);
+            },
+        });
+    }
+
+    updateNightDiff(entryId: number, entriesValue: any) {
         this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
             next: (response) => {
                 this._snackBarService.openSnackBar("Update successfully", "okay");
@@ -224,6 +243,7 @@ export class SummaryComponent implements OnInit {
 
     timesheetApprovedData(dataTimesheet: any) {
         const week_no = dataTimesheet.week_number;
+        const employed_department = this.employee_department;
         const employed_name = this.employed_name;
         const employee_code = this.employee_code;
         const employee_id = dataTimesheet.user_id;
@@ -231,9 +251,13 @@ export class SummaryComponent implements OnInit {
         const actual_hours = dataTimesheet.actual_hours;
         const is_ot = dataTimesheet.is_ot;
         const ot_number = dataTimesheet.ot_number;
+        const is_nd = dataTimesheet.is_nd;
+        const nd_number = dataTimesheet.nd_number;
         const approved_check = dataTimesheet.approved_check;
         const dateyear = new Date(dataTimesheet.date);
         const year = dateyear.getFullYear().toString();
+
+        
 
         let RG = 0;
         let ND = 0;
@@ -265,9 +289,11 @@ export class SummaryComponent implements OnInit {
             Week_no: week_no,
             Date: year,
             user_id: employee_id,
+            Department: employed_department,
             Employee: employed_name,
             Code: employee_code,
             is_ot: is_ot,
+            is_nd: is_nd,
             RG: RG,
             ND: ND,
             LVE: LVE,
@@ -276,13 +302,20 @@ export class SummaryComponent implements OnInit {
             RHRD: RHRD,
             SHRD: SHRD,
         };
-
+        // console.log('sdasd',DataSummary.ND)
         if (is_ot) {
             DataSummary.OT = ot_number;
         } else {
             DataSummary.OT = 0;
         }
-
+        if (is_nd) {
+            DataSummary.ND = nd_number;
+        } else if(ND) {
+            DataSummary.ND = ND;
+        }else{
+            DataSummary.ND = 0;
+        }
+        
         if (approved_check) {
             this.updateSummary(DataSummary, true);
         } else {
@@ -294,7 +327,6 @@ export class SummaryComponent implements OnInit {
         const weekNo = DataSummary.Week_no;
         const date = DataSummary.Date;
         const userId = DataSummary.user_id;
-
         // console.log(DataSummary.OT)
 
         let regData = 0;
@@ -334,6 +366,7 @@ export class SummaryComponent implements OnInit {
                 Week_no: weekNo,
                 Date: date,
                 user_id: userId,
+                Department: DataSummary.Department,
                 Employee: DataSummary.Employee,
                 Code: DataSummary.Code,
                 RG: totalRegular,
@@ -347,6 +380,7 @@ export class SummaryComponent implements OnInit {
                 LVE: totalLVE,
                 Hours: totalSum,
             };
+           
             this.entrySummary(sumData);
         });
     }
@@ -354,10 +388,11 @@ export class SummaryComponent implements OnInit {
     entrySummary(SummaryData: any) {
         this.SummaryService.postTimesheetSummary(SummaryData).subscribe({
             next: (response: any) => {
-                // console.log("Successfully created:", response);
+                console.log("Successfully created:", response);
             },
             error: (error) => {
-                console.log("Successfully created:", error);
+                console.log("Successfully error:", error);
+                
             },
         });
     }

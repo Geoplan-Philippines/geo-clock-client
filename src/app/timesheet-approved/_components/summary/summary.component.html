@@ -55,7 +55,7 @@
                     <div *ngIf="this.hasValue(element.nd_number); else ifNoValue">
                         <input
                             type="checkbox"
-                            [checked]="element.is_ot"
+                            [checked]="element.is_nd"
                             (change)="getEntryData(element, 'is_nd')"
                             [disabled]="element.approved_check"
                         />
@@ -63,7 +63,7 @@
                     <ng-template #ifNoValue>
                         <input
                             type="checkbox"
-                            [checked]="element.is_ot"
+                            [checked]="element.is_nd"
                             (change)="getEntryData(element, 'is_nd')"
                             [disabled]="'true'"
                         />

@@ -48,6 +48,13 @@
                     <td mat-cell *matCellDef="let element">{{ element.id }}</td>
                 </ng-container>
 
+                <!-- Department Column -->
+                <ng-container matColumnDef="Department">
+                    <th mat-header-cell *matHeaderCellDef>Department</th>
+                    <th></th>
+                    <td mat-cell *matCellDef="let element">{{ element.Department }}</td>
+                </ng-container>
+
                 <!-- Name Column -->
                 <ng-container matColumnDef="Employee">
                     <th mat-header-cell *matHeaderCellDef>Employee</th>

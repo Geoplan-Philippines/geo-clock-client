@@ -21,7 +21,7 @@ export class TimesheetSummaryComponent {
     latestWeekNumber: string = '';
 
     dataSource = new MatTableDataSource<TimesheetSummaryModel>();
-    displayedColumns: any[] = ["id", "Employee", "Code", "RG", "OT", "RD", "RH", "SH", "RHRD", "SHRD", "LVE", "ND", "Hours"];
+    displayedColumns: any[] = ["id", "Department" ,"Employee", "Code", "RG", "OT", "RD", "RH", "SH", "RHRD", "SHRD", "LVE", "ND", "Hours"];
 
     constructor(private timesheetSummaryService: TimesheetSummaryService) {}
 
@@ -135,7 +135,7 @@ export class TimesheetSummaryComponent {
         const rows = data
             .map(
                 (item, index) =>
-                    `${index + 1}\t${item.Employee}\t${item.Code}\t${item.RG}\t${item.OT}\t${item.RD}\t${item.RH}\t${item.SH}\t${item.RHRD}\t${item.SHRD}\t${item.LVE}\t${item.ND}\t${item.Hours}`,
+                    `${index + 1}\t${item.Department}\t${item.Employee}\t${item.Code}\t${item.RG}\t${item.OT}\t${item.RD}\t${item.RH}\t${item.SH}\t${item.RHRD}\t${item.SHRD}\t${item.LVE}\t${item.ND}\t${item.Hours}`,
             )
             .join("\n");
 
