@@ -65,6 +65,7 @@ export class MaintenanceComponent {
             };
     
             this.dataSourceHolidays.filter = this.generalFilter;
+            
         });
     }
 
@@ -229,9 +230,12 @@ export class MaintenanceComponent {
     }
 
     updateDataHoliday(id: number) {
+       const data = this.dataSourceHolidays.data.find(holiday => holiday.id === id)
+        // console.log("dialog", data)
         this.dialogRef = this.dialog.open(UpdateHolidayModalComponent, {
             data: {
                 id: id,
+                dataHoliday: data,
                 table: "holiday",
             },
         });
