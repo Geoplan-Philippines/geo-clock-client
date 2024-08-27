@@ -2,7 +2,7 @@
 
 <mat-dialog-content class="mat-typography">
     <div>
-        <!-- <form [formGroup]="formData" class="formContainer"> -->
+        <form [formGroup]="formData" class="formContainer">
             <div class="secondFormContainer w-[100%] sm:w-80">
                 <div class="flex flex-col">
                     <mat-form-field class="flex-1">
@@ -19,7 +19,7 @@
                   
                     <mat-form-field class="flex-1">
                         <mat-label>Holiday Name</mat-label>
-                        <mat-select formControlName="holiday_name">
+                        <mat-select formControlName="type">
                           <mat-option value="RH">
                             RH
                           </mat-option>
@@ -32,14 +32,15 @@
                   
               
               
-                <div class="mt-4">
-                    <!-- <button mat-stroked-button class="submitBtn" [disabled]="!formData.valid">Submit</button> -->
+                <div class="mt-4 flex justify-end">
+                    <button mat-button mat-dialog-close>Cancel</button>
+                    <button mat-raised-button color="primary" [disabled]="!formData.valid" (click)="submitForm()">Submit</button>
                     <!-- Disable button if form is invalid -->
                 </div>
             </div>
-        <!-- </form> -->
+        </form>
     </div>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
+<!-- <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancel</button>
-</mat-dialog-actions>
+</mat-dialog-actions> -->
