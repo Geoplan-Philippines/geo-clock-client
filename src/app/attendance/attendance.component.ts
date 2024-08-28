@@ -13,13 +13,15 @@ import { SnackBarService } from "../shared/service/snack-bar/snack-bar.service";
 import { TimeOutValidationComponent } from "./_components/time-out-validation/time-out-validation.component";
 import { MatSelectChange } from "@angular/material/select";
 import { MatPaginator } from "@angular/material/paginator";
+import { ForMatDialogComponent } from "./_components/for-mat-dialog/for-mat-dialog.component";
+
 
 @Component({
     selector: "app-attendance",
     templateUrl: "./attendance.component.html",
     styleUrls: ["./attendance.component.scss"],
 })
-export class AttendanceComponent implements OnInit, OnDestroy {
+export class AttendanceComponent{
     //         date: date,
     //         attendance_type: type,
     //         time_in: dateTime,
@@ -53,6 +55,7 @@ export class AttendanceComponent implements OnInit, OnDestroy {
         "time_out_location",
         "total_hours",
         "status",
+        "remarks",
     ];
 
     generalFilter: string = "";
@@ -522,8 +525,17 @@ export class AttendanceComponent implements OnInit, OnDestroy {
                 }
             });
     }
+
+    openDialog(): void { 
+        this.dialog.open(ForMatDialogComponent, {
+            width: '500px',
+            height: '400px',
+            data: {}
+        })
+        }
     // //  search bar end
     // ngAfterViewInit() {
     //     this.dataSource.paginator = this.paginator;
     // }
+
 }

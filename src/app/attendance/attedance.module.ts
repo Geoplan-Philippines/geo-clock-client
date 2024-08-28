@@ -10,6 +10,9 @@ import { AttendanceTypeComponent } from "./_components/attendance-type/attendanc
 import { TimeInValidationComponent } from "./_components/time-in-validation/time-in-validation.component";
 import { ExistingValidationComponent } from "./_components/existing-validation/existing-validation.component";
 import { TimeOutValidationComponent } from "./_components/time-out-validation/time-out-validation.component";
+import {MatDialogModule} from '@angular/material/dialog';
+import { ForMatDialogComponent } from './_components/for-mat-dialog/for-mat-dialog.component';
+
 
 @NgModule({
     declarations: [
@@ -18,8 +21,9 @@ import { TimeOutValidationComponent } from "./_components/time-out-validation/ti
         TimeInValidationComponent,
         ExistingValidationComponent,
         TimeOutValidationComponent,
+        ForMatDialogComponent,
     ],
-    imports: [CommonModule, SharedModule, ReactiveFormsModule, FormsModule, MaterialModule, MatTableModule, MatPaginatorModule],
+    imports: [CommonModule, SharedModule, ReactiveFormsModule, FormsModule, MaterialModule, MatTableModule, MatPaginatorModule, MatDialogModule],
     exports: [AttendanceComponent],
 })
 export class AttedanceModule {}
