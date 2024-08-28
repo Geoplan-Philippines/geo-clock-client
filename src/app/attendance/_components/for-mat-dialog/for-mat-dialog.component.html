@@ -3,11 +3,22 @@
         Remarks
     </h1>
 </div>
-<div class="p-2 for-border mx-3 text-justify mt-3 pb-11">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus expedita suscipit error mollitia libero laboriosam ducimus labore impedit, minus repellendus qui! Culpa deleniti quisquam odit minima tempore adipisci iusto ullam! Lorem ipsum, 
+<div class="p-2 mx-3 text-justify mt-3 pb-11 border border-black" *ngIf="!showInput">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus expedita suscipit error mollitia libero laboriosam ducimus labore impedit, minus repellendus qui! Culpa deleniti quisquam odit minima tempore adipisci iusto ullam! Lorem ipsum, 
     dolor sit amet consectetur adipisicing elit. Quos fugit adipisci ipsam eum praesentium in ut sed aut, velit alias nihil. Rerum quia voluptatum officia, atque labore dolore excepturi at!
-    <div class="absolute bottom-0 right-0 mx-2 pb-2">
-            <button mat-button mat-dialog-close>Cancel</button>
-            <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
     </div>
+
+<div *ngIf="showInput">
+    <form class="example-form">
+    <mat-form-field class="example-full-width">
+        <mat-label>Leave a comment</mat-label>
+        <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+      </mat-form-field>
+    </form>
+</div>
+
+<div class="absolute bottom-0 right-0 mx-2 pb-2">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" *ngIf="!comment" (click)="toggleInput()" cdkFocusInitial>Comment</button> 
+    <button mat-raised-button color="primary" *ngIf="comment" (click)="toggleInput()" cdkFocusInitial>Save</button> 
 </div>
