@@ -64,6 +64,9 @@ export class AttendanceComponent{
     filterData: any;
     todayDate: Date = new Date();
 
+    timeInCon = false ;  
+    fieldInCon = false ;  
+
     @ViewChild(MatPaginator)
     paginator!: MatPaginator;
     constructor(
@@ -195,7 +198,7 @@ export class AttendanceComponent{
                         const dataAttendance = {
                             user_id: user,
                             date: date,
-                            statuses: "Subsequent",
+                            statuses: "Field",
                             time_in: dateTime,
                             time_in_location: data.display_name,
                         };
@@ -289,7 +292,7 @@ export class AttendanceComponent{
 
     subsequentTimeOut() {
         const currentDateTime = moment().tz("Asia/Manila");
-        const statuses = "Subsequent";
+        const statuses = "Field";
         const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
 
@@ -387,6 +390,21 @@ export class AttendanceComponent{
 
                 this.attendanceService.getAllAttendanceData(date).subscribe((res: any) => {
                     const ds = res;
+
+                    const timeInGetCon = ds.find((GettimeInCon: any) => GettimeInCon.time_out === '1970-01-01T00:00:00.000Z' && GettimeInCon.user_id === userId && GettimeInCon.statuses === 'Initial')
+                    const fieldInGetCon = ds.find((GetFieldInCon: any) => GetFieldInCon.time_out === '1970-01-01T00:00:00.000Z' && GetFieldInCon.user_id === userId && GetFieldInCon.statuses === 'Field')
+
+                    if(timeInGetCon){
+                        this.timeInCon = true
+                    }else{
+                        this.timeInCon = false
+                    }
+                    if(fieldInGetCon){
+                        this.fieldInCon = true
+                    }
+                    else{
+                        this.fieldInCon = false
+                    }
 
                     if (isOwner) {
                         this.dataSource = new MatTableDataSource<AttedanceModel>(ds);

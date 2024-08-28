@@ -12,8 +12,8 @@
         </p>
 
         <div class="mt-7 flex items-start justify-center space-x-4 text-6xl">
-            <button mat-raised-button color="primary" (click)="initialTimeIn()">Time In</button>
-            <button mat-raised-button color="primary" (click)="subsequentTimeIn()">Field In</button>
+            <button mat-raised-button color="primary" (click)="initialTimeIn()" [disabled]="timeInCon">Time In</button>
+            <button mat-raised-button color="primary" (click)="subsequentTimeIn()" [disabled]="fieldInCon">Field In</button>
             <button mat-raised-button color="warn" (click)="subsequentTimeOut()">Field Out</button>
             <button mat-raised-button color="warn" (click)="InitialTimeOut()">Time Out</button>
         </div>
