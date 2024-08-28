@@ -147,7 +147,7 @@
                         <!-- remarks column -->
                         <ng-container matColumnDef="remarks">
                             <th mat-header-cell *matHeaderCellDef>Remarks</th>
-                            <td mat-cell *matCellDef="let element" class="box"><button mat-button (click)="openDialog()">view</button></td>
+                            <td mat-cell *matCellDef="let element" class="box"><button mat-raised-button color="primary" (click)="openDialog(element.id, element.comment, element.date, element.user_id)">view</button></td>
                         </ng-container>
                         
                         <!-- Header Row -->

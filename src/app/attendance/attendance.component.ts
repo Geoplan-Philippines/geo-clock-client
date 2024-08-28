@@ -544,13 +544,25 @@ export class AttendanceComponent{
             });
     }
 
-    openDialog(): void { 
-        this.dialog.open(ForMatDialogComponent, {
+    openDialog(id: number, comment: string, date: any, user_id: any): void { 
+        // console.log("id of row", id,"comment", comment)
+        const user = this.encrypt.getItem("id");
+        const dialog = this.dialog.open(ForMatDialogComponent, {
             width: '500px',
             height: '400px',
-            data: {}
-        })
+            data: {
+                id: id,
+                comment: comment,
+                date: date,
+                user_id1: user,
+                user_id2: user_id
+            }
+        });
+        dialog.afterClosed().subscribe(() => {
+            this.loadAttendance();
+        });
         }
+        
     // //  search bar end
     // ngAfterViewInit() {
     //     this.dataSource.paginator = this.paginator;

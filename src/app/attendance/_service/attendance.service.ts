@@ -48,6 +48,9 @@ export class AttendanceService {
       return this._http.get(`${this.apiUrl}/users`);
     }
 
+    updateAllDataAttendanceComment(id: number, data:any){
+      return this._http.patch(`${this.apiUrl}/attendance/comment/${id}`, data)
+    }
    
 
 }

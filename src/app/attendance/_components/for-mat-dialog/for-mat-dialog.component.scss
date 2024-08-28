@@ -6,7 +6,10 @@
   }
   .example-full-width {
     width: 97%;
-    height: 15rem;
     margin: 6px;
+    textarea{
+      height: 14rem !important;
+    }
   }
+  
 }
