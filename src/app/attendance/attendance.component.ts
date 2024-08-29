@@ -122,21 +122,20 @@ export class AttendanceComponent{
         const date = currentDateTime.format("YYYY-MM-DD");
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`;
-
         const user = this.encrypt.getItem("id");
-        console.log(user);
+        // console.log(user);
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
-                console.log(`longtitude ${longitude}, latitude ${latitude}`);
+                // console.log(`longtitude ${longitude}, latitude ${latitude}`);
                 const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
 
                 fetch(nominatimUrl)
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log("Reverse Geocoding Result:", data.display_name);
+                        // console.log("Reverse Geocoding Result:", data.display_name);
 
                         const dataAttendance = {
                             user_id: user,
@@ -145,7 +144,7 @@ export class AttendanceComponent{
                             time_in: dateTime,
                             time_in_location: data.display_name,
                         };
-                        console.log(data);
+                        // console.log(data);
                         this.attendanceService.postAllDataInitialTimeIn(dataAttendance).subscribe({
                             next: (response: any) => {
                                 this._snackBarService.openSnackBar("Time In Successfully", "okay");
@@ -181,19 +180,19 @@ export class AttendanceComponent{
         const dateTime = `${date}T${time}Z`;
 
         const user = this.encrypt.getItem("id");
-        console.log(user);
+        // console.log(user);
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
-                console.log(`longtitude ${longitude}, latitude ${latitude}`);
+                // console.log(`longtitude ${longitude}, latitude ${latitude}`);
                 const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
 
                 fetch(nominatimUrl)
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log("Reverse Geocoding Result:", data.display_name);
+                        // console.log("Reverse Geocoding Result:", data.display_name);
 
                         const dataAttendance = {
                             user_id: user,
@@ -202,7 +201,7 @@ export class AttendanceComponent{
                             time_in: dateTime,
                             time_in_location: data.display_name,
                         };
-                        console.log(data);
+                        // console.log(data);
                         this.attendanceService.postAllDataTimeIn(dataAttendance).subscribe({
                             next: (response: any) => {
                                 this._snackBarService.openSnackBar("Time In Successfully", "okay");
@@ -382,7 +381,7 @@ export class AttendanceComponent{
         // Load user's department
         this.attendanceService.getAllemployeetData().subscribe((employeeData: any) => {
             const currentUser = employeeData.find((emp: any) => emp.id === userId);
-            console.log(currentUser)
+            // console.log(currentUser)
             if (currentUser) {
                 const userRole = currentUser.role;
                 const userDepartment = currentUser.department;
@@ -477,7 +476,7 @@ export class AttendanceComponent{
             this.filterDate = yearFilterValue as string;
             this.loadFilteringWithDate();
         }
-        console.log("Date selected:", this.filterDate);
+        // console.log("Date selected:", this.filterDate);
     }
 
     loadFilteringWithDate() {

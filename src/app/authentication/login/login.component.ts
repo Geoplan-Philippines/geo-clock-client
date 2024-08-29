@@ -37,7 +37,7 @@ export class LoginComponent {
         this.loadUser();
         this.userInfo();
         this.requiredRole = this.route.snapshot.data["role"];
-        console.log("Required Role:", this.requiredRole);
+        // console.log("Required Role:", this.requiredRole);
     }
 
     // firebase output email
@@ -53,7 +53,7 @@ export class LoginComponent {
     loadUser() {
         this.authenticationService.getUser().subscribe((res: any) => {
             const ds = res;
-            console.log(ds);
+            // console.log(ds);
             this.users = ds;
         });
     }
