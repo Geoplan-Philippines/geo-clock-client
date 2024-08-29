@@ -39,7 +39,7 @@ export class TrainingComponent {
     openDialog() {
         const dialogRef = this.dialog.open(AddTrainingComponent);
         dialogRef.afterClosed().subscribe((result) => {
-            console.log(`Dialog result: ${result}`);
+            // console.log(`Dialog result: ${result}`);
         });
     }
 }

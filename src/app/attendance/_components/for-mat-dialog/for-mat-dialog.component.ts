@@ -57,7 +57,7 @@ export class ForMatDialogComponent implements OnInit{
   submitForm() {
       this.attendanceService.updateAllDataAttendanceComment(this.data.id, this.formData.value).subscribe({
         next: (response) => {
-          console.log("Data patched successfully:", response);
+          // console.log("Data patched successfully:", response);
           this.snackbar.openSnackBar('Successfully Commented', 'okay');
           this.updatedialogRef.close(); 
       },
@@ -73,7 +73,7 @@ export class ForMatDialogComponent implements OnInit{
         const ds = res;
       
         const userIdMatch = ds.find((user: any) => user.user_id ===this.data.user_id1 && user.id === this.data.id);
-        console.log('69', userIdMatch)
+        // console.log('69', userIdMatch)
         if(userIdMatch){
           this.toggleBtn = true
         }else{

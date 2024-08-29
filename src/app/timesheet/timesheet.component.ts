@@ -519,8 +519,8 @@ export class TimesheetComponent {
 
     determineWorkingType(date: any) {
         let holidayByDate = this.holidayDate;
-        console.log(holidayByDate);
-        console.log(date);
+        // console.log(holidayByDate);
+        // console.log(date);
         
         const dayOfWeek = (new Date(date)).getDay();
         const isWeekend = dayOfWeek === 6 || dayOfWeek === 0;
@@ -579,8 +579,8 @@ export class TimesheetComponent {
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
             const workingType = this.determineWorkingType(selectedDate)
-            console.log("ebtry",selectedDate)
-            console.log(workingType)
+            // console.log("ebtry",selectedDate)
+            // console.log(workingType)
 
             const approval = timesheetEntries.find(entry => entry.date === selectedDate);
 
@@ -956,8 +956,8 @@ export class TimesheetComponent {
         
         const startDate = dateinput.clone().startOf('isoWeek');
         const endDate = dateinput.clone().endOf('isoWeek');
-        console.log("monday",startDate.format());
-        console.log("sunday",endDate.format());
+        // console.log("monday",startDate.format());
+        // console.log("sunday",endDate.format());
         let employeeName: string;
         this.timesheetService.getUserLoadById(userId).subscribe((res: any) => {
             const ds = res;
