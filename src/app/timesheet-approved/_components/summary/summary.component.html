@@ -48,13 +48,43 @@
                     /> -->
                 </td>
             </ng-container>
+
+            <ng-container matColumnDef="night_diff">
+                <th mat-header-cell *matHeaderCellDef>ND</th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngIf="this.hasValue(element.nd_number); else ifNoValue">
+                        <input
+                            type="checkbox"
+                            [checked]="element.is_nd"
+                            (change)="getEntryData(element, 'is_nd')"
+                            [disabled]="element.approved_check"
+                        />
+                    </div>
+                    <ng-template #ifNoValue>
+                        <input
+                            type="checkbox"
+                            [checked]="element.is_nd"
+                            (change)="getEntryData(element, 'is_nd')"
+                            [disabled]="'true'"
+                        />
+                    </ng-template>
+                    <!-- <input
+                        type="checkbox"
+                        [checked]="element.is_ot"
+                        (change)="getEntryData(element, 'is_ot')"
+                        [disabled]="element.approved_check"
+                    /> -->
+                </td>
+            </ng-container>
+
+
             <ng-container matColumnDef="project_name">
                 <th mat-header-cell *matHeaderCellDef>PROJECT NAME</th>
                 <td mat-cell *matCellDef="let element">{{ element.project.project_name }}</td>
             </ng-container>
             <ng-container matColumnDef="date_created">
                 <th mat-header-cell *matHeaderCellDef>DATE</th>
-                <td mat-cell *matCellDef="let element">{{ element.date | date: 'EEE, MMM d' }}</td>
+                <td mat-cell *matCellDef="let element">{{ element.date | date: "EEE, MMM d" }}</td>
             </ng-container>
             <ng-container matColumnDef="working_location">
                 <th mat-header-cell *matHeaderCellDef>LOCATION</th>
@@ -71,6 +101,10 @@
             <ng-container matColumnDef="ot_number">
                 <th mat-header-cell *matHeaderCellDef>OVERTIME</th>
                 <td mat-cell *matCellDef="let element">{{ element.ot_number }}h</td>
+            </ng-container>
+            <ng-container matColumnDef="nd_number">
+                <th mat-header-cell *matHeaderCellDef>Night Diff</th>
+                <td mat-cell *matCellDef="let element">{{ element.nd_number }}h</td>
             </ng-container>
             <ng-container matColumnDef="discription">
                 <th mat-header-cell *matHeaderCellDef>TASK</th>

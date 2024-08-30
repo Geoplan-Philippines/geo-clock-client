@@ -3,9 +3,7 @@
     <div>
         <app-aside></app-aside>
     </div>
-    <div
-        class="static z-10 mt-10 h-full flex-1 overflow-x-hidden overflow-y-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10"
-    >
+    <div class="static z-10 mt-10 h-full flex-1 overflow-x-hidden overflow-y-hidden p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
         <div class="mx-1 grid grid-cols-[100px_1fr] gap-4 sm:mx-40">
             <div>
                 <ul class="category">
@@ -15,38 +13,23 @@
                     <li (click)="scrollToSection('section4')"><p>Shifts</p></li>
                 </ul>
             </div>
-            <div
-                class="selected h-[80vh] overflow-y-scroll border-l-2 border-solid border-l-[#0a54a0] px-5"
-            >
+            <div class="selected h-[80vh] overflow-y-scroll border-l-2 border-solid border-l-[#0a54a0] px-5">
                 <div id="section1" class="h-auto">
                     <p>Holidays</p>
                     <mat-form-field class="w-[100%] sm:w-80">
                         <mat-label>Search</mat-label>
-                        <input
-                            matInput
-                            (keyup)="applyFilterHoliday($event)"
-                            placeholder="Ex. ium"
-                            #input
-                            class="custom-input"
-                        />
+                        <input matInput (keyup)="applyFilterHoliday($event)" placeholder="Ex. ium" #input class="custom-input" />
                     </mat-form-field>
                     <form [formGroup]="formDataHoliday" (ngSubmit)="submitFormHoliday()">
                         <p>Adding Holiday</p>
                         <div class="block w-[100%] sm:flex">
                             <mat-form-field class="example-full-width-holiday">
                                 <mat-label>Holiday Name</mat-label>
-                                <input
-                                    matInput
-                                    formControlName="holiday_name"
-                                    placeholder="Enter Holiday Name"
-                                />
+                                <input matInput formControlName="holiday_name" placeholder="Enter Holiday Name" />
                             </mat-form-field>
                             <mat-form-field class="example-full-width-holiday">
                                 <mat-label>Holiday Category</mat-label>
-                                <mat-select
-                                    formControlName="type"
-                                    placeholder="Enter Holiday Category"
-                                >
+                                <mat-select formControlName="type" placeholder="Enter Holiday Category">
                                     <mat-option value="SH">Special Holiday</mat-option>
                                     <mat-option value="RH">Regular Holiday</mat-option>
                                 </mat-select>
@@ -59,10 +42,7 @@
                                     formControlName="holiday_date"
                                     placeholder="Enter Holiday Date"
                                 />
-                                <mat-datepicker-toggle
-                                    matSuffix
-                                    [for]="picker"
-                                ></mat-datepicker-toggle>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
                             </mat-form-field>
                             <div class="mb-8 ml-0 mt-3 sm:mt-3">
@@ -85,27 +65,36 @@
                         </ng-container>
 
                         <ng-container matColumnDef="date">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <h1 class="font-bold">Date</h1>
-                            </th>
+                            <th mat-header-cell *matHeaderCellDef><h1 class="font-bold">Date</h1></th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element.holiday_date | date: 'EEE, MMM d' }}
+                                {{ element.holiday_date | date: "EEE, MMM d"}}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="type">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <h1 class="font-bold">Type</h1>
-                            </th>
+                            <th mat-header-cell *matHeaderCellDef><h1 class="font-bold">Type</h1></th>
                             <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                         </ng-container>
-                        <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <h1 class="text-center font-bold">Action</h1>
-                            </th>
+                        <ng-container matColumnDef="update">
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Update</h1></th>
                             <td mat-cell *matCellDef="let element">
                                 <div class="flex justify-center">
                                     <button
                                         mat-stroked-button
+                                        (click)="updateDataHoliday(element.id)"
+                                        class="submit-Btn bg w-full text-center sm:w-32"
+                                    >
+                                        Update
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="delete">
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Delete</h1></th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="flex justify-center">
+                                    <button
+                                        mat-flat-button 
+                                        color="warn"
                                         (click)="deleteDataHoliday(element.id)"
                                         class="submit-Btn bg w-full text-center sm:w-32"
                                     >
@@ -136,18 +125,10 @@
                         <div class="block w-[100%] sm:flex">
                             <mat-form-field class="example-full-width-department">
                                 <mat-label>Department Name</mat-label>
-                                <input
-                                    matInput
-                                    formControlName="department_name"
-                                    placeholder="Enter Employee Code"
-                                />
+                                <input matInput formControlName="department_name" placeholder="Enter Employee Code" />
                             </mat-form-field>
                             <div class="mb-8 ml-0 mt-3 sm:ml-5 sm:mt-3">
-                                <button
-                                    mat-stroked-button
-                                    class="submit-Btn bg w-full sm:w-32"
-                                    [disabled]="!formDataDep.valid"
-                                >
+                                <button mat-stroked-button class="submit-Btn bg w-full sm:w-32" [disabled]="!formDataDep.valid">
                                     Submit
                                 </button>
                             </div>
@@ -158,14 +139,10 @@
                             <th mat-header-cell *matHeaderCellDef>
                                 <h1 class="font-bold">Departments</h1>
                             </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element.department_name }}
-                            </td>
+                            <td mat-cell *matCellDef="let element">{{ element.department_name }}</td>
                         </ng-container>
                         <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <h1 class="text-center font-bold">Action</h1>
-                            </th>
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Action</h1></th>
                             <td mat-cell *matCellDef="let element">
                                 <div class="flex justify-center">
                                     <button
@@ -200,40 +177,24 @@
                         <div class="block w-[100%] sm:flex">
                             <mat-form-field class="example-full-width-department">
                                 <mat-label>Classification Name</mat-label>
-                                <input
-                                    matInput
-                                    formControlName="classification_name"
-                                    placeholder="Enter Classification"
-                                />
+                                <input matInput formControlName="classification_name" placeholder="Enter Classification" />
                             </mat-form-field>
                             <div class="mb-8 ml-0 mt-3 sm:ml-5 sm:mt-3">
-                                <button
-                                    mat-stroked-button
-                                    class="submit-Btn bg w-full sm:w-32"
-                                    [disabled]="!formDataClass.valid"
-                                >
+                                <button mat-stroked-button class="submit-Btn bg w-full sm:w-32" [disabled]="!formDataClass.valid">
                                     Submit
                                 </button>
                             </div>
                         </div>
                     </form>
-                    <table
-                        mat-table
-                        [dataSource]="dataSourceClassification"
-                        class="mat-elevation-z8"
-                    >
+                    <table mat-table [dataSource]="dataSourceClassification" class="mat-elevation-z8">
                         <ng-container matColumnDef="classification_name">
                             <th mat-header-cell *matHeaderCellDef>
                                 <h1 class="font-bold">Classification</h1>
                             </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element.classification_name }}
-                            </td>
+                            <td mat-cell *matCellDef="let element">{{ element.classification_name }}</td>
                         </ng-container>
                         <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <h1 class="text-center font-bold">Action</h1>
-                            </th>
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Action</h1></th>
                             <td mat-cell *matCellDef="let element">
                                 <div class="flex justify-center">
                                     <button
@@ -247,12 +208,10 @@
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayedColumnsClassification"></tr>
-                        <tr
-                            mat-row
-                            *matRowDef="let row; columns: displayedColumnsClassification"
-                        ></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsClassification"></tr>
                     </table>
                 </div>
+
 
                 <div id="section4" class="h-screen">
                     <p>Shifts</p>
@@ -267,34 +226,22 @@
                             <th mat-header-cell *matHeaderCellDef>
                                 <h1 class="font-bold">Start Time</h1>
                             </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element.start_time | date: 'h:mm a' : 'UTC' }}
-                            </td>
+                            <td mat-cell *matCellDef="let element">{{ element.start_time | date: "h:mm a" : "UTC" }}</td>
                         </ng-container>
                         <ng-container matColumnDef="end_start">
                             <th mat-header-cell *matHeaderCellDef>
                                 <h1 class="font-bold">End Time</h1>
                             </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element.end_time | date: 'h:mm a' : 'UTC' }}
-                            </td>
+                            <td mat-cell *matCellDef="let element">{{ element.end_time | date: "h:mm a" : "UTC" }}</td>
                         </ng-container>
                         <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <h1 class="text-center font-bold">Action</h1>
-                            </th>
+                            <th mat-header-cell *matHeaderCellDef><h1 class="text-center font-bold">Action</h1></th>
                             <td mat-cell *matCellDef="let element">
                                 <div class="flex justify-center">
                                     <button
                                         mat-stroked-button
                                         class="submit-Btn bg w-full text-center sm:w-32"
-                                        (click)="
-                                            updateDataClass(
-                                                element.id,
-                                                element.start_time,
-                                                element.end_time
-                                            )
-                                        "
+                                        (click)="updateDataClass(element.id, element.start_time, element.end_time)"
                                     >
                                         Update
                                     </button>
@@ -304,6 +251,7 @@
                         <tr mat-header-row *matHeaderRowDef="displayColumnsDifferential"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayColumnsDifferential"></tr>
                     </table>
+
                 </div>
             </div>
         </div>

@@ -1,38 +1,39 @@
 // external dependencies
-import * as XLSX from 'xlsx';
-import { weekNumber } from 'weeknumber';
+import * as XLSX from "xlsx";
+import { weekNumber } from "weeknumber";
 
 // internal dependencies
-import { GENERAL } from '../shared/constants/general';
+import { GENERAL } from "../shared/constants/general";
 
 // angular dependencies
-import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { DatePipe } from '@angular/common';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Component, ViewChild } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
+import { DatePipe } from "@angular/common";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
 
 // material ui dependencies
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
 
 // services
-import { TimesheetService } from './_service/timesheet.service';
-import { SnackBarService } from '../shared/service/snack-bar/snack-bar.service';
-import { DialogService } from '../shared/service/dialog/dialog.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DescriptionComponent } from './_components/description/description.component';
+import { TimesheetService } from "./_service/timesheet.service";
+import { SnackBarService } from "../shared/service/snack-bar/snack-bar.service";
+import { DialogService } from "../shared/service/dialog/dialog.service";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { DescriptionComponent } from "./_components/description/description.component";
 
 // components
-import { DeleteConfirmationModalComponent } from './_components/delete-confirmation-modal/delete-confirmation-modal.component';
-import { WholeDeleteModalComponent } from './_components/whole-delete-modal/whole-delete-modal.component';
+import { DeleteConfirmationModalComponent } from "./_components/delete-confirmation-modal/delete-confirmation-modal.component";
+import { WholeDeleteModalComponent } from "./_components/whole-delete-modal/whole-delete-modal.component";
 
-import { EncryptionService } from '../authentication/_guards/encrpytion.service';
-import * as moment from 'moment';
+
+import { EncryptionService } from "../authentication/_guards/encrpytion.service";
+import * as moment from "moment";
 @Component({
-    selector: 'app-timesheet',
-    templateUrl: './timesheet.component.html',
-    styleUrls: ['./timesheet.component.scss'],
+    selector: "app-timesheet",
+    templateUrl: "./timesheet.component.html",
+    styleUrls: ["./timesheet.component.scss"],
 })
 export class TimesheetComponent {
     readonly GENERAL = GENERAL;
@@ -42,48 +43,39 @@ export class TimesheetComponent {
 
     // material ui table variables
     columnCount: number = 0;
-    displayedColumns: string[] = [
-        'project_name',
-        'day_0',
-        'day_1',
-        'day_2',
-        'day_3',
-        'day_4',
-        'day_5',
-        'day_6',
-        'total',
-    ];
+    displayedColumns: string[] = ["project_name", "day_0", "day_1", "day_2", "day_3", "day_4", "day_5", "day_6", "total"];
     dynamicHeaderName: string[] = [];
     dataSource = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator)
     paginator!: MatPaginator;
 
-    fileName = 'ExcelSheet.xlsx';
+    fileName = "ExcelSheet.xlsx";
     project: any[] = []; //dropdown filter
     projects: any[] = []; //for menu
-    selectedProject: any = '';
+    selectedProject: any = "";
 
     //date
-    selectedStartDateYear: any = '';
-    start_date_data: any = '';
-    end_date_data: any = '';
-    latest_start_date: string = '';
+    selectedStartDateYear: any = "";
+    start_date_data: any = "";
+    end_date_data: any = "";
+    latest_start_date: string = "";
 
     dateFromFilter!: Date;
 
     //entries
-    timesheet_entries: string = '';
+    timesheet_entries: string = "";
     timesheet_ot: any;
 
     //total hours
     totalActualHoursByDate: number = 0;
 
     //holiday value
-    holidayDate: any[] = [];
+    holidayDate: any[] =[];
+
 
     hasValue(value: any): boolean {
-        return value !== undefined && value !== null && value !== '';
+        return value !== undefined && value !== null && value !== "";
     }
 
     isLoading = false;
@@ -102,8 +94,8 @@ export class TimesheetComponent {
         const futureDate = new Date(today);
         futureDate.setDate(today.getDate() + 6);
         // Get the parts of the Date
-        const day = today.toLocaleString('en-US', { weekday: 'short' }); // Short weekday name (e.g., "Sun")
-        const month = today.toLocaleString('en-US', { month: 'short' }); // Short month name (e.g., "Mar")
+        const day = today.toLocaleString("en-US", { weekday: "short" }); // Short weekday name (e.g., "Sun")
+        const month = today.toLocaleString("en-US", { month: "short" }); // Short month name (e.g., "Mar")
         const date = today.getDate(); // Day of the month (e.g., 10)
         const year = today.getFullYear(); // Full year (e.g., 2024)
 
@@ -114,14 +106,14 @@ export class TimesheetComponent {
         this.dynamicTableHeader(
             // date_first,
             // futureDate,
-            'Sun Mar 10 2024 00:00:00 GMT+0800 (Philippine Standard Time)',
-            'Sat Mar 16 2024 00:00:00 GMT+0800 (Philippine Standard Time)'
+            "Sun Mar 10 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
+            "Sat Mar 16 2024 00:00:00 GMT+0800 (Philippine Standard Time)",
         );
         // this.loadTimesheet();
-
+    
         this.filteredOptions = this.myControl.valueChanges.pipe(
-            startWith(''),
-            map((value) => this._filter(value || ''))
+            startWith(""),
+            map((value) => this._filter(value || "")),
         );
         this.loadProjects();
         // this.totalHours();
@@ -155,7 +147,7 @@ export class TimesheetComponent {
     // }
 
     loadTimesheet() {
-        const timesheetIdString = this.encrypt.getItem('id');
+        const timesheetIdString = this.encrypt.getItem("id");
         if (timesheetIdString !== null) {
             const timesheetId = +timesheetIdString;
             this.timesheetService.getAllTimesheetData(timesheetId).subscribe((res: any) => {
@@ -167,10 +159,10 @@ export class TimesheetComponent {
                 // console.log(this.dataSource);
             });
         } else {
-            console.error('Timesheet ID is not available in localStorage');
+            console.error("Timesheet ID is not available in localStorage");
         }
     }
-    myControl = new FormControl('');
+    myControl = new FormControl("");
     filteredOptions!: Observable<string[]>;
 
     loadProjects() {
@@ -210,7 +202,7 @@ export class TimesheetComponent {
 
                 return formattedStartDate <= dateCreated && dateCreated <= formattedEndDate;
             };
-            this.dataSource.filter = 'custom-filter'; // Set a dummy filter to trigger the update
+            this.dataSource.filter = "custom-filter"; // Set a dummy filter to trigger the update
         }
     }
 
@@ -226,8 +218,8 @@ export class TimesheetComponent {
     }
 
     formatDate(date: any) {
-        const options = { weekday: 'short', month: 'short', day: 'numeric' };
-        const formattedDate = date.toLocaleDateString('en-US', options);
+        const options = { weekday: "short", month: "short", day: "numeric" };
+        const formattedDate = date.toLocaleDateString("en-US", options);
         return formattedDate.toString();
     }
 
@@ -248,17 +240,12 @@ export class TimesheetComponent {
         if (startDate) {
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 6); // Add 5 days to the start date
-            this.range.get('end')?.setValue(endDate);
+            this.range.get("end")?.setValue(endDate);
 
-            const formattedStartDate = this.datePipe.transform(
-                startDate,
-                'yyyy-MM-dd',
-                'GMT+8',
-                'en'
-            );
-            const formattedEndDate = this.datePipe.transform(endDate, 'yyyy-MM-dd', 'GMT+8', 'en');
+            const formattedStartDate = this.datePipe.transform(startDate, "yyyy-MM-dd", "GMT+8", "en");
+            const formattedEndDate = this.datePipe.transform(endDate, "yyyy-MM-dd", "GMT+8", "en");
 
-            this.selectedStartDateYear = this.datePipe.transform(startDate, 'yyyy', 'GMT+8', 'en');
+            this.selectedStartDateYear = this.datePipe.transform(startDate, "yyyy", "GMT+8", "en");
 
             this.loadFilterTimesheet(formattedStartDate, formattedEndDate);
             this.dynamicTableHeader(startDate, endDate);
@@ -266,25 +253,23 @@ export class TimesheetComponent {
     }
 
     loadFilterTimesheet(startDate: any, endDate: any) {
-        const timesheetIdString = this.encrypt.getItem('id');
+        const timesheetIdString = this.encrypt.getItem("id");
 
         this.start_date_data = startDate;
         this.end_date_data = endDate;
 
         if (timesheetIdString !== null) {
             const timesheetId = +timesheetIdString;
-            this.timesheetService
-                .getalltimesheetbydate(timesheetId, startDate, endDate)
-                .subscribe((res: any) => {
-                    const ds = res;
-                    // console.log(ds[1].project[1].actual_hours[1]); // Log the response to inspect its structure
-                    console.log(ds);
-                    this.dataSource = new MatTableDataSource<any>(ds);
-                    this.dataSource.paginator = this.paginator;
-                    // this.totalHours();
-                });
+            this.timesheetService.getalltimesheetbydate(timesheetId, startDate, endDate).subscribe((res: any) => {
+                const ds = res;
+                // console.log(ds[1].project[1].actual_hours[1]); // Log the response to inspect its structure
+                console.log(ds);
+                this.dataSource = new MatTableDataSource<any>(ds);
+                this.dataSource.paginator = this.paginator;
+                // this.totalHours();
+            });
         } else {
-            console.error('Timesheet ID is not available in localStorage');
+            console.error("Timesheet ID is not available in localStorage");
         }
     }
 
@@ -304,7 +289,7 @@ export class TimesheetComponent {
         this.dataSource.data.unshift({
             project: {
                 id: 1,
-                project_name: '',
+                project_name: "",
                 timesheetEntries: [
                     {
                         actual_hours: 0,
@@ -369,10 +354,10 @@ export class TimesheetComponent {
     //renan pogi on process start
     postProjects(event: FocusEvent) {
         const projectNameValue = (event.target as HTMLInputElement).value;
-        if (projectNameValue === '') {
+        if (projectNameValue === "") {
             //kapag pareho ng projectname at date wag mo payagan mag lagay
             // console.log("pogi walang laman"); //snackbar jv
-            this._snackBarService.openSnackBar('Creating Project Failed', 'okay');
+            this._snackBarService.openSnackBar("Creating Project Failed", "okay");
         } else {
             this.validateProjectInput(projectNameValue);
         }
@@ -382,25 +367,22 @@ export class TimesheetComponent {
 
         this.timesheetService.getAllProjectData().subscribe((res: any) => {
             const existingProjects = res.response;
-            const existingProject = existingProjects.find(
-                (project: any) =>
-                    project.work_order_number + ' | ' + project.project_name === projectNameValue
-            );
+            const existingProject = "GEO" || existingProjects.find(
+                (project: any) => project.work_order_number + " | " + project.project_name === projectNameValue,
+            ) ;
             if (existingProject) {
-                console.log('go');
+                console.log("go");
                 this.timesheetService.getProjectName().subscribe((res: any) => {
                     const existingProjects = res;
-                    const existingProject = existingProjects.find(
-                        (project: any) => project.project_name === projectNameValue
-                    );
-
+                    const existingProject =existingProjects.find((project: any) => project.project_name === projectNameValue) ;
+                    
                     if (existingProject) {
-                        console.log('Project already exists.');
+                        console.log("Project already exists.");
 
                         const projectId = existingProject.id;
                         const projectName = existingProject.project_name;
 
-                        const userId = Number(this.encrypt.getItem('id'));
+                        const userId = Number(this.encrypt.getItem("id"));
                         this.isLoading = false;
 
                         this.postData(projectId, userId);
@@ -408,17 +390,17 @@ export class TimesheetComponent {
                         // Post the project name if it doesn't exist
                         this.timesheetService.postProjectName(projectNameValue).subscribe({
                             next: (response: any) => {
-                                console.log('Successfully created:', response);
+                                console.log("Successfully created:", response);
 
                                 const projectId = response.id;
-                                const userId = Number(this.encrypt.getItem('id'));
+                                const userId = Number(this.encrypt.getItem("id"));
 
                                 this.isLoading = false;
 
                                 this.postData(projectId, userId);
                             },
                             error: (error: any) => {
-                                console.log('Error creating project:', error);
+                                console.log("Error creating project:", error);
                             },
                         });
                     }
@@ -426,7 +408,7 @@ export class TimesheetComponent {
             } else {
                 this.isLoading = false;
                 //console.log("bawal mema dito");
-                this._snackBarService.openSnackBar('The project name is not whitelisted', 'okay');
+                this._snackBarService.openSnackBar("The project name is not whitelisted", "okay");
             }
         });
     }
@@ -442,15 +424,11 @@ export class TimesheetComponent {
             valueDate = filteringDate;
             weekNum = weekNumber(filteringDate);
         } else if (latestDate instanceof Date && !isNaN(latestDate.getTime())) {
-            const latestDateWithPHTime = this.datePipe.transform(
-                latestDate,
-                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                'Asia/Manila'
-            );
+            const latestDateWithPHTime = this.datePipe.transform(latestDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
             valueDate = latestDateWithPHTime;
             weekNum = weekNumber(latestDate);
         } else {
-            console.error('Both filteringDate and latestDate are not valid Date objects.');
+            console.error("Both filteringDate and latestDate are not valid Date objects.");
         }
 
         const dataParams = {
@@ -460,17 +438,17 @@ export class TimesheetComponent {
             actual_hours: 0,
             is_ot: false,
             is_nd: false,
-            approved_by: '',
+            approved_by: "",
             week_number: weekNum,
         };
 
         this.timesheetService.postProject(dataParams).subscribe({
             next: (response: any) => {
-                console.log('Successfully created:', response);
+                console.log("Successfully created:", response);
 
                 this.getTimesheetApproved(weekNum, valueDate);
 
-                this._snackBarService.openSnackBar('Project name has been created', 'okay');
+                this._snackBarService.openSnackBar("Project name has been created", "okay");
 
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
@@ -491,7 +469,7 @@ export class TimesheetComponent {
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
                 }
-                this._snackBarService.openSnackBar('Project name exist', 'okay');
+                this._snackBarService.openSnackBar("Project name exist", "okay");
             },
         });
     }
@@ -508,6 +486,7 @@ export class TimesheetComponent {
 
     //renan pogi on process end
 
+
     getHoursForDate(timesheetEntries: any[], index: any) {
         const entry = timesheetEntries.find((entry) => {
             const date = new Date(entry.date);
@@ -521,70 +500,68 @@ export class TimesheetComponent {
     }
 
     // renan start Special holiday indicator
-    getDataHoliday() {
-        this.timesheetService.getAllDataHoliday().subscribe((res: any) => {
+    getDataHoliday(){
+        this.timesheetService.getAllDataHoliday().subscribe((res: any) =>{
             const ds = res;
 
             // console.log(ds)
 
             ds.forEach((item: any) => {
-                // console.log(item.holiday_date);
+                // console.log(item.holiday_date); 
 
-                this.holidayDate.push(item);
+                this.holidayDate.push(item)
             });
-        });
+
+        })
     }
+
+
 
     determineWorkingType(date: any) {
         let holidayByDate = this.holidayDate;
-        console.log(holidayByDate);
-        console.log(date);
-
-        const dayOfWeek = new Date(date).getDay();
+        // console.log(holidayByDate);
+        // console.log(date);
+        
+        const dayOfWeek = (new Date(date)).getDay();
         const isWeekend = dayOfWeek === 6 || dayOfWeek === 0;
         const isSaturday = dayOfWeek === 6;
         const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
-
-        const holiday = holidayByDate.find((item) => item.holiday_date === date);
+        
+        const holiday = holidayByDate.find(item => item.holiday_date === date);
         console.log(date);
-
+        
         if (holiday) {
             console.log(holiday.type);
             if (holiday.type === 'SH' && isWeekend) {
-                console.log('Special holiday and weekend detected');
+                console.log("Special holiday and weekend detected");
                 return 'SHRD';
             } else if (holiday.type === 'RH' && isWeekend) {
-                console.log('Regular holiday and weekend detected');
+                console.log("Regular holiday and weekend detected");
                 return 'RHRD';
-            } else if (holiday.type === 'RH' && isWeekday) {
-                console.log('Regular holiday and weekday detected');
+            }else if (holiday.type === 'RH' && isWeekday) {
+                console.log("Regular holiday and weekday detected");
                 return 'RG';
             }
-            return holiday.type;
+            return holiday.type; 
         }
-
+        
         if (isSaturday) {
-            console.log('Saturday detected');
+            console.log("Saturday detected");
             return 'RD';
         } else if (isWeekend) {
-            console.log('Sunday detected');
+            console.log("Sunday detected");
             return 'RD';
         }
-
+    
         return 'RG';
     }
 
-    saveEntries(
-        value: any,
-        entryBy: number,
-        timesheetEntries: any[],
-        project_id: any,
-        index: any,
-        event: any
-    ) {
-        if (event.type === 'blur') {
+    saveEntries(value: any, entryBy: number, timesheetEntries: any[], project_id: any, index: any, event: any) {
+
+        if (event.type === "blur") {
             console.log(index);
             // the problem
+           
 
             //useless start
             const entry = timesheetEntries.find((entry) => {
@@ -593,32 +570,29 @@ export class TimesheetComponent {
             });
             //useless end
 
+           
+
+       
+
             const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
-            const selectedDate = this.datePipe.transform(
-                formattedDateToISO,
-                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                'Asia/Manila'
-            );
+            const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
-            const workingType = this.determineWorkingType(selectedDate);
-            console.log('ebtry', selectedDate);
-            console.log(workingType);
+            const workingType = this.determineWorkingType(selectedDate)
+            // console.log("ebtry",selectedDate)
+            // console.log(workingType)
 
-            const approval = timesheetEntries.find((entry) => entry.date === selectedDate);
+            const approval = timesheetEntries.find(entry => entry.date === selectedDate);
 
             if (approval) {
-                console.log('Approval found:', approval);
+                console.log("Approval found:", approval);
                 if (approval.approved_check === true) {
-                    console.log('Timesheet is approved. Cannot be changed.');
-                    this._snackBarService.openSnackBar(
-                        'Approved Timesheet cannot be changed',
-                        'okay'
-                    );
+                    console.log("Timesheet is approved. Cannot be changed.");
+                    this._snackBarService.openSnackBar("Approved Timesheet cannot be changed", "okay");
                     this.dateRefresher();
                 } else if (approval.approved_check === false) {
-                    console.log('Timesheet is not approved.');
-
+                    console.log("Timesheet is not approved.");
+            
                     if (value <= 20) {
                         if (value > 9) {
                             this.timesheet_ot = value - 9;
@@ -632,22 +606,17 @@ export class TimesheetComponent {
                                 user_id: entryBy,
                                 project_id: project_id,
                                 ot_number: this.timesheet_ot,
-                                working_location: 'OFC-DW',
+                                working_location: "OFC-DW",
                                 working_type: workingType,
                                 week_number: weekNum,
                             };
                             const editParams = {
                                 actual_hours: +9,
                                 ot_number: this.timesheet_ot,
-                                working_location: 'OFC-DW',
+                                working_location: "OFC-DW",
                                 working_type: workingType,
                             };
-                            this.isHaveEntries(
-                                timesheetEntries,
-                                selectedDate,
-                                postParams,
-                                editParams
-                            );
+                            this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                         } else {
                             const weekNum = weekNumber(formattedDateToISO);
                             const postParams = {
@@ -657,31 +626,27 @@ export class TimesheetComponent {
                                 is_nd: false,
                                 user_id: entryBy,
                                 project_id: project_id,
-                                working_location: 'OFC-DW',
+                                working_location: "OFC-DW",
                                 working_type: workingType,
                                 week_number: weekNum,
                             };
                             const editParams = {
                                 actual_hours: +value,
-                                working_location: 'OFC-DW',
+                                working_location: "OFC-DW",
                                 working_type: workingType,
                             };
-                            this.isHaveEntries(
-                                timesheetEntries,
-                                selectedDate,
-                                postParams,
-                                editParams
-                            );
+                            this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                         }
-                    } else {
-                        this._snackBarService.openSnackBar('Cannot exceed 20hours', 'okay');
+                    }else{
+                        this._snackBarService.openSnackBar("Cannot exceed 20hours", "okay");
                         this.dateRefresher();
-                    }
+
+                 }
                 }
             } else {
-                console.log('No data found for the selected date.');
-
-                console.log('no data');
+                console.log("No data found for the selected date.");
+            
+                console.log("no data");
                 if (value <= 20) {
                     if (value > 9) {
                         this.timesheet_ot = value - 9;
@@ -695,7 +660,7 @@ export class TimesheetComponent {
                             user_id: entryBy,
                             project_id: project_id,
                             ot_number: this.timesheet_ot,
-                            working_location: 'OFC-DW',
+                            working_location: "OFC-DW",
                             working_type: workingType,
                             week_number: weekNum,
                         };
@@ -714,7 +679,7 @@ export class TimesheetComponent {
                             is_nd: false,
                             user_id: entryBy,
                             project_id: project_id,
-                            working_location: 'OFC-DW',
+                            working_location: "OFC-DW",
                             working_type: workingType,
                             week_number: weekNum,
                         };
@@ -724,12 +689,13 @@ export class TimesheetComponent {
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     }
-                } else {
-                    this._snackBarService.openSnackBar('Cannot exceed 20hours', 'okay');
+                }else{
+                    this._snackBarService.openSnackBar("Cannot exceed 20hours", "okay");
                     this.dateRefresher();
+                    
                 }
             }
-
+            
             // this._snackBarService.openSnackBar("Approved Timesheet cannot be change", "okay");
             // this.dateRefresher();
 
@@ -780,8 +746,8 @@ export class TimesheetComponent {
     postTimesheetEntry(params: any) {
         this.timesheetService.postTimesheetEntry(params).subscribe({
             next: (response) => {
-                console.log('Entry successfully:', response);
-                this._snackBarService.openSnackBar('Time entry has been created', 'okay');
+                console.log("Entry successfully:", response);
+                this._snackBarService.openSnackBar("Time entry has been created", "okay");
 
                 //console.log(params);
 
@@ -796,7 +762,7 @@ export class TimesheetComponent {
                 this.getTimesheetApproved(params.week_number, valueDate);
             },
             error: (error) => {
-                console.error('Error creating entry:', error);
+                console.error("Error creating entry:", error);
             },
         });
     }
@@ -809,8 +775,8 @@ export class TimesheetComponent {
         // console.log("edited");
         this.timesheetService.editTimesheetEntry(id, params).subscribe({
             next: (response) => {
-                console.log('Edit successfully:', response);
-                this._snackBarService.openSnackBar('Succesfully updated 1 time entries', 'okay');
+                console.log("Edit successfully:", response);
+                this._snackBarService.openSnackBar("Succesfully updated 1 time entries", "okay");
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
@@ -818,14 +784,11 @@ export class TimesheetComponent {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar(
-                        'Succesfully enter a task description',
-                        'okay'
-                    );
+                    this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
                 }
             },
             error: (error) => {
-                console.error('Error creating entry:', error);
+                console.error("Error creating entry:", error);
             },
         });
     }
@@ -849,12 +812,12 @@ export class TimesheetComponent {
                     if (this.dateFromFilter !== undefined) {
                         // Variable is defined
                         this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                        this._snackBarService.openSnackBar('Delete Canceled', 'okay');
+                        this._snackBarService.openSnackBar("Delete Canceled", "okay");
                     } else {
                         // Variable is undefined
                         const latestStartDate = new Date(this.latest_start_date);
                         this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                        this._snackBarService.openSnackBar('Succesfully delete entry', 'okay');
+                        this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
                     }
                     // this.loadTimesheet();
                 });
@@ -862,28 +825,28 @@ export class TimesheetComponent {
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar('Delete Canceled', 'okay');
+                    this._snackBarService.openSnackBar("Delete Canceled", "okay");
                 } else {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar('Succesfully delete entry', 'okay');
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
                 }
-                this._snackBarService.openSnackBar('20 Hours max and 1 hours minimum', 'okay');
+                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
             } else if (
                 editParams.actual_hours === matchingEntry.actual_hours &&
                 editParams.ot_number === matchingEntry.ot_number
             ) {
-                console.log('no edit changes');
+                console.log("no edit changes");
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar('Entries Updated', 'okay');
+                    this._snackBarService.openSnackBar("Entries Updated", "okay");
                 } else {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar('Entries Updated', 'okay');
+                    this._snackBarService.openSnackBar("Entries Updated", "okay");
                 }
             } else {
                 this.editTimesheetEntry(matchingEntry.id, editParams);
@@ -892,29 +855,29 @@ export class TimesheetComponent {
             if (this.dateFromFilter !== undefined) {
                 // Variable is defined
                 this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                this._snackBarService.openSnackBar('Succesfully delete entry', 'okay');
+                this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
             } else {
                 // Variable is undefined
                 const latestStartDate = new Date(this.latest_start_date);
                 this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                this._snackBarService.openSnackBar('Succesfully delete entry', 'okay');
+                this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
             }
-            this._snackBarService.openSnackBar('20 Hours max and 1 hours minimum', 'okay');
+            this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
         } else {
             // console.log(matchingEntry);
             if (postParams.actual_hours === 0) {
-                console.log('no change');
+                console.log("no change");
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar('Succesfully delete entry', 'okay');
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
                 } else {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar('Succesfully delete entry', 'okay');
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
                 }
-                this._snackBarService.openSnackBar('20 Hours max and 1 hours minimum', 'okay');
+                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
             } else {
                 this.postTimesheetEntry(postParams);
             }
@@ -924,28 +887,25 @@ export class TimesheetComponent {
     openTimesheetEntryDescription(timesheetEntries: any, index: any) {
         const formattedDateToISO = new Date(this.dynamicHeaderName[index]);
         formattedDateToISO.setFullYear(this.selectedStartDateYear);
-        const transformDate = this.datePipe.transform(
-            formattedDateToISO,
-            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-            'Asia/Manila'
-        );
+        const transformDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
         const matchEntry = timesheetEntries.find((entry: any) => entry.date == transformDate);
-        console.log(matchEntry);
+        // console.log(matchEntry.nd_number);
         const entryData = {
             id: matchEntry.id,
             description: matchEntry.description,
             working_location: matchEntry.working_location,
             working_type: matchEntry.working_type,
             ot_number: matchEntry.ot_number,
+            nd_number: matchEntry.nd_number,
             approved_check: matchEntry.approved_check,
         };
         console.log(matchEntry.approved_check);
         // console.log(date);
         if (matchEntry.approved_check == true) {
-            this._snackBarService.openSnackBar('Already approved, update info disabled', 'okay');
+            this._snackBarService.openSnackBar("Already approved, update info disabled", "okay");
         } else {
-            console.log('false puwede pa palitan');
+            console.log("false puwede pa palitan");
             this.dialogService.openTimesheetEntryDescription(entryData).subscribe((result) => {
                 // console.log(`Dialog result: ${result}`);
                 if (this.dateFromFilter !== undefined) {
@@ -965,7 +925,7 @@ export class TimesheetComponent {
     getTimesheetApproved(weekNo: number, date: any) {
         // var dateinput = new Date(date);
         // const year = dateinput.getFullYear();
-
+      
         // var startDate = new Date(year, 0, 1);
         // var dayOfWeek = startDate.getDay();
         // // Adjust the start date to the first Monday of the year
@@ -987,17 +947,17 @@ export class TimesheetComponent {
         // const startDateString = startDate.toISOString().split("T")[0] + "T00:00:00Z";
         // const endDateString = endDate.toISOString().split("T")[0] + "T00:00:00Z";
         const weekNumber = weekNo;
-        const userId = Number(this.encrypt.getItem('id'));
-        const dateinput = moment.tz(date, 'Asia/Manila');
-
+        const userId = Number(this.encrypt.getItem("id"));
+        const dateinput = moment.tz(date, "Asia/Manila");
+        
         // Get the year from the date
         const year = dateinput.year();
         // const startDate = moment.tz("Asia/Manila");
-
+        
         const startDate = dateinput.clone().startOf('isoWeek');
         const endDate = dateinput.clone().endOf('isoWeek');
-        console.log('monday', startDate.format());
-        console.log('sunday', endDate.format());
+        // console.log("monday",startDate.format());
+        // console.log("sunday",endDate.format());
         let employeeName: string;
         this.timesheetService.getUserLoadById(userId).subscribe((res: any) => {
             const ds = res;
@@ -1005,7 +965,7 @@ export class TimesheetComponent {
             const firstName = ds.first_name;
             const lastName = ds.last_name;
 
-            employeeName = firstName + ' ' + lastName;
+            employeeName = firstName + " " + lastName;
         });
 
         this.timesheetService.getAllTimesheetApprovedData().subscribe((res: any) => {
@@ -1020,12 +980,12 @@ export class TimesheetComponent {
             });
 
             if (existingWeek) {
-                console.log('exist na');
+                console.log("exist na");
             } else {
                 const ApprovedData = {
                     week_no: weekNumber,
                     user_id: userId,
-                    approved: '',
+                    approved: "",
                     start_date: startDate,
                     end_date: endDate,
                     employee_name: employeeName,
@@ -1039,10 +999,10 @@ export class TimesheetComponent {
     postTimesheetApproved(approvedData: any) {
         this.timesheetService.postAlltimesheetApproved(approvedData).subscribe({
             next: (response) => {
-                console.log('successfully', response);
+                console.log("successfully", response);
             },
             error: (error) => {
-                console.error('Error creating approved:', error);
+                console.error("Error creating approved:", error);
             },
         });
     }
@@ -1064,18 +1024,14 @@ export class TimesheetComponent {
             const latestDateWithPHTimeStart = this.datePipe.transform(
                 lateststartDate,
                 "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                'Asia/Manila'
+                "Asia/Manila",
             );
-            const latestDateWithPHTimeEnd = this.datePipe.transform(
-                latestEndDate,
-                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                'Asia/Manila'
-            );
+            const latestDateWithPHTimeEnd = this.datePipe.transform(latestEndDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
             startDate = latestDateWithPHTimeStart;
             endDate = latestDateWithPHTimeEnd;
         } else {
-            console.error('Both filteringDate and latestDate are not valid Date objects.');
+            console.error("Both filteringDate and latestDate are not valid Date objects.");
         }
 
         this.dialogRef = this.dialog.open(WholeDeleteModalComponent, {
@@ -1089,7 +1045,7 @@ export class TimesheetComponent {
         // After the dialog is closed
         this.dialogRef.afterClosed().subscribe((result: any) => {
             // Handle result here
-            console.log('Dialog closed with result:', result);
+            console.log("Dialog closed with result:", result);
             this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
         });
     }
