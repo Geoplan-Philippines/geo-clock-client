@@ -3,9 +3,7 @@
     <div>
         <app-aside></app-aside>
     </div>
-    <div
-        class="static z-0 mt-10 h-full flex-1 overflow-x-hidden overflow-y-scroll p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10"
-    >
+    <div class="static z-0 mt-10 h-full flex-1 overflow-x-hidden overflow-y-scroll p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
         <div class="justify-between sm:flex">
             <!-- <mat-form-field>
                 <mat-label>Filter</mat-label>
@@ -14,10 +12,7 @@
 
             <mat-form-field>
                 <mat-label>Year</mat-label>
-                <mat-select
-                    [(value)]="latestYearNumber"
-                    (selectionChange)="selectYearNumber($event)"
-                >
+                <mat-select [(value)]="latestYearNumber" (selectionChange)="selectYearNumber($event)">
                     <mat-option [value]="null">Clear</mat-option>
                     <mat-option *ngFor="let year of yearNumber" [value]="year.toString()">
                         {{ year }}
@@ -27,10 +22,7 @@
 
             <mat-form-field>
                 <mat-label>Week</mat-label>
-                <mat-select
-                    [(value)]="latestWeekNumber"
-                    (selectionChange)="selectWeekNumber($event)"
-                >
+                <mat-select [(value)]="latestWeekNumber" (selectionChange)="selectWeekNumber($event)">
                     <mat-option [value]="null">Clear</mat-option>
                     <mat-option *ngFor="let data of weekNumber" [value]="data.value.toString()">
                         {{ data.wk_name }}
@@ -54,6 +46,13 @@
                 <ng-container matColumnDef="id">
                     <th mat-header-cell *matHeaderCellDef>No.</th>
                     <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                </ng-container>
+
+                <!-- Department Column -->
+                <ng-container matColumnDef="Department">
+                    <th mat-header-cell *matHeaderCellDef>Department</th>
+                    <th></th>
+                    <td mat-cell *matCellDef="let element">{{ element.Department }}</td>
                 </ng-container>
 
                 <!-- Name Column -->

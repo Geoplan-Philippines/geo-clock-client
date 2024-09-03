@@ -3,9 +3,7 @@
     <div>
         <app-aside></app-aside>
     </div>
-    <div
-        class="static z-0 mt-10 h-full flex-1 overflow-x-hidden overflow-y-scroll p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10"
-    >
+    <div class="static z-0 mt-10 h-full flex-1 overflow-x-hidden overflow-y-scroll p-0 pt-10 shadow-lg sm:mt-0 sm:p-10 sm:pt-10">
         <div class="justify-between sm:flex">
             <!-- <div class="">
                 <mat-form-field class="h-20 w-full sm:w-96">
@@ -34,11 +32,7 @@
                         <mat-date-range-picker #picker></mat-date-range-picker>
                     </div>
                     <div>
-                        <mat-date-range-input
-                            class="calendar"
-                            [formGroup]="range"
-                            [rangePicker]="picker"
-                        >
+                        <mat-date-range-input class="calendar" [formGroup]="range" [rangePicker]="picker">
                             <input
                                 matStartDate
                                 formControlName="start"
@@ -55,9 +49,7 @@
         <div class="h-[40rem] overflow-y-scroll">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" id="excel-table">
                 <ng-container matColumnDef="project_name">
-                    <th mat-header-cell *matHeaderCellDef>
-                        {{ GENERAL.TABLE_HEADER_NAME.PROJECT }}
-                    </th>
+                    <th mat-header-cell *matHeaderCellDef>{{ GENERAL.TABLE_HEADER_NAME.PROJECT }}</th>
                     <td mat-cell *matCellDef="let element" class="cursor-pointer">
                         <div *ngIf="this.hasValue(element.project.project_name)">
                             <input
@@ -84,6 +76,10 @@
                         </div>
                         <datalist id="browsers">
                             <option
+                                value="GEO"
+                                class="datalist-option"
+                            ></option>
+                            <option
                                 *ngFor="let opt of projects"
                                 [value]="opt.work_order_number + ' | ' + opt.project_name"
                                 class="datalist-option"
@@ -91,19 +87,11 @@
                         </datalist>
                     </td>
                 </ng-container>
-                <ng-container
-                    *ngFor="let header of dynamicHeaderName; let i = index"
-                    [matColumnDef]="'day_' + i"
-                >
+                <ng-container *ngFor="let header of dynamicHeaderName; let i = index" [matColumnDef]="'day_' + i">
                     <th mat-header-cell *matHeaderCellDef>{{ dynamicHeaderName[i] }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="flex align-middle">
-                            <div
-                                *ngIf="
-                                    this.hasValue(element.project.project_name);
-                                    else checkIfEmptyString
-                                "
-                            >
+                            <div *ngIf="this.hasValue(element.project.project_name); else checkIfEmptyString">
                                 <input
                                     type="number"
                                     [value]="getHoursForDate(element.project.timesheetEntries, i)"
@@ -125,9 +113,7 @@
                                 <div *ngIf="element.project.project_name === ''">
                                     <input
                                         type="number"
-                                        [value]="
-                                            getHoursForDate(element.project.timesheetEntries, i)
-                                        "
+                                        [value]="getHoursForDate(element.project.timesheetEntries, i)"
                                         disabled
                                         #inputField
                                         (blur)="
@@ -144,26 +130,15 @@
                                 </div>
                             </ng-template>
 
-                            <div
-                                class="descriptionIcon"
-                                *ngIf="getHoursForDate(element.project.timesheetEntries, i) !== 0"
-                            >
+                            <div class="descriptionIcon" *ngIf="getHoursForDate(element.project.timesheetEntries, i) !== 0">
                                 <mat-icon
                                     class="text-2xl text-black"
-                                    (click)="
-                                        openTimesheetEntryDescription(
-                                            element.project.timesheetEntries,
-                                            i
-                                        )
-                                    "
+                                    (click)="openTimesheetEntryDescription(element.project.timesheetEntries, i)"
                                 >
                                     more_vert
                                 </mat-icon>
                             </div>
-                            <div
-                                class="descriptionIcon"
-                                *ngIf="getHoursForDate(element.project.timesheetEntries, i) === 0"
-                            >
+                            <div class="descriptionIcon" *ngIf="getHoursForDate(element.project.timesheetEntries, i) === 0">
                                 <mat-icon class="text-2xl text-gray-300">more_vert</mat-icon>
                             </div>
                         </div>
@@ -173,9 +148,7 @@
                     <th mat-header-cell *matHeaderCellDef>Total Hour</th>
                     <td mat-cell *matCellDef="let element">
                         <div>
-                            <p class="text-xl">
-                                {{ getTotalHoursForProject(element.project.timesheetEntries) }}h
-                            </p>
+                            <p class="text-xl">{{ getTotalHoursForProject(element.project.timesheetEntries) }}h</p>
                             <!-- <mat-icon class="mat-icon-element" (click)="deleteWholeWeek(element.user_id, element.project.id)">
                                 close
                             </mat-icon> -->
@@ -193,11 +166,7 @@
             </table>
         </div>
         <div class="block sm:flex sm:justify-between">
-            <mat-paginator
-                [pageSizeOptions]="[7, 10, 15]"
-                showFirstLastButtons
-                aria-label="Select page of periodic elements"
-            >
+            <mat-paginator [pageSizeOptions]="[7, 10, 15]" showFirstLastButtons aria-label="Select page of periodic elements">
             </mat-paginator>
             <div class="mt-2 flex w-[100%] justify-between sm:w-auto">
                 <button class="add_Btn" mat-raised-button (click)="addRow()">ADD ROW</button>

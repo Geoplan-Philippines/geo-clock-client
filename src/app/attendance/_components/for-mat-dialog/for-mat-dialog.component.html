@@ -1,0 +1,30 @@
+<div class="flex flex-col">
+    <div class="text-center mt-3 font-bold text-2xl justify-center">
+        <h1>
+            Remarks
+        </h1>
+    </div>
+    <form class="example-form" [formGroup]="formData" (ngSubmit)="submitForm()">
+        <div>
+            <div class="p-2 mx-3 text-justify mt-3 pb-11 border shadow-black break-words h-60" *ngIf="!showInput">
+                {{commentData}}
+              </div>
+
+                <div *ngIf="showInput" class="overflow-hidden">
+                
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Leave a comment</mat-label>
+                        <textarea matInput placeholder="Ex. It makes me feel..." formControlName="comment"></textarea>
+                    </mat-form-field>
+                
+                </div>
+        </div>
+
+        <div class="sm:absolute sm:bottom-0 sm:right-0 mx-2 pb-2 pt-3 flex justify-end" *ngIf="toggleBtn">
+            <button mat-button mat-dialog-close>Cancel</button>
+            <button mat-raised-button color="primary" *ngIf="!comment" (click)="toggleInput()" cdkFocusInitial>Comment</button> 
+            <button mat-raised-button color="primary" *ngIf="comment" (click)="toggleInput()" cdkFocusInitial>Save</button> 
+        </div>
+    </form>
+</div>
+    
