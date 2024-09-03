@@ -41,6 +41,10 @@ export class MaintenanceService {
     updateAllDifferentialData(id: number, updateDifferential: any): Observable<any> {
         return this._http.patch(`${this.apiUrl}/differential-hours/${id}`, updateDifferential);
     }
+    
+    updateAllHolidays(id: number, updateHoliday: any): Observable<any> {
+        return this._http.patch(`${this.apiUrl}/holiday/${id}`, updateHoliday);
+    }
 
     deleteData(id: any, table: any) {
         if (table === 'holiday') {
