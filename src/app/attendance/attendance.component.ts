@@ -438,7 +438,6 @@ export class AttendanceComponent{
 
                         const updatedFilteredAttedance = filteredattendance.map((item: any, index: number) => ({
                             ...item,
-                            id: index + 1,
                         }));
                         const filteredData = updatedFilteredAttedance.filter((data: any) => {
                             const matchesGeneralFilter = this.generalFilter
@@ -526,7 +525,6 @@ export class AttendanceComponent{
     
                             const updatedFilteredAttedance = filteredattendance.map((item: any, index: number) => ({
                                 ...item,
-                                id: index + 1,
                             }));
                             const filteredData = updatedFilteredAttedance.filter((data: any) => {
                                 const matchesGeneralFilter = this.generalFilter
