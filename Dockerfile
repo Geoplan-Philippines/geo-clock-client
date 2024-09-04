@@ -20,6 +20,9 @@ FROM nginx:alpine
 # Copy the built Angular files from the previous stage
 COPY --from=build /app/dist/official-geoplan-site /usr/share/nginx/html
 
+# Copy the custom Nginx configuration file
+COPY default.conf /etc/nginx/conf.d/default.conf
+
 # Expose port 80
 EXPOSE 80
 
