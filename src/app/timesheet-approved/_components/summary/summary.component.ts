@@ -288,7 +288,10 @@ export class SummaryComponent implements OnInit {
         if(is_ot === false && ot_number > 0){
             RGOT = RG + ot_number;
         }
-        else if(is_ot === true){
+        else if(is_ot === true && ot_number > 0){
+            RGOT = RG
+        }
+        else{
             RGOT = RG
         }
 
