@@ -258,7 +258,7 @@ export class SummaryComponent implements OnInit {
         const year = dateyear.getFullYear().toString();
 
         
-
+        let RGOT = 0;
         let RG = 0;
         let ND = 0;
         let LVE = 0;
@@ -284,6 +284,16 @@ export class SummaryComponent implements OnInit {
         } else {
             console.warn("Unexpected working_type:", working_type);
         }
+//latest update fuck
+        if(is_ot === false && ot_number > 0){
+            RGOT = RG + ot_number;
+        }
+        else if(is_ot === true && ot_number > 0){
+            RGOT = RG
+        }
+        else{
+            RGOT = RG
+        }
 
         const DataSummary: any = {
             Week_no: week_no,
@@ -294,7 +304,7 @@ export class SummaryComponent implements OnInit {
             Code: employee_code,
             is_ot: is_ot,
             is_nd: is_nd,
-            RG: RG,
+            RG: RGOT,
             ND: ND,
             LVE: LVE,
             RD: RD,
@@ -305,14 +315,18 @@ export class SummaryComponent implements OnInit {
         // console.log('sdasd',DataSummary.ND)
         if (is_ot) {
             DataSummary.OT = ot_number;
-        } else {
+        } 
+        else {
             DataSummary.OT = 0;
         }
+        
         if (is_nd) {
             DataSummary.ND = nd_number;
-        } else if(ND) {
+        } 
+        else if(ND) {
             DataSummary.ND = ND;
-        }else{
+        }
+        else{
             DataSummary.ND = 0;
         }
         
