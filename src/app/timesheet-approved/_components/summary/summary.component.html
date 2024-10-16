@@ -10,7 +10,7 @@
                 <th mat-header-cell *matHeaderCellDef>APPROVED BY</th>
                 <td mat-cell *matCellDef="let element">{{ element.approved_by }}</td>
             </ng-container>
-            <ng-container matColumnDef="is_approved">
+            <ng-container matColumnDef="is_approved" >
                 <th mat-header-cell *matHeaderCellDef>✔</th>
                 <td mat-cell *matCellDef="let element">
                     <div *ngIf="!textField">
@@ -73,16 +73,37 @@
             </td>
             </ng-container>
 
-            <ng-container matColumnDef="Update">
-                <th mat-header-cell *matHeaderCellDef>Update</th>
-                <td mat-cell *matCellDef="let element">
-                    <mat-icon class="cursor-pointer" (click)="timesheetEntryHoursUpdate(element.id)" *ngIf="!textField">edit</mat-icon>
-                    <mat-icon class="cursor-pointer text-green-600" *ngIf="textField">check</mat-icon>
-                    <mat-icon class="cursor-pointer text-red-600" *ngIf="textField" (click)="timesheetEntryHoursUpdate(element.id)">close</mat-icon>
-                </td>
-              </ng-container>
+        <ng-container matColumnDef="Update">
+            <th mat-header-cell *matHeaderCellDef>Update</th>
+            <td mat-cell *matCellDef="let element">
+                <!-- Hide the icons if the entry is approved (if approved_by has a value) -->
+                <mat-icon 
+                    class="cursor-pointer" 
+                    (click)="timesheetEntryHoursUpdate(element.id)" 
+                    *ngIf="!element.approved_by && !textField && !element.is_ot && !element.is_nd "
+                >
+                    edit
+                </mat-icon>
+                
+                <mat-icon 
+                    class="cursor-pointer text-green-600" 
+                    *ngIf="textField && !element.approved_by" 
+                    (click)="saveEntry(element.id)"
+                >
+                    check
+                </mat-icon>
+                
+                <mat-icon 
+                    class="cursor-pointer text-red-600" 
+                    *ngIf="textField && !element.approved_by" 
+                    (click)="timesheetEntryHoursUpdate(element.id)"
+                >
+                    close
+                </mat-icon>
+            </td>
+        </ng-container>
 
-        <form [formGroup]="form">
+        <!-- <form [formGroup]="form"> -->
             <ng-container matColumnDef="project_name">
                 <th mat-header-cell *matHeaderCellDef>PROJECT NAME</th>
                 <td mat-cell *matCellDef="let element">{{ element.project.project_name }}</td>
@@ -100,7 +121,7 @@
               
                     <mat-form-field *ngIf="textField" class="w-32 mt-5">
                     <mat-label>Location</mat-label>
-                        <mat-select>
+                        <mat-select [(value)]="workingLocationData" >
                             <mat-option [value]="'OFC-DW'">OFC-DW</mat-option>
                             <mat-option [value]="'OFC-ND'">OFC-ND</mat-option>
                             <mat-option [value]="'WFH'">WFH</mat-option>
@@ -119,7 +140,7 @@
 
                     <mat-form-field *ngIf="textField" class="w-32 mt-5">
                         <mat-label>Type</mat-label>
-                            <mat-select>
+                            <mat-select [(value)]="typeData">
                                 <mat-option [value]="'RG'">RG</mat-option>
                                 <mat-option [value]="'ND'">ND</mat-option>
                                 <mat-option [value]="'LVE'">LVE</mat-option>
@@ -141,7 +162,7 @@
 
                     <mat-form-field *ngIf="textField" class="w-32 mt-5">
                         <mat-label>Duration</mat-label>
-                        <input matInput>
+                        <input [(ngModel)]="actualHoursData" matInput>
                     </mat-form-field>
                     
                 </td>
@@ -156,7 +177,7 @@
 
                     <mat-form-field *ngIf="textField" class="w-32 mt-5">
                         <mat-label>Overtime</mat-label>
-                        <input matInput>
+                        <input [(ngModel)]="overtimeData" matInput>
                     </mat-form-field>
 
                 </td>
@@ -165,11 +186,11 @@
                 <th mat-header-cell *matHeaderCellDef>Night Diff</th>
                 <td mat-cell *matCellDef="let element">
 
-                    <span *ngIf="!textField">{{ element.nd_number  || '0'}}h</span>
+                    <span *ngIf="!textField">{{ element.nd_number}}h</span>
                 
                     <mat-form-field *ngIf="textField" class="w-32 mt-5">
                         <mat-label>Night Diff.</mat-label>
-                        <input matInput>
+                        <input [(ngModel)]="nightdiffData" matInput>
                     </mat-form-field>
                 </td>
             </ng-container>
@@ -177,7 +198,7 @@
                 <th mat-header-cell *matHeaderCellDef>TASK</th>
                 <td mat-cell *matCellDef="let element">{{ element.description }}</td>
             </ng-container>
-        </form>
+        <!-- </form> -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>

@@ -622,6 +622,7 @@ export class TimesheetComponent {
                                 user_id: entryBy,
                                 project_id: project_id,
                                 ot_number: this.timesheet_ot,
+                                nd_number: 0,
                                 working_location: "OFC-DW",
                                 working_type: workingType,
                                 week_number: weekNum,
@@ -629,6 +630,7 @@ export class TimesheetComponent {
                             const editParams = {
                                 actual_hours: +9,
                                 ot_number: this.timesheet_ot,
+                                nd_number: 0,
                                 working_location: "OFC-DW",
                                 working_type: workingType,
                             };
@@ -640,6 +642,7 @@ export class TimesheetComponent {
                                 actual_hours: +value,
                                 is_ot: false,
                                 is_nd: false,
+                                nd_number: 0,
                                 user_id: entryBy,
                                 project_id: project_id,
                                 working_location: "OFC-DW",
@@ -648,6 +651,7 @@ export class TimesheetComponent {
                             };
                             const editParams = {
                                 actual_hours: +value,
+                                nd_number: 0,
                                 working_location: "OFC-DW",
                                 working_type: workingType,
                             };
@@ -676,6 +680,7 @@ export class TimesheetComponent {
                             user_id: entryBy,
                             project_id: project_id,
                             ot_number: this.timesheet_ot,
+                            nd_number: 0,
                             working_location: "OFC-DW",
                             working_type: workingType,
                             week_number: weekNum,
@@ -683,6 +688,7 @@ export class TimesheetComponent {
                         const editParams = {
                             actual_hours: +9,
                             ot_number: this.timesheet_ot,
+                            nd_number: 0,
                             working_type: workingType,
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
@@ -693,6 +699,7 @@ export class TimesheetComponent {
                             actual_hours: +value,
                             is_ot: false,
                             is_nd: false,
+                            nd_number: 0,
                             user_id: entryBy,
                             project_id: project_id,
                             working_location: "OFC-DW",
@@ -701,6 +708,7 @@ export class TimesheetComponent {
                         };
                         const editParams = {
                             actual_hours: +value,
+                            nd_number: 0,
                             working_type: workingType,
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
@@ -906,7 +914,7 @@ export class TimesheetComponent {
         const transformDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
         const matchEntry = timesheetEntries.find((entry: any) => entry.date == transformDate);
-        // console.log(matchEntry.nd_number);
+        // console.log("timesheetndnumber",matchEntry.nd_number);
         const entryData = {
             id: matchEntry.id,
             description: matchEntry.description,

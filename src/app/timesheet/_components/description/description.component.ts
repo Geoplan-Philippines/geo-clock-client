@@ -44,19 +44,17 @@ export class DescriptionComponent implements OnInit {
         this.subscription = this.formData.get('working_type')?.valueChanges.subscribe((value) => {
             this.selectedType = value;
             if (value === 'RG') {
-                this.formData.patchValue({ nd_number: this.data.nd_number || 0 });
+                this.formData.patchValue({ nd_number: this.data.nd_number});
             } else {
                 this.formData.patchValue({ nd_number: 0 });
             }
             
             if(value === 'OT'){
-                this.formData.patchValue({ ot_number: this.data.ot_number || 0 });
+                this.formData.patchValue({ ot_number: this.data.ot_number});
             }else{
                 this.formData.patchValue({ ot_number: 0 });
             }
         });
-
-
 
     }
 
@@ -69,13 +67,14 @@ export class DescriptionComponent implements OnInit {
             nd_number: [this.data.nd_number]
 
         });
+        // console.log("sadasd",this.data.nd_number);
     }
 
     submitForm(): void {
         if (this.formData.valid) {
             const id = this.data.id;
             const params = this.formData.value;
-            console.log(params)
+            // console.log("paramstesting",params)
             this.timesheet.editTimesheetEntry(id, params).subscribe({
                 next: (response: any) => {
                     // console.log("Edit successfully:", response);

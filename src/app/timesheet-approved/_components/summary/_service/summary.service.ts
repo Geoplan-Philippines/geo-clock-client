@@ -52,4 +52,8 @@ export class SummaryService {
     postTimesheetSummary(Summary: any) {
         return this._http.post(`${this.apiUrl}/timesheet-summary`, Summary);
     }
+
+    editTimesheetEntry(id: any, data: any) {
+        return this._http.patch(`${this.apiUrl}/timesheet-entry/${id}`, data);
+    }
 }

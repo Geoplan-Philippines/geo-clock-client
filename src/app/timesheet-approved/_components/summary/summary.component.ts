@@ -40,7 +40,15 @@ export class SummaryComponent implements OnInit {
     fb!: FormBuilder;
     form!: FormGroup ;
 
-    
+    timesheetEntryData: any[] = [];
+    workingLocationData: string = '';
+    typeData: string = '';
+    actualHoursData: number = 0;
+    overtimeData: number = 0;
+    nightdiffData: number = 0;
+
+    approvedby: boolean=false;
+
     constructor(
         private SummaryService: SummaryService,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -61,9 +69,7 @@ export class SummaryComponent implements OnInit {
         }
         // console.log("data of user",data)
 
-        this.form = this.fb.group({
-            location: ['', ],
-          });
+        
         
     }
 
@@ -105,9 +111,17 @@ export class SummaryComponent implements OnInit {
             this.timesheetId = timesheetEntries.id;
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
-            // console.log(filteredEntries);
+            // console.log("timesheetEntriesample",timesheetEntries);
             this.clickboard = filteredEntries;
+
+            this.timesheetEntryData = timesheetEntries
+            console.log("timesheetEntriesample",this.timesheetEntryData);
+            
+        //  this.selectedWorkingLocation = timesheetEntries.working_location;
+        //  console.log("timesheetEntriesample",this.selectedWorkingLocation);
         });
+
+
     }
 
     loadTimesheetForLength() {
@@ -127,6 +141,7 @@ export class SummaryComponent implements OnInit {
 
             this.updateApproved(approvalStatus);
         });
+        
     }
 
     countApprovedEntries(entries: any[]): number {
@@ -192,6 +207,7 @@ export class SummaryComponent implements OnInit {
             if (element.approved_check) {
                 updateValueApproved.approved_by = "";
             }
+                
             this.updateTimesheetEntry(entryId, updateValueApproved);
         } else if (field === "is_nd") {
             if (element.approved_check === true) {
@@ -477,12 +493,55 @@ export class SummaryComponent implements OnInit {
             },
         });
     }
+
     timesheetEntryHoursUpdate(id: number){
         if (this.textField === false){
             this.textField = true
-        }else if(this.textField === true){
+
+            const foundEntry = this.timesheetEntryData.find((entry: any) => entry.id === id);
+
+            if (foundEntry) {
+            
+            this.workingLocationData = foundEntry.working_location;
+            this.typeData = foundEntry.working_type;
+            this.actualHoursData = foundEntry.actual_hours;
+            this.overtimeData = foundEntry.ot_number;
+            this.nightdiffData = foundEntry.nd_number;
+
+            console.log("Found entry:", this.workingLocationData);
+
+            } else {
+            console.log("Entry not found");
+            }
+        }
+        else if(this.textField === true){
             this.textField = false
         }
+
+    }
+
+    saveEntry(id:number){
+        let dataUpdate = {
+            working_location: this.workingLocationData,
+            working_type: this.typeData,
+            actual_hours: Number(this.actualHoursData),
+            ot_number: Number(this.overtimeData),
+            nd_number: Number(this.nightdiffData)
+        }
+
+        this.SummaryService.editTimesheetEntry(id,dataUpdate).subscribe({
+            next: (response: any) => {
+                // console.log("Edit successfully:", response);
+                this._snackBarService.openSnackBar("Succesfully updated 1 time entries", "okay");
+                // this.dialogRef.close();
+                this.timesheetEntryHoursUpdate(0);
+            },
+            error: (error: any) => {
+                this._snackBarService.openSnackBar("Unsuccesfully updated. Please check your input", "okay");
+                console.error("Error creating entry:", error);
+            },
+        });
+
         
     }
 
