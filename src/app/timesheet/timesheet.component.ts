@@ -578,6 +578,22 @@ export class TimesheetComponent {
             formattedDateToISO.setFullYear(this.selectedStartDateYear);
             const selectedDate = this.datePipe.transform(formattedDateToISO, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
 
+
+          const momentDate = moment.tz(new Date(this.dynamicHeaderName[index]), 'Asia/Manila')
+                        .year(this.selectedStartDateYear); // Set the correct year
+
+            // Check if the date is a Sunday (0 = Sunday)
+            const isSunday = momentDate.weekday() === 0;
+
+            // If it's Sunday, add 1 to the week number
+            let weekNum = weekNumber(momentDate.toDate()); // Convert Moment to Date
+            if (isSunday) {
+                weekNum += 1;
+            }
+
+            // console.log("Week Number111111:", weekNum);
+
+
             const workingType = this.determineWorkingType(selectedDate)
             // console.log("ebtry",selectedDate)
             // console.log(workingType)
@@ -597,7 +613,7 @@ export class TimesheetComponent {
                         if (value > 9) {
                             this.timesheet_ot = value - 9;
                             console.log(this.timesheet_ot);
-                            const weekNum = weekNumber(formattedDateToISO);
+                            // const weekNum = weekNumber(formattedDateToISO);
                             const postParams = {
                                 date: selectedDate,
                                 actual_hours: 9,
@@ -618,7 +634,7 @@ export class TimesheetComponent {
                             };
                             this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                         } else {
-                            const weekNum = weekNumber(formattedDateToISO);
+                            // const weekNum = weekNumber(formattedDateToISO);
                             const postParams = {
                                 date: selectedDate,
                                 actual_hours: +value,
@@ -651,7 +667,7 @@ export class TimesheetComponent {
                     if (value > 9) {
                         this.timesheet_ot = value - 9;
                         console.log(this.timesheet_ot);
-                        const weekNum = weekNumber(formattedDateToISO);
+                        // const weekNum = weekNumber(formattedDateToISO);
                         const postParams = {
                             date: selectedDate,
                             actual_hours: 9,
@@ -671,7 +687,7 @@ export class TimesheetComponent {
                         };
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     } else {
-                        const weekNum = weekNumber(formattedDateToISO);
+                        // const weekNum = weekNumber(formattedDateToISO);
                         const postParams = {
                             date: selectedDate,
                             actual_hours: +value,
@@ -923,29 +939,7 @@ export class TimesheetComponent {
     }
 
     getTimesheetApproved(weekNo: number, date: any) {
-        // var dateinput = new Date(date);
-        // const year = dateinput.getFullYear();
       
-        // var startDate = new Date(year, 0, 1);
-        // var dayOfWeek = startDate.getDay();
-        // // Adjust the start date to the first Monday of the year
-        // startDate.setDate(startDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -5 : 1));
-        // // Adjust the start date to the first day of the specified week
-        // startDate.setDate(startDate.getDate() + (weekNumber - 1) * 7);
-
-        // // Set time components of startDate to 00:00:00
-        // startDate.setHours(0, 0, 0, 0);
-
-        // // Calculate the end date by adding 6 days to the start date
-        // var endDate = new Date(startDate);
-        // endDate.setDate(endDate.getDate() + 7);
-
-        // // Set time components of endDate to 00:00:00
-        // endDate.setHours(0, 0, 0, 0);
-
-        // // Convert start date and end date to string representation in "YYYY-MM-DD" format
-        // const startDateString = startDate.toISOString().split("T")[0] + "T00:00:00Z";
-        // const endDateString = endDate.toISOString().split("T")[0] + "T00:00:00Z";
         const weekNumber = weekNo;
         const userId = Number(this.encrypt.getItem("id"));
         const dateinput = moment.tz(date, "Asia/Manila");
@@ -954,8 +948,8 @@ export class TimesheetComponent {
         const year = dateinput.year();
         // const startDate = moment.tz("Asia/Manila");
         
-        const startDate = dateinput.clone().startOf('isoWeek');
-        const endDate = dateinput.clone().endOf('isoWeek');
+        const startDate = dateinput.clone().startOf('week'); // Sunday
+        const endDate = dateinput.clone().endOf('week'); // Saturday
         // console.log("monday",startDate.format());
         // console.log("sunday",endDate.format());
         let employeeName: string;

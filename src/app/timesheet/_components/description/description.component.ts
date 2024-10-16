@@ -48,7 +48,16 @@ export class DescriptionComponent implements OnInit {
             } else {
                 this.formData.patchValue({ nd_number: 0 });
             }
+            
+            if(value === 'OT'){
+                this.formData.patchValue({ ot_number: this.data.ot_number || 0 });
+            }else{
+                this.formData.patchValue({ ot_number: 0 });
+            }
         });
+
+
+
     }
 
     createForm(): void {
