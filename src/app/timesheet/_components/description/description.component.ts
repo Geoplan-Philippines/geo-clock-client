@@ -49,14 +49,19 @@ export class DescriptionComponent implements OnInit {
                 this.formData.patchValue({ nd_number: 0 });
             }
             
-            if(value === 'OT'){
-                this.formData.patchValue({ ot_number: this.data.ot_number});
-            }else{
+            if (value === 'OT') {
+                this.formData.patchValue({ ot_number: this.data.ot_number });
+            } else {
+                this.formData.patchValue({ ot_number: 0 });
+            }
+            
+            if (value === 'OT') {
                 this.formData.patchValue({ ot_number: 0 });
             }
         });
 
     }
+
 
     createForm(): void {
         this.formData = this.fb.group({

@@ -34,4 +34,9 @@ export class TimesheetSummaryService {
             `${this.apiUrl1}/timesheet-summary/${week_no}/${Year}`
         );
     }
+
+    getAllemployeetDataaaa() {
+        return this._http.get(`${this.apiUrl1}/users`);
+    };
+
 }

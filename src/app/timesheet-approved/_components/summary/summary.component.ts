@@ -41,6 +41,7 @@ export class SummaryComponent implements OnInit {
     form!: FormGroup ;
 
     timesheetEntryData: any[] = [];
+    idData: number = 0;
     workingLocationData: string = '';
     typeData: string = '';
     actualHoursData: number = 0;
@@ -111,11 +112,11 @@ export class SummaryComponent implements OnInit {
             this.timesheetId = timesheetEntries.id;
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
-            // console.log("timesheetEntriesample",timesheetEntries);
+            console.log("timesheetEntriesample",this.dataSource);
             this.clickboard = filteredEntries;
 
             this.timesheetEntryData = timesheetEntries
-            console.log("timesheetEntriesample",this.timesheetEntryData);
+            // console.log("timesheetEntriesample",this.timesheetEntryData);
             
         //  this.selectedWorkingLocation = timesheetEntries.working_location;
         //  console.log("timesheetEntriesample",this.selectedWorkingLocation);
@@ -337,13 +338,13 @@ export class SummaryComponent implements OnInit {
 
         }else if (working_type === "OT") {
 
-            if(is_ot === false && ot_number > 0){
-                OT =  actual_hours+ ot_number;
-            }else if(is_ot === true && ot_number > 0){
+            // if(is_ot === false && ot_number > 0){
+            //     OT =  actual_hours+ ot_number;
+            // }else if(is_ot === true && ot_number > 0){
+            //     OT = actual_hours;
+            // }else{
                 OT = actual_hours;
-            }else{
-                OT = actual_hours;
-            }
+            // }
 
         } else if (working_type === "SH") {
 
@@ -495,20 +496,22 @@ export class SummaryComponent implements OnInit {
     }
 
     timesheetEntryHoursUpdate(id: number){
+        this.idData = id;
         if (this.textField === false){
             this.textField = true
 
             const foundEntry = this.timesheetEntryData.find((entry: any) => entry.id === id);
-
+            console.log("Found entry:",foundEntry);
             if (foundEntry) {
             
+           
             this.workingLocationData = foundEntry.working_location;
             this.typeData = foundEntry.working_type;
             this.actualHoursData = foundEntry.actual_hours;
             this.overtimeData = foundEntry.ot_number;
             this.nightdiffData = foundEntry.nd_number;
 
-            console.log("Found entry:", this.workingLocationData);
+           
 
             } else {
             console.log("Entry not found");
@@ -560,6 +563,6 @@ export class SummaryComponent implements OnInit {
         "nd_number",
         "working_location",
         "working_type",
-        "discription",
+        "description",
     ];
 }
