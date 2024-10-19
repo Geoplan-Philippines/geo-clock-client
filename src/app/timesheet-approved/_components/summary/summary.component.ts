@@ -537,7 +537,8 @@ export class SummaryComponent implements OnInit {
                 // console.log("Edit successfully:", response);
                 this._snackBarService.openSnackBar("Succesfully updated 1 time entries", "okay");
                 // this.dialogRef.close();
-                this.timesheetEntryHoursUpdate(0);
+                this.ngOnInit()
+                this.textField = false
             },
             error: (error: any) => {
                 this._snackBarService.openSnackBar("Unsuccesfully updated. Please check your input", "okay");
