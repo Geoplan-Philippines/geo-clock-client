@@ -8,11 +8,12 @@ import { SnackBarService } from "src/app/shared/service/snack-bar/snack-bar.serv
 
 import { EncryptionService } from "src/app/authentication/_guards/encrpytion.service";
 import * as moment from "moment";
+import { FormBuilder, FormGroup } from "@angular/forms";
 export interface DialogData {
     id: number;
     week_number: number;
     user_id: number;
-    start_date: Date;
+    start_date: Date;   
     end_date: Date;
 }
 
@@ -35,6 +36,20 @@ export class SummaryComponent implements OnInit {
     timesheetId: any;
     clickboard: any = "";
 
+    textField = false
+    fb!: FormBuilder;
+    form!: FormGroup ;
+
+    timesheetEntryData: any[] = [];
+    idData: number = 0;
+    workingLocationData: string = '';
+    typeData: string = '';
+    actualHoursData: number = 0;
+    overtimeData: number = 0;
+    nightdiffData: number = 0;
+
+    approvedby: boolean=false;
+
     constructor(
         private SummaryService: SummaryService,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -54,6 +69,9 @@ export class SummaryComponent implements OnInit {
             end_date:this.data.end_date
         }
         // console.log("data of user",data)
+
+        
+        
     }
 
     loadAdminUser() {
@@ -94,9 +112,17 @@ export class SummaryComponent implements OnInit {
             this.timesheetId = timesheetEntries.id;
             const filteredEntries = timesheetEntries.filter((entry: any) => entry.actual_hours > 0);
             this.dataSource = new MatTableDataSource<SummaryModel>(filteredEntries);
-            // console.log(filteredEntries);
+            console.log("timesheetEntriesample",this.dataSource);
             this.clickboard = filteredEntries;
+
+            this.timesheetEntryData = timesheetEntries
+            // console.log("timesheetEntriesample",this.timesheetEntryData);
+            
+        //  this.selectedWorkingLocation = timesheetEntries.working_location;
+        //  console.log("timesheetEntriesample",this.selectedWorkingLocation);
         });
+
+
     }
 
     loadTimesheetForLength() {
@@ -116,6 +142,7 @@ export class SummaryComponent implements OnInit {
 
             this.updateApproved(approvalStatus);
         });
+        
     }
 
     countApprovedEntries(entries: any[]): number {
@@ -181,6 +208,7 @@ export class SummaryComponent implements OnInit {
             if (element.approved_check) {
                 updateValueApproved.approved_by = "";
             }
+                
             this.updateTimesheetEntry(entryId, updateValueApproved);
         } else if (field === "is_nd") {
             if (element.approved_check === true) {
@@ -258,42 +286,102 @@ export class SummaryComponent implements OnInit {
         const year = dateyear.getFullYear().toString();
 
         
-        let RGOT = 0;
+        // let RGOT = 0;
         let RG = 0;
         let ND = 0;
         let LVE = 0;
+        let OT = 0;
         let RD = 0;
         let SH = 0;
         let RHRD = 0;
         let SHRD = 0;
 
         if (working_type === "RG" || working_type === "WFH" || working_type === "FLD") {
-            RG = actual_hours;
+            if(is_ot === false && ot_number > 0){
+                RG =  actual_hours+ ot_number;
+                }
+                else if(is_ot === true && ot_number > 0){
+                    RG = actual_hours;
+                }
+                else{
+                    RG = actual_hours;
+            }
         } else if (working_type === "ND") {
-            ND = actual_hours;
+
+            if(is_ot === false && ot_number > 0){
+                ND =  actual_hours+ ot_number;
+            }else if(is_ot === true && ot_number > 0){
+                ND = actual_hours;
+            }else{
+                ND = actual_hours;
+            }
+
         } else if (working_type === "LVE") {
-            LVE = actual_hours;
+
+            if(is_ot === false && ot_number > 0){
+                LVE =  actual_hours+ ot_number;
+            }else if(is_ot === true && ot_number > 0){
+                LVE = actual_hours;
+            }else{
+                LVE = actual_hours;
+            }
+
         } else if (working_type === "RD") {
-            RD = actual_hours;
+
+            if(is_ot === false && ot_number > 0){
+                RD =  actual_hours+ ot_number;
+            }else if(is_ot === true && ot_number > 0){
+                RD = actual_hours;
+            }else{
+                RD = actual_hours;
+            }
+
+        }else if (working_type === "OT") {
+
+            // if(is_ot === false && ot_number > 0){
+            //     OT =  actual_hours+ ot_number;
+            // }else if(is_ot === true && ot_number > 0){
+            //     OT = actual_hours;
+            // }else{
+                OT = actual_hours;
+            // }
+
         } else if (working_type === "SH") {
-            SH = actual_hours;
+
+            if(is_ot === false && ot_number > 0){
+                SH =  actual_hours+ ot_number;
+            }else if(is_ot === true && ot_number > 0){
+                SH = actual_hours;
+            }else{
+                SH = actual_hours;
+            }
+
         } else if (working_type === "RHRD") {
-            RHRD = actual_hours;
+
+            if(is_ot === false && ot_number > 0){
+                RHRD =  actual_hours+ ot_number;
+            }else if(is_ot === true && ot_number > 0){
+                RHRD = actual_hours;
+            }else{
+                RHRD = actual_hours;
+            }
+
+
         } else if (working_type === "SHRD") {
-            SHRD = actual_hours;
+
+            if(is_ot === false && ot_number > 0){
+                SHRD =  actual_hours+ ot_number;
+            }else if(is_ot === true && ot_number > 0){
+                SHRD = actual_hours;
+            }else{
+                SHRD = actual_hours;
+            }
+
         } else {
             console.warn("Unexpected working_type:", working_type);
         }
 
-        if(is_ot === false && ot_number > 0){
-            RGOT = RG + ot_number;
-        }
-        else if(is_ot === true && ot_number > 0){
-            RGOT = RG
-        }
-        else{
-            RGOT = RG
-        }
+      
 
         const DataSummary: any = {
             Week_no: week_no,
@@ -304,7 +392,7 @@ export class SummaryComponent implements OnInit {
             Code: employee_code,
             is_ot: is_ot,
             is_nd: is_nd,
-            RG: RGOT,
+            RG: RG,
             ND: ND,
             LVE: LVE,
             RD: RD,
@@ -316,7 +404,7 @@ export class SummaryComponent implements OnInit {
         if (is_ot) {
             DataSummary.OT = ot_number;
         } else {
-            DataSummary.OT = 0;
+            DataSummary.OT = OT;
         }
         if (is_nd) {
             DataSummary.ND = nd_number;
@@ -407,9 +495,64 @@ export class SummaryComponent implements OnInit {
         });
     }
 
+    timesheetEntryHoursUpdate(id: number){
+        this.idData = id;
+        if (this.textField === false){
+            this.textField = true
+
+            const foundEntry = this.timesheetEntryData.find((entry: any) => entry.id === id);
+            console.log("Found entry:",foundEntry);
+            if (foundEntry) {
+            
+           
+            this.workingLocationData = foundEntry.working_location;
+            this.typeData = foundEntry.working_type;
+            this.actualHoursData = foundEntry.actual_hours;
+            this.overtimeData = foundEntry.ot_number;
+            this.nightdiffData = foundEntry.nd_number;
+
+           
+
+            } else {
+            console.log("Entry not found");
+            }
+        }
+        else if(this.textField === true){
+            this.textField = false
+        }
+
+    }
+
+    saveEntry(id:number){
+        let dataUpdate = {
+            working_location: this.workingLocationData,
+            working_type: this.typeData,
+            actual_hours: Number(this.actualHoursData),
+            ot_number: Number(this.overtimeData),
+            nd_number: Number(this.nightdiffData)
+        }
+
+        this.SummaryService.editTimesheetEntry(id,dataUpdate).subscribe({
+            next: (response: any) => {
+                // console.log("Edit successfully:", response);
+                this._snackBarService.openSnackBar("Succesfully updated 1 time entries", "okay");
+                // this.dialogRef.close();
+                this.ngOnInit()
+                this.textField = false
+            },
+            error: (error: any) => {
+                this._snackBarService.openSnackBar("Unsuccesfully updated. Please check your input", "okay");
+                console.error("Error creating entry:", error);
+            },
+        });
+
+        
+    }
+
    
 
     displayedColumns: any[] = [
+        "Update",
         "project_name",
         "aproved_by",
         "is_approved",
@@ -421,6 +564,6 @@ export class SummaryComponent implements OnInit {
         "nd_number",
         "working_location",
         "working_type",
-        "discription",
+        "description",
     ];
 }
