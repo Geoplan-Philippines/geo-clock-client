@@ -310,5 +310,12 @@ export class MaintenanceComponent {
         });
     }
 
-   
+    activeSection: string | null = null; // No default active section
+
+    setActiveSection(section: string) {
+        // Set the clicked section as the active one
+        this.activeSection = section;
+        this.scrollToSection(section); // Call your existing scroll function
+    }
+
 }
