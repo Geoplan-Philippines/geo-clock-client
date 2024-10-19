@@ -1,59 +1,29 @@
 $geo-color: #0a54a0;
 $secondary-text-color: white;
 .category {
-    position: sticky; // Keep it sticky
-    top: 0; // Stick to the top
-    z-index: 10; // Ensure it stays above other content
-    background-color: #0a54a0; // Adjust background for visibility
-    font-size: 20px;
-    font-weight: bold;
-
     li {
-        display: inline-block; // Ensure li items are inline
-        margin-right: 1rem; // Space between buttons
-
-        &:last-child {
-            margin-right: 0; // Remove margin for the last item
-        }
-
         &:hover {
             text-decoration: underline;
             font-weight: bold;
-            color: $geo-color;         
+            color: $geo-color;
         }
     }
 }
-// .category {
-
-//     li {
-//         &:hover {
-//             position:sticky !important;
-//             text-decoration: underline;
-//             font-weight: bold;
-//             color: $geo-color;         
-//         }
-//     }
-// }
 .selected {
     scroll-behavior: smooth;
-    position: relative;
-    z-index: 2;
     > div {
-        // margin-top: 2rem;
+        margin-top: 2rem;
         p {
             font-weight: bold;
             font-size: x-large;
             color: $geo-color;
-            top: 0px;
+            top: 0;
             position: sticky;
             background-color: white;
-            z-index: 100;
-
-        
+            z-index: 1000;
         }
     }
 }
-
 :host ::ng-deep {
     .example-full-width-department {
         width: 100%;
@@ -65,22 +35,5 @@ $secondary-text-color: white;
     .example-full-width-holiday {
         width: 100%;
         margin: 0px 5px;
-    }
-}
-
-@media (max-width: 641px) {
-    .selected > div {
-        max-width: 100%; // Full width on mobile
-        padding: 0 1rem; // Add padding for better spacing
-    }
-
-    .example-full-width-holiday,
-    .example-full-width-department {
-        max-width: 100%; // Ensure full width
-        margin: 0; // Remove side margins
-    }
-
-    p {
-        font-size: large; // Adjust font size for smaller screens
     }
 }
