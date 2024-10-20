@@ -5,9 +5,13 @@
     height: 100%;
     left: 0;
     top: 0;
-    background-color: rgba(255, 255, 255, 0.7);
+    background: transparent;
     z-index: 9999;
 }
+// ::ng deep .load-transparent .mdc-dialog__surface{
+//     background-color: transparent !important;
+//     box-shadow: none !important;
+//   }
 // .custom-spinner {
 // color:aqua;
 // }

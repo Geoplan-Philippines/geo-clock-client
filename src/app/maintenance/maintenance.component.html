@@ -26,8 +26,8 @@
                 <div class="flex-1 overflow-y-auto max-h-[calc(90vh-64px)] pt-1">
                     <div class="selected h-full border-l-2 border-solid border-l-[#0a54a0] px-5">
                         <div id="section1" class="h-auto">
-                            <!-- <p>Holidays</p>  -->
-                    <mat-form-field class="w-[100%] sm:w-80">
+                            <p></p> 
+                    <mat-form-field class="w-[100%] sm:w-80 mt-3">
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="applyFilterHoliday($event)" placeholder="Ex. ium" #input class="custom-input" />
                     </mat-form-field>
@@ -99,8 +99,8 @@
                     </table>
                 </div>
                 <div id="section2" class="h-auto">
-                    <!-- <p>Department</p> -->
-                    <mat-form-field class="w-[100%] sm:w-80">
+                    <p></p>
+                    <mat-form-field class="w-[100%] sm:w-80 mt-3">
                         <mat-label>Search</mat-label>
                         <input
                             matInput
@@ -150,9 +150,9 @@
                     </table>
                 </div>
                 <div id="section3" class="h-auto">
-                    <!-- <p>Classification</p> -->
+                    <p></p>
 
-                    <mat-form-field class="w-[100%] sm:w-80">
+                    <mat-form-field class="w-[100%] sm:w-80 mt-3">
                         <mat-label>Search</mat-label>
                         <input
                             matInput
@@ -203,8 +203,8 @@
                 </div>
 
 
-                <div id="section4" class="h-screen">
-                    <!-- <p>Shifts</p> -->
+                <div id="section4" class="h-screen mt-3">
+                    <p></p>
                     <table mat-table [dataSource]="dataSourceDifferential" class="mat-elevation-z8">
                         <ng-container matColumnDef="diff_name">
                             <th mat-header-cell *matHeaderCellDef>

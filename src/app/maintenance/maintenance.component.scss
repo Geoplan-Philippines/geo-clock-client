@@ -2,7 +2,8 @@ $geo-color: #0a54a0;
 $secondary-text-color: white;
 .category {
     position: sticky; // Keep it sticky
-    top: 0; // Stick to the top
+    // top: 0; // Stick to the top
+    bottom: 2rem;
     z-index: 10; // Ensure it stays above other content
     background-color: #0a54a0; // Adjust background for visibility
     font-size: 20px;
@@ -42,7 +43,7 @@ $secondary-text-color: white;
         // margin-top: 2rem;
         p {
             font-weight: bold;
-            font-size: x-large;
+            font-size: large;
             color: $geo-color;
             top: 0px;
             position: sticky;
