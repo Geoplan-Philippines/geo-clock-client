@@ -12,6 +12,8 @@ import { ExistingValidationComponent } from "./_components/existing-validation/e
 import { TimeOutValidationComponent } from "./_components/time-out-validation/time-out-validation.component";
 import {MatDialogModule} from '@angular/material/dialog';
 import { ForMatDialogComponent } from './_components/for-mat-dialog/for-mat-dialog.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 
 @NgModule({
@@ -23,7 +25,7 @@ import { ForMatDialogComponent } from './_components/for-mat-dialog/for-mat-dial
         TimeOutValidationComponent,
         ForMatDialogComponent,
     ],
-    imports: [CommonModule, SharedModule, ReactiveFormsModule, FormsModule, MaterialModule, MatTableModule, MatPaginatorModule, MatDialogModule],
+    imports: [CommonModule, SharedModule, ReactiveFormsModule, FormsModule, MaterialModule, MatTableModule, MatPaginatorModule, MatDialogModule, MatProgressSpinnerModule],
     exports: [AttendanceComponent],
 })
 export class AttedanceModule {}

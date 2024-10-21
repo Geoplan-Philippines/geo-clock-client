@@ -14,7 +14,7 @@ import { TimeOutValidationComponent } from "./_components/time-out-validation/ti
 import { MatSelectChange } from "@angular/material/select";
 import { MatPaginator } from "@angular/material/paginator";
 import { ForMatDialogComponent } from "./_components/for-mat-dialog/for-mat-dialog.component";
-
+import { LoadPageService } from "./_service/load-page.service";
 
 @Component({
     selector: "app-attendance",
@@ -65,7 +65,7 @@ export class AttendanceComponent{
     todayDate: Date = new Date();
 
     timeInCon = false ;  
-    fieldInCon = false ;  
+    fieldInCon = false ; 
 
     @ViewChild(MatPaginator)
     paginator!: MatPaginator;
@@ -75,6 +75,7 @@ export class AttendanceComponent{
         private attendanceService: AttendanceService,
         private encrypt: EncryptionService,
         private dialog: MatDialog,
+        private loadPageService: LoadPageService,
     ) {}
 
     ngOnInit(): void {
@@ -123,6 +124,7 @@ export class AttendanceComponent{
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`;
         const user = this.encrypt.getItem("id");
+        this.loadPageService.openLoad();
         // console.log(user);
 
         navigator.geolocation.getCurrentPosition(
@@ -136,6 +138,8 @@ export class AttendanceComponent{
                     .then((response) => response.json())
                     .then((data) => {
                         // console.log("Reverse Geocoding Result:", data.display_name);
+                        this.loadPageService.closeLoad();
+
 
                         const dataAttendance = {
                             user_id: user,
@@ -178,8 +182,9 @@ export class AttendanceComponent{
         const date = currentDateTime.format("YYYY-MM-DD");
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`;
-
         const user = this.encrypt.getItem("id");
+        this.loadPageService.openLoad();
+
         // console.log(user);
 
         navigator.geolocation.getCurrentPosition(
@@ -201,6 +206,8 @@ export class AttendanceComponent{
                             time_in: dateTime,
                             time_in_location: data.display_name,
                         };
+                        this.loadPageService.closeLoad();
+
                         // console.log(data);
                         this.attendanceService.postAllDataTimeIn(dataAttendance).subscribe({
                             next: (response: any) => {
@@ -240,8 +247,9 @@ export class AttendanceComponent{
         const statuses = "Initial";
         const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
-
         const formattedDateTime = moment(currentDateTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        this.loadPageService.openLoad();
+
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -259,6 +267,8 @@ export class AttendanceComponent{
                             time_out: formattedDateTime,
                             time_out_location: location,
                         };
+                        this.loadPageService.closeLoad();
+
                         // console.log(data);
 
                         this.attendanceService.updateAllDataInitialTimeOut(user, date, statuses, dataAttendance).subscribe({
@@ -294,8 +304,9 @@ export class AttendanceComponent{
         const statuses = "Field";
         const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
-
         const formattedDateTime = moment(currentDateTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        this.loadPageService.openLoad();
+
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -313,6 +324,8 @@ export class AttendanceComponent{
                             time_out: formattedDateTime,
                             time_out_location: location,
                         };
+                        this.loadPageService.closeLoad();
+
                         // console.log(data);
 
                         this.attendanceService.updateAllDataInitialTimeOut(user, date, statuses, dataAttendance).subscribe({

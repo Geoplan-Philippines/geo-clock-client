@@ -1,29 +1,39 @@
 $geo-color: #0a54a0;
 $secondary-text-color: white;
 .category {
+    position:sticky !important;
+    z-index: 3;
+    position: relative;
+
     li {
         &:hover {
             text-decoration: underline;
             font-weight: bold;
             color: $geo-color;
+            background-color: #3F51B5;         
         }
     }
 }
 .selected {
     scroll-behavior: smooth;
+    position: relative;
+    z-index: 2;
     > div {
-        margin-top: 2rem;
+        // margin-top: 2rem;
         p {
             font-weight: bold;
             font-size: x-large;
             color: $geo-color;
-            top: 0;
+            top: 0px;
             position: sticky;
             background-color: white;
             z-index: 1000;
+
+        
         }
     }
 }
+
 :host ::ng-deep {
     .example-full-width-department {
         width: 100%;
