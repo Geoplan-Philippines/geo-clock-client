@@ -17,4 +17,3 @@ export class PageLoadComponent implements OnInit {
       this.label = this.data.label
         };
       }
-  //dinagdagan ko

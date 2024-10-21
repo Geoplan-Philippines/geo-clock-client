@@ -7,7 +7,8 @@
          <div class="mx-1 grid grid-cols-1 gap-4 sm:mx-40 sm:grid-cols-[800px_1fr] h-full">
             <div class="flex flex-col h-full">
                 <!-- Sticky Top Navbar -->
-                <ul class="category flex justify-start sm:justify-center space-x-4 border-b-2 pb-2 mb-4 top-0 overflow-x-auto whitespace-nowrap px-4 sm:px-0">
+                <ul class="category flex justify-start sm:justify-center space-x-4 border-b-2 pb-2 mb-4  bg-blue-700  top-0 overflow-x-auto whitespace-nowrap px-4 sm:px-0">
+
                     <li (click)="setActiveSection('section1')">
                         <button [ngClass]="{'bg-blue-500': activeSection === 'section1', 'text-white': activeSection !== 'section1'}" class="py-2 px-4 hover:bg-red-400">HOLIDAYS</button>
                     </li>
@@ -25,8 +26,8 @@
                 <!-- Scrollable Content Area -->
                 <div class="flex-1 overflow-y-auto max-h-[calc(90vh-64px)] pt-1">
                     <div class="selected h-full border-l-2 border-solid border-l-[#0a54a0] px-5">
-                        <div id="section1" class="h-auto">
-                            <!-- <p>Holidays</p>  -->
+                        <div id="section1" class="h-auto mt-3">
+                            <p>Holidays</p> 
                     <mat-form-field class="w-[100%] sm:w-80">
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="applyFilterHoliday($event)" placeholder="Ex. ium" #input class="custom-input" />
@@ -98,9 +99,9 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumnsHolliday"></tr>
                     </table>
                 </div>
-                <div id="section2" class="h-auto">
-                    <!-- <p>Department</p> -->
-                    <mat-form-field class="w-[100%] sm:w-80">
+                <div id="section2" class="h-auto mt-3">
+                    <p>Department</p>
+                    <mat-form-field class="w-[100%] sm:w-80 mt-5">
                         <mat-label>Search</mat-label>
                         <input
                             matInput
@@ -152,7 +153,7 @@
                 <div id="section3" class="h-auto">
                     <!-- <p>Classification</p> -->
 
-                    <mat-form-field class="w-[100%] sm:w-80">
+                    <mat-form-field class="w-[100%] sm:w-80 mt-5">
                         <mat-label>Search</mat-label>
                         <input
                             matInput
@@ -202,9 +203,8 @@
                     </table>
                 </div>
 
-
-                <div id="section4" class="h-screen">
-                    <!-- <p>Shifts</p> -->
+                <div id="section4" class="h-screen mt-6">
+                    <p>Shifts</p>
                     <table mat-table [dataSource]="dataSourceDifferential" class="mat-elevation-z8">
                         <ng-container matColumnDef="diff_name">
                             <th mat-header-cell *matHeaderCellDef>

@@ -37,6 +37,12 @@ body {
   }
 
 
+.loading-wrapper .mdc-dialog__surface {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+
 // *{
 //     overflow: hidden;
 // }

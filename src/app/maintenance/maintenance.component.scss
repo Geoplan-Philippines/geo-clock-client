@@ -1,12 +1,9 @@
 $geo-color: #0a54a0;
 $secondary-text-color: white;
 .category {
-    position: sticky; // Keep it sticky
-    top: 0; // Stick to the top
-    z-index: 10; // Ensure it stays above other content
-    background-color: #0a54a0; // Adjust background for visibility
-    font-size: 20px;
-    font-weight: bold;
+    position:sticky !important;
+    z-index: 3;
+    position: relative;
 
     li {
         display: inline-block; // Ensure li items are inline
@@ -19,7 +16,8 @@ $secondary-text-color: white;
         &:hover {
             text-decoration: underline;
             font-weight: bold;
-            color: $geo-color;         
+            color: $geo-color;
+            background-color: #3F51B5;         
         }
     }
 }
@@ -47,7 +45,7 @@ $secondary-text-color: white;
             top: 0px;
             position: sticky;
             background-color: white;
-            z-index: 100;
+            z-index: 1000;
 
         
         }
