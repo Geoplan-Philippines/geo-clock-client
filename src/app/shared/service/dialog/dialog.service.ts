@@ -18,6 +18,7 @@ export class DialogService {
                 description: entryData.description,
                 working_location: entryData.working_location,
                 working_type: entryData.working_type,
+                nd_number: entryData.nd_number,
                 ot_number: entryData.ot_number,
             },
         });

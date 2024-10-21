@@ -31,6 +31,11 @@ body {
     border-radius: 5px;
     background-color: #0a54a0;
 }
+.mat-mdc-dialog-container .mdc-dialog__surface{
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
 
 .loading-wrapper .mdc-dialog__surface {
     background-color: transparent !important;

@@ -1,0 +1,240 @@
+[33mcommit 5eadf968f83443078889f7dcb47dc2821de2e184[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mwip_production[m[33m, [m[1;31morigin/wip_production[m[33m)[m
+Merge: 21be143 2329f8a
+Author: Renan Boniza <104438440+BonizaRenan@users.noreply.github.com>
+Date:   Sat Oct 19 18:47:27 2024 +0800
+
+    Merge pull request #61 from Geoplan-Philippines/wip_production_valdez
+    
+    added page-load comp. and load-page service, responsive in maintenance?
+
+[33mcommit 2329f8a9118f53adea75edf0e14ce9bdefa4149e[m[33m ([m[1;31morigin/wip_production_valdez[m[33m)[m
+Merge: 6e0868d 21be143
+Author: Renan Boniza <104438440+BonizaRenan@users.noreply.github.com>
+Date:   Sat Oct 19 18:47:11 2024 +0800
+
+    Merge branch 'wip_production' into wip_production_valdez
+
+[33mcommit 21be1439a6e75efedd8ef773eb89e05e1a6af27e[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Sat Oct 19 18:44:27 2024 +0800
+
+    done
+
+[33mcommit 6e0868dbe30824f7be11817adab06629fada6264[m
+Author: Alli <alliyah@gmail.com>
+Date:   Sat Oct 19 14:55:52 2024 +0800
+
+    added page-load comp. and load-page service, responsive in maintenance?
+
+[33mcommit 3830205a0995a2cbd768e08ec368eaf536e5dd66[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Fri Oct 18 21:41:11 2024 +0800
+
+    updating all done
+
+[33mcommit 37e617296f2d63bd444a67d6d951fb5891ca39d7[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Wed Oct 16 21:46:11 2024 +0800
+
+    description and summary done
+
+[33mcommit 0910fb21b9e3d06c53a5849d1c06bed26a1da492[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Wed Oct 16 09:49:33 2024 +0800
+
+    update the other module
+
+[33mcommit e5355fa22fb1c03035c6e5b5c080f1abcf6c42c3[m[33m ([m[1;31morigin/production[m[33m, [m[1;32mproduction[m[33m)[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Tue Oct 8 23:27:02 2024 +0800
+
+    update ot rg rgot
+
+[33mcommit bea0550700368fbdf5c6f101d02498800a2e7cfa[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Sun Sep 29 18:18:08 2024 +0800
+
+    computation
+
+[33mcommit 156ad1babee32c000dd6e991570a448f7781aa2f[m
+Merge: 2a95748 1c4dd03
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Wed Sep 4 19:52:52 2024 +0800
+
+    Merge branch 'production' of github.com:Geoplan-Philippines/geo-clock-client into production
+
+[33mcommit 2a957480b22d7a5e64427654a45a974d50820bc9[m
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Wed Sep 4 19:52:42 2024 +0800
+
+    config(nginx): add default config that redirect /* to /
+
+[33mcommit 1c4dd0379886d1ba3e444271f2357021ba8ce2ed[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Tue Sep 3 14:57:58 2024 +0800
+
+    update attendance module
+
+[33mcommit a0ca3d726e65bc8e5ddb52db0281ed30896c2df8[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Tue Sep 3 09:52:59 2024 +0800
+
+    adding service add model
+
+[33mcommit 202d24f712e6831d2b8d4705fc19152cde312a04[m
+Merge: d5960ad 76721f8
+Author: Renan Boniza <104438440+BonizaRenan@users.noreply.github.com>
+Date:   Tue Sep 3 09:24:46 2024 +0800
+
+    Merge pull request #60 from Geoplan-Philippines/update_production_v1
+    
+    Update production v1
+
+[33mcommit 76721f8deab7597f718f1be50449852b575e2c9f[m[33m ([m[1;31morigin/update_production_v1[m[33m)[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Fri Aug 30 10:31:27 2024 +0800
+
+    update tab icon and aside header
+
+[33mcommit 8b314cbb76c123af805f29b45c71b917aa55c71c[m
+Author: Renan Boniza <aprilrenan03@email.com>
+Date:   Fri Aug 30 09:37:43 2024 +0800
+
+    production update version two
+
+[33mcommit d5960adf9ee34c25bc731d2369f689f7b02a714c[m
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Sat Aug 17 11:46:16 2024 +0800
+
+    fix: updated Dockerfile, Update package.json
+
+[33mcommit aa61538001427ae2833bb8d216c58d984275a200[m
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Sat Aug 17 11:36:02 2024 +0800
+
+    fix: updated Dockerfile, Update package.json
+
+[33mcommit 3955a01019be9111ab4210b54aea0bcf5da99749[m
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Sat Aug 17 11:23:02 2024 +0800
+
+    fix: updated Dockerfile
+
+[33mcommit 930dadcd6a1ce7f6d20ffeaae86ef371c9c4470f[m
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Sat Aug 17 10:50:23 2024 +0800
+
+    fix: updated Jenkinsfile
+
+[33mcommit 10ecbacc5ef9de3b167591fe98dfc79c35057b11[m
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Fri Aug 16 22:54:12 2024 +0800
+
+    fix: updated Jenkinsfile
+
+[33mcommit bf8e84155bfe2b43f277584e08ab2ee9bc254b29[m
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Fri Aug 16 18:46:42 2024 +0800
+
+    update: update jenkins
+
+[33mcommit 2495e4a0bf87291aaf4a1847273b1ce32fb5beea[m
+Author: GeoplanOperations <operations@geosense.biz>
+Date:   Fri Aug 16 15:38:59 2024 +0800
+
+    update: added Dockerfile, Jenkins, formatted all files with prettier
+
+[33mcommit c1db0617a6c9d9980c906bc382c735c926a6d9e1[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Merge: b2b143b aa1b19e
+Author: Jayvee Seiton Empleo <85397499+EmpleoJv@users.noreply.github.com>
+Date:   Tue May 28 11:54:32 2024 +0800
+
+    Merge pull request #32 from Geoplan-Philippines/main2-v1
+    
+    Main2 v1
+
+[33mcommit aa1b19e0138a97ab23c0e4358e648d04a514fcff[m
+Merge: cb78c3a 7517d44
+Author: Jayvee Seiton Empleo <85397499+EmpleoJv@users.noreply.github.com>
+Date:   Fri May 24 18:59:10 2024 +0800
+
+    Merge pull request #31 from Geoplan-Philippines/jv
+    
+    done validate
+
+[33mcommit 7517d44f1591e9baff28d2a4714ab6de274ef33b[m
+Author: JvEmpleo <empleojv28@gmail.com>
+Date:   Fri May 24 18:58:13 2024 +0800
+
+    done validate
+
+[33mcommit cb78c3a5a82870ed9cff51c666f296ae1a8769d6[m
+Merge: 783795d 0d10ebd
+Author: Renan Boniza <104438440+BonizaRenan@users.noreply.github.com>
+Date:   Thu May 23 16:24:54 2024 +0800
+
+    Merge pull request #30 from Geoplan-Philippines/timesheet_summary_renan_new_features
+    
+    timesheet summary
+
+[33mcommit 783795d6a5e2eaed075bc315929c6b93b26f70ac[m
+Merge: 06b4920 f5b2841
+Author: Jayvee Seiton Empleo <85397499+EmpleoJv@users.noreply.github.com>
+Date:   Thu May 23 16:19:51 2024 +0800
+
+    Merge pull request #29 from Geoplan-Philippines/m2-v1-jv-manning-analytics
+    
+    timesheet update validate when approved cant change anymore
+
+[33mcommit 0d10ebd7384efc15f3d7eee1a881dd5ac16cbc99[m
+Author: renan <renanboniza@email.com>
+Date:   Thu May 23 16:17:51 2024 +0800
+
+    timesheet summary
+
+[33mcommit b2b143bc0aa01690c51c3a34412b21e6c9bb8620[m
+Merge: e94eee9 f5b2841
+Author: Jayvee Seiton Empleo <85397499+EmpleoJv@users.noreply.github.com>
+Date:   Thu May 23 16:17:41 2024 +0800
+
+    Merge pull request #27 from Geoplan-Philippines/m2-v1-jv-manning-analytics
+    
+    M2 v1 jv manning analytics
+
+[33mcommit f5b2841e808e8024ee612750f8418321df80dacc[m
+Author: Jayvee Empleo <geo.jayveeempleo@gmail.com>
+Date:   Thu May 23 16:16:35 2024 +0800
+
+    timesheet update validate when approved cant change anymore
+
+[33mcommit 06b492063c6d54c2bbfa9d6736a3642264f3f84b[m
+Merge: 4aca8c0 62a343d
+Author: Jayvee Seiton Empleo <85397499+EmpleoJv@users.noreply.github.com>
+Date:   Wed May 22 17:54:52 2024 +0800
+
+    Merge pull request #26 from Geoplan-Philippines/m2-v1-jv-may22-dashobard-analytics
+    
+    commit, validate if approved it cannot be change,
+
+[33mcommit 62a343d822aef19b01492c529bd0c3f6a1a410c1[m
+Author: Jayvee Empleo <geo.jayveeempleo@gmail.com>
+Date:   Wed May 22 17:53:19 2024 +0800
+
+    commit, validate if approved it cannot be change,
+    refactoring timesheet frontend,
+    dashboard wfh-tracker component,
+    analytics of dashboard wfh-tracker component,
+    dashboard project charging component,
+    analytics of dashboard project charging component,
+    frontend of dashboard and analytics.
+
+[33mcommit 4aca8c0da548082d9264a7b074c8bff693c0d515[m
+Merge: 874d63e 6643d64
+Author: Jayvee Seiton Empleo <85397499+EmpleoJv@users.noreply.github.com>
+Date:   Wed May 22 13:38:47 2024 +0800
+
+    Merge pull request #25 from Geoplan-Philippines/m2-v1-jv-may20-timsheet-hotfix
+    
+    commit, validate if approved it cannot be change,
+
+[33mcommit 6643d644ec7d689b2884ff8d3b5b42384e77b7

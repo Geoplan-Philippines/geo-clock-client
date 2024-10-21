@@ -6,6 +6,13 @@ $secondary-text-color: white;
     position: relative;
 
     li {
+        display: inline-block; // Ensure li items are inline
+        margin-right: 1rem; // Space between buttons
+
+        &:last-child {
+            margin-right: 0; // Remove margin for the last item
+        }
+
         &:hover {
             text-decoration: underline;
             font-weight: bold;
@@ -14,6 +21,17 @@ $secondary-text-color: white;
         }
     }
 }
+// .category {
+
+//     li {
+//         &:hover {
+//             position:sticky !important;
+//             text-decoration: underline;
+//             font-weight: bold;
+//             color: $geo-color;         
+//         }
+//     }
+// }
 .selected {
     scroll-behavior: smooth;
     position: relative;
@@ -45,5 +63,22 @@ $secondary-text-color: white;
     .example-full-width-holiday {
         width: 100%;
         margin: 0px 5px;
+    }
+}
+
+@media (max-width: 641px) {
+    .selected > div {
+        max-width: 100%; // Full width on mobile
+        padding: 0 1rem; // Add padding for better spacing
+    }
+
+    .example-full-width-holiday,
+    .example-full-width-department {
+        max-width: 100%; // Ensure full width
+        margin: 0; // Remove side margins
+    }
+
+    p {
+        font-size: large; // Adjust font size for smaller screens
     }
 }

@@ -8,6 +8,7 @@
             <div class="flex flex-col h-full">
                 <!-- Sticky Top Navbar -->
                 <ul class="category flex justify-start sm:justify-center space-x-4 border-b-2 pb-2 mb-4  bg-blue-700  top-0 overflow-x-auto whitespace-nowrap px-4 sm:px-0">
+
                     <li (click)="setActiveSection('section1')">
                         <button [ngClass]="{'bg-blue-500': activeSection === 'section1', 'text-white': activeSection !== 'section1'}" class="py-2 px-4 hover:bg-red-400">HOLIDAYS</button>
                     </li>
@@ -150,7 +151,7 @@
                     </table>
                 </div>
                 <div id="section3" class="h-auto">
-                    <p>Classification</p>
+                    <!-- <p>Classification</p> -->
 
                     <mat-form-field class="w-[100%] sm:w-80 mt-5">
                         <mat-label>Search</mat-label>
@@ -201,7 +202,6 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumnsClassification"></tr>
                     </table>
                 </div>
-
 
                 <div id="section4" class="h-screen mt-6">
                     <p>Shifts</p>

@@ -119,6 +119,7 @@ export class AttendanceComponent{
     }
 
     initialTimeIn() {
+        this.loadpageService.openLoad(); //dagdag ko
         const currentDateTime = moment().tz("Asia/Manila");
         const date = currentDateTime.format("YYYY-MM-DD");
         const time = currentDateTime.format("HH:mm:ss.sss");
@@ -138,6 +139,7 @@ export class AttendanceComponent{
                     .then((response) => response.json())
                     .then((data) => {
                         // console.log("Reverse Geocoding Result:", data.display_name);
+
                         this.loadPageService.closeLoad();
 
 
@@ -178,6 +180,7 @@ export class AttendanceComponent{
     }
 
     subsequentTimeIn() {
+        this.loadpageService.openLoad(); //dagdag ko
         const currentDateTime = moment().tz("Asia/Manila");
         const date = currentDateTime.format("YYYY-MM-DD");
         const time = currentDateTime.format("HH:mm:ss.sss");
@@ -186,7 +189,6 @@ export class AttendanceComponent{
         this.loadPageService.openLoad();
 
         // console.log(user);
-
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const latitude = position.coords.latitude;
@@ -197,6 +199,8 @@ export class AttendanceComponent{
                 fetch(nominatimUrl)
                     .then((response) => response.json())
                     .then((data) => {
+                        this.loadpageService.closeLoad(); //dagdag ko
+
                         // console.log("Reverse Geocoding Result:", data.display_name);
 
                         const dataAttendance = {
@@ -227,7 +231,7 @@ export class AttendanceComponent{
             (error) => {
                 console.error("Error getting location", error);
             },
-
+                
             {
                 enableHighAccuracy: true, // Request high accuracy
                 timeout: 40000, // Timeout after 10 seconds
@@ -240,9 +244,11 @@ export class AttendanceComponent{
         const dateString = this.datePipe.transform(currentDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
         return dateString || "";
     }
+    
     // time in click end
 
     InitialTimeOut() {
+        this.loadpageService.openLoad(); //dagdag ko
         const currentDateTime = moment().tz("Asia/Manila");
         const statuses = "Initial";
         const date = currentDateTime.format("YYYY-MM-DD");
@@ -252,6 +258,7 @@ export class AttendanceComponent{
 
 
         navigator.geolocation.getCurrentPosition(
+            
             (position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
@@ -262,6 +269,7 @@ export class AttendanceComponent{
                     .then((response) => response.json())
                     .then((data) => {
                         // console.log('Reverse Geocoding Result:', data.display_name);
+                        this.loadpageService.closeLoad(); //dagdag ko
                         const location = data.display_name;
                         const dataAttendance = {
                             time_out: formattedDateTime,
@@ -300,6 +308,7 @@ export class AttendanceComponent{
     }
 
     subsequentTimeOut() {
+        this.loadpageService.openLoad(); //dagdag ko
         const currentDateTime = moment().tz("Asia/Manila");
         const statuses = "Field";
         const date = currentDateTime.format("YYYY-MM-DD");
@@ -318,6 +327,8 @@ export class AttendanceComponent{
                 fetch(nominatimUrl)
                     .then((response) => response.json())
                     .then((data) => {
+                        this.loadpageService.closeLoad(); //dagdag ko
+
                         // console.log('Reverse Geocoding Result:', data.display_name);
                         const location = data.display_name;
                         const dataAttendance = {

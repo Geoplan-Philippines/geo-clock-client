@@ -53,13 +53,52 @@ export class TimesheetSummaryComponent {
 
 
     loadTimesheetSummary() {
-        this.timesheetSummaryService.getFilteringYearAndWeek(this.latestWeekNumber, this.latestYearNumber).subscribe((res: TimesheetSummaryModel[]) =>{
-            const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
-            this.dataSource.data = ds;
-            console.log(ds)
-        })
-
+        this.timesheetSummaryService.getFilteringYearAndWeek(this.latestWeekNumber, this.latestYearNumber).subscribe((res: TimesheetSummaryModel[]) => {
+            let ds = res.map((item, index) => ({ ...item, id: index + 1 }));
+    
+            this.timesheetSummaryService.getAllemployeetDataaaa().subscribe((employeeRes: any) => {
+                const activeEmployees = employeeRes.filter((employee: any) => employee.is_active === true);
+                const summaryMap = new Map(ds.map((summary: any) => [summary.user_id, summary]));
+    
+                const combinedDs = activeEmployees.map((employee: any, index: number) => {
+                    const existingSummary = summaryMap.get(employee.id);
+                    return {
+                        Code: employee.employee_code,
+                        Date: this.latestYearNumber,
+                        Department: employee.department,
+                        Employee: employee.first_name + ' ' + employee.last_name,
+                        Hours: existingSummary ? existingSummary.Hours : 0,
+                        LVE: existingSummary ? existingSummary.LVE : 0,
+                        ND: existingSummary ? existingSummary.ND : 0,
+                        OT: existingSummary ? existingSummary.OT : 0,
+                        RD: existingSummary ? existingSummary.RD : 0,
+                        RG: existingSummary ? existingSummary.RG : 0,
+                        RH: existingSummary ? existingSummary.RH : 0,
+                        RHRD: existingSummary ? existingSummary.RHRD : 0,
+                        SH: existingSummary ? existingSummary.SH : 0,
+                        SHRD: existingSummary ? existingSummary.SHRD : 0,
+                        Week_no: this.latestWeekNumber,
+                        id: index + 1,
+                        user_id: employee.id
+                    };
+                });
+    
+                combinedDs.sort((a: { Employee?: string }, b: { Employee?: string }) => {
+                    const lastNameA = (a.Employee?.split(' ').pop() || '').toLowerCase();
+                    const lastNameB = (b.Employee?.split(' ').pop() || '').toLowerCase();
+                    return lastNameA.localeCompare(lastNameB);
+                });
+    
+                this.dataSource.data = combinedDs;
+                console.log('Sorted combined dataset:', combinedDs);
+            });
+        });
     }
+    
+    
+    
+    
+    
 
    
 
@@ -69,26 +108,55 @@ export class TimesheetSummaryComponent {
         } else {
             this.filterWeek = event.value;
             const weekFilterValue = event.value.toString();
-
             let filterYear = this.filterYear || this.latestYearNumber;
-
-
+    
             console.log(weekFilterValue);
             console.log(filterYear);
-            console.log("a",this.latestYearNumber)
+            console.log("a", this.latestYearNumber);
     
             this.timesheetSummaryService.getFilteringYearAndWeek(weekFilterValue, filterYear).subscribe((res: TimesheetSummaryModel[]) => {
-                const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
-                this.dataSource.data = ds;
+                let ds = res.map((item, index) => ({ ...item, id: index + 1 }));
     
-                this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
-                    return data.Week_no.toString().toLowerCase() === filter;
-                };
-                this.dataSource.filter = weekFilterValue;
-
-                console.log("Week filter applied:", weekFilterValue);
-                console.log(this.dataSource.data);
+                this.timesheetSummaryService.getAllemployeetDataaaa().subscribe((employeeRes: any) => {
+                    const activeEmployees = employeeRes.filter((employee: any) => employee.is_active === true);
+                    const summaryMap = new Map(ds.map((summary: any) => [summary.user_id, summary]));
+    
+                    const combinedDs = activeEmployees.map((employee: any, index: number) => {
+                        const existingSummary = summaryMap.get(employee.id);
+                        return {
+                            Code: employee.employee_code,
+                            Date: filterYear,
+                            Department: employee.department,
+                            Employee: employee.first_name + ' ' + employee.last_name,
+                            Hours: existingSummary ? existingSummary.Hours : 0,
+                            LVE: existingSummary ? existingSummary.LVE : 0,
+                            ND: existingSummary ? existingSummary.ND : 0,
+                            OT: existingSummary ? existingSummary.OT : 0,
+                            RD: existingSummary ? existingSummary.RD : 0,
+                            RG: existingSummary ? existingSummary.RG : 0,
+                            RH: existingSummary ? existingSummary.RH : 0,
+                            RHRD: existingSummary ? existingSummary.RHRD : 0,
+                            SH: existingSummary ? existingSummary.SH : 0,
+                            SHRD: existingSummary ? existingSummary.SHRD : 0,
+                            Week_no: weekFilterValue,
+                            id: index + 1,
+                            user_id: employee.id
+                        };
+                    });
+    
+                    combinedDs.sort((a: { Employee?: string }, b: { Employee?: string }) => {
+                        const lastNameA = (a.Employee?.split(' ').pop() || '').toLowerCase();
+                        const lastNameB = (b.Employee?.split(' ').pop() || '').toLowerCase();
+                        return lastNameA.localeCompare(lastNameB);
+                    });
+    
+                    this.dataSource.data = combinedDs;
+                    console.log('Sorted combined dataset:', combinedDs);
+                });
             });
+    
+            console.log("Week filter applied:", weekFilterValue);
+            console.log(this.dataSource.data);
         }
     
         console.log("End of selectWeekNumber method.");
@@ -101,32 +169,61 @@ export class TimesheetSummaryComponent {
             const yearFilterValue = event.value.toString();
             console.log(event);
             console.log(this.filterWeek);
-            
-
+    
             let filterWeek = this.filterWeek || this.latestWeekNumber;
-
-              console.log(filterWeek);
-              console.log("a", this.latestWeekNumber)
-
+    
+            console.log(filterWeek);
+            console.log("a", this.latestWeekNumber);
+    
             this.timesheetSummaryService.getFilteringYearAndWeek(filterWeek, yearFilterValue).subscribe((res: TimesheetSummaryModel[]) => {
-                const ds = res.map((item, index) => ({ ...item, id: index + 1 }));
-                this.dataSource.data = ds;
+                let ds = res.map((item, index) => ({ ...item, id: index + 1 }));
     
-                this.dataSource.filterPredicate = (data: TimesheetSummaryModel, filter: string) => {
-                    return data.Date.toString().toLowerCase().includes(filter);
-                };
-                this.dataSource.filter = yearFilterValue;
+                this.timesheetSummaryService.getAllemployeetDataaaa().subscribe((employeeRes: any) => {
+                    const activeEmployees = employeeRes.filter((employee: any) => employee.is_active === true);
+                    const summaryMap = new Map(ds.map((summary: any) => [summary.user_id, summary]));
     
+                    const combinedDs = activeEmployees.map((employee: any, index: number) => {
+                        const existingSummary = summaryMap.get(employee.id);
+                        return {
+                            Code: employee.employee_code,
+                            Date: yearFilterValue,
+                            Department: employee.department,
+                            Employee: employee.first_name + ' ' + employee.last_name,
+                            Hours: existingSummary ? existingSummary.Hours : 0,
+                            LVE: existingSummary ? existingSummary.LVE : 0,
+                            ND: existingSummary ? existingSummary.ND : 0,
+                            OT: existingSummary ? existingSummary.OT : 0,
+                            RD: existingSummary ? existingSummary.RD : 0,
+                            RG: existingSummary ? existingSummary.RG : 0,
+                            RH: existingSummary ? existingSummary.RH : 0,
+                            RHRD: existingSummary ? existingSummary.RHRD : 0,
+                            SH: existingSummary ? existingSummary.SH : 0,
+                            SHRD: existingSummary ? existingSummary.SHRD : 0,
+                            Week_no: filterWeek,
+                            id: index + 1,
+                            user_id: employee.id
+                        };
+                    });
+    
+                    combinedDs.sort((a: { Employee?: string }, b: { Employee?: string }) => {
+                        const lastNameA = (a.Employee?.split(' ').pop() || '').toLowerCase();
+                        const lastNameB = (b.Employee?.split(' ').pop() || '').toLowerCase();
+                        return lastNameA.localeCompare(lastNameB);
+                    });
+    
+                    this.dataSource.data = combinedDs;
+                    console.log('Sorted combined dataset:', combinedDs);
+                });
+    
+                this.filterYear = yearFilterValue;
                 console.log("Year filter applied:", yearFilterValue);
                 console.log(this.dataSource.data);
             });
-    
-            this.filterYear = yearFilterValue;
-            console.log(this.filterWeek);
         }
     
         console.log("End of selectYearNumber method.");
     }
+    
     
 
 
