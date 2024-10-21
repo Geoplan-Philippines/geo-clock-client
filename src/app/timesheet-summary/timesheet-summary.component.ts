@@ -60,9 +60,13 @@ export class TimesheetSummaryComponent {
                 const activeEmployees = employeeRes.filter((employee: any) => employee.is_active === true);
                 const summaryMap = new Map(ds.map((summary: any) => [summary.user_id, summary]));
     
+                // Initialize a counter to start from 1
+                let loopNumber = 1;
+    
                 const combinedDs = activeEmployees.map((employee: any, index: number) => {
                     const existingSummary = summaryMap.get(employee.id);
                     return {
+                        LoopNumber: loopNumber++, // Sequential number starting from 1
                         Code: employee.employee_code,
                         Date: this.latestYearNumber,
                         Department: employee.department,
@@ -78,7 +82,7 @@ export class TimesheetSummaryComponent {
                         SH: existingSummary ? existingSummary.SH : 0,
                         SHRD: existingSummary ? existingSummary.SHRD : 0,
                         Week_no: this.latestWeekNumber,
-                        id: index + 1,
+                        id: activeEmployees.length - index, // id descending
                         user_id: employee.id
                     };
                 });
@@ -94,6 +98,7 @@ export class TimesheetSummaryComponent {
             });
         });
     }
+    
     
     
     
