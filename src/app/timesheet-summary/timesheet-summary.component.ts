@@ -60,13 +60,9 @@ export class TimesheetSummaryComponent {
                 const activeEmployees = employeeRes.filter((employee: any) => employee.is_active === true);
                 const summaryMap = new Map(ds.map((summary: any) => [summary.user_id, summary]));
     
-                // Initialize a counter to start from 1
-                let loopNumber = 1;
-    
                 const combinedDs = activeEmployees.map((employee: any, index: number) => {
                     const existingSummary = summaryMap.get(employee.id);
                     return {
-                        LoopNumber: loopNumber++, // Sequential number starting from 1
                         Code: employee.employee_code,
                         Date: this.latestYearNumber,
                         Department: employee.department,
@@ -82,7 +78,7 @@ export class TimesheetSummaryComponent {
                         SH: existingSummary ? existingSummary.SH : 0,
                         SHRD: existingSummary ? existingSummary.SHRD : 0,
                         Week_no: this.latestWeekNumber,
-                        id: activeEmployees.length - index, // id descending
+                        id: activeEmployees.length - index,
                         user_id: employee.id
                     };
                 });
@@ -126,7 +122,7 @@ export class TimesheetSummaryComponent {
                     const activeEmployees = employeeRes.filter((employee: any) => employee.is_active === true);
                     const summaryMap = new Map(ds.map((summary: any) => [summary.user_id, summary]));
     
-                    const combinedDs = activeEmployees.map((employee: any, index: number) => {
+                    const combinedDsFilter = activeEmployees.map((employee: any, index: number) => {
                         const existingSummary = summaryMap.get(employee.id);
                         return {
                             Code: employee.employee_code,
@@ -144,19 +140,19 @@ export class TimesheetSummaryComponent {
                             SH: existingSummary ? existingSummary.SH : 0,
                             SHRD: existingSummary ? existingSummary.SHRD : 0,
                             Week_no: weekFilterValue,
-                            id: index + 1,
+                            id: activeEmployees.length - index,
                             user_id: employee.id
                         };
                     });
     
-                    combinedDs.sort((a: { Employee?: string }, b: { Employee?: string }) => {
+                    combinedDsFilter.sort((a: { Employee?: string }, b: { Employee?: string }) => {
                         const lastNameA = (a.Employee?.split(' ').pop() || '').toLowerCase();
                         const lastNameB = (b.Employee?.split(' ').pop() || '').toLowerCase();
                         return lastNameA.localeCompare(lastNameB);
                     });
     
-                    this.dataSource.data = combinedDs;
-                    console.log('Sorted combined dataset:', combinedDs);
+                    this.dataSource.data = combinedDsFilter;
+                    console.log('Sorted combined dataset:', combinedDsFilter);
                 });
             });
     
@@ -187,7 +183,7 @@ export class TimesheetSummaryComponent {
                     const activeEmployees = employeeRes.filter((employee: any) => employee.is_active === true);
                     const summaryMap = new Map(ds.map((summary: any) => [summary.user_id, summary]));
     
-                    const combinedDs = activeEmployees.map((employee: any, index: number) => {
+                    const combinedDsFilter = activeEmployees.map((employee: any, index: number) => {
                         const existingSummary = summaryMap.get(employee.id);
                         return {
                             Code: employee.employee_code,
@@ -205,19 +201,19 @@ export class TimesheetSummaryComponent {
                             SH: existingSummary ? existingSummary.SH : 0,
                             SHRD: existingSummary ? existingSummary.SHRD : 0,
                             Week_no: filterWeek,
-                            id: index + 1,
+                            id: activeEmployees.length - index,
                             user_id: employee.id
                         };
                     });
     
-                    combinedDs.sort((a: { Employee?: string }, b: { Employee?: string }) => {
+                    combinedDsFilter.sort((a: { Employee?: string }, b: { Employee?: string }) => {
                         const lastNameA = (a.Employee?.split(' ').pop() || '').toLowerCase();
                         const lastNameB = (b.Employee?.split(' ').pop() || '').toLowerCase();
                         return lastNameA.localeCompare(lastNameB);
                     });
     
-                    this.dataSource.data = combinedDs;
-                    console.log('Sorted combined dataset:', combinedDs);
+                    this.dataSource.data = combinedDsFilter;
+                    console.log('Sorted combined dataset:', combinedDsFilter);
                 });
     
                 this.filterYear = yearFilterValue;
@@ -240,15 +236,32 @@ export class TimesheetSummaryComponent {
                     `${index + 1}\t${item.Department}\t${item.Employee}\t${item.Code}\t${item.RG}\t${item.OT}\t${item.RD}\t${item.RH}\t${item.SH}\t${item.RHRD}\t${item.SHRD}\t${item.LVE}\t${item.ND}\t${item.Hours}`,
             )
             .join("\n");
-
-        navigator.clipboard
-            .writeText(rows)
-            .then(() => {
-                console.log("Data copied to clipboard");
-            })
-            .catch((err) => {
-                console.error("Could not copy data to clipboard", err);
-            });
+    
+        // Check if the Clipboard API is supported
+        if (navigator.clipboard) {
+            navigator.clipboard
+                .writeText(rows)
+                .then(() => {
+                    console.log("Data copied to clipboard");
+                })
+                .catch((err) => {
+                    console.error("Could not copy data to clipboard", err);
+                });
+        } else {
+            // Fallback for unsupported browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = rows;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand("copy");
+                console.log("Data copied to clipboard using fallback");
+            } catch (err) {
+                console.error("Could not copy data to clipboard using fallback", err);
+            }
+            document.body.removeChild(textArea);
+        }
     }
+    
 
 }
