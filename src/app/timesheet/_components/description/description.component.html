@@ -23,7 +23,6 @@
                             <mat-option [value]="'OFC-ND'">OFC-ND</mat-option>
                             <mat-option [value]="'WFH'">WFH</mat-option>
                             <mat-option [value]="'FLD'">FLD</mat-option>
-                            <mat-option [value]="'LVE'">LVE</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -35,13 +34,22 @@
                         <mat-select [(value)]="selectedType" formControlName="working_type">
                             <mat-option [value]="'RG'">RG</mat-option>
                             <mat-option [value]="'ND'">ND</mat-option>
+                            <mat-option [value]="'LVE'">LVE</mat-option>
+                            <mat-option [value]="'OT'">OT</mat-option>
+                            <mat-option [value]="'RD'" [disabled]="true">RD</mat-option>
+                            <mat-option [value]="'SH'" [disabled]="true">SH</mat-option>
+                            <mat-option [value]="'RH'" [disabled]="true">RH</mat-option>
+                            <mat-option [value]="'RHRD'" [disabled]="true">RHRD</mat-option>
+                            <mat-option [value]="'SHRD'" [disabled]="true">SHRD</mat-option>
                            
                         </mat-select>
                     </mat-form-field>
                 </div>
 
 
-                <div class="flex justify-between">
+                <div class="flex justify-between" *ngIf="selectedType === 'RG' || 
+                selectedType === 'ND' || selectedType === 'LVE' || selectedType === 'RD' || 
+                selectedType === 'SH' || selectedType === 'RH' || selectedType === 'RHRD' || selectedType === 'SHRD' ">
                     <h2 mat-dialog-title>Overtime</h2>
                     <mat-form-field class="flex-item">
                         <mat-label>Overtime</mat-label>
@@ -55,9 +63,9 @@
                 </div>
 
                 <div class="flex justify-between" *ngIf="selectedType === 'RG'">
-                    <h2 mat-dialog-title>Night Differential</h2>
+                    <h2 mat-dialog-title>Night Hours</h2>
                     <mat-form-field class="flex-item">
-                        <mat-label>Night Differential Hours</mat-label>
+                        <mat-label>Night Hours</mat-label>
                         <input 
                             matInput 
                             type="number"

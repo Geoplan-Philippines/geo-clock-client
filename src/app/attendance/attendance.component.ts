@@ -14,7 +14,7 @@ import { TimeOutValidationComponent } from "./_components/time-out-validation/ti
 import { MatSelectChange } from "@angular/material/select";
 import { MatPaginator } from "@angular/material/paginator";
 import { ForMatDialogComponent } from "./_components/for-mat-dialog/for-mat-dialog.component";
-
+import { LoadPageService } from "./_service/load-page.service";
 
 @Component({
     selector: "app-attendance",
@@ -65,7 +65,7 @@ export class AttendanceComponent{
     todayDate: Date = new Date();
 
     timeInCon = false ;  
-    fieldInCon = false ;  
+    fieldInCon = false ; 
 
     @ViewChild(MatPaginator)
     paginator!: MatPaginator;
@@ -75,6 +75,7 @@ export class AttendanceComponent{
         private attendanceService: AttendanceService,
         private encrypt: EncryptionService,
         private dialog: MatDialog,
+        private loadPageService: LoadPageService,
     ) {}
 
     ngOnInit(): void {
@@ -118,11 +119,13 @@ export class AttendanceComponent{
     }
 
     initialTimeIn() {
+        this.loadPageService.openLoad(); //dagdag ko
         const currentDateTime = moment().tz("Asia/Manila");
         const date = currentDateTime.format("YYYY-MM-DD");
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`;
         const user = this.encrypt.getItem("id");
+        // this.loadPageService.openLoad();
         // console.log(user);
 
         navigator.geolocation.getCurrentPosition(
@@ -137,6 +140,9 @@ export class AttendanceComponent{
                     .then((data) => {
                         // console.log("Reverse Geocoding Result:", data.display_name);
 
+                       
+
+
                         const dataAttendance = {
                             user_id: user,
                             date: date,
@@ -149,6 +155,7 @@ export class AttendanceComponent{
                             next: (response: any) => {
                                 this._snackBarService.openSnackBar("Time In Successfully", "okay");
                                 this.loadAttendance();
+                                this.loadPageService.closeLoad();
                             },
                             error: (error: any) => {
                                 this._snackBarService.openSnackBar("Error", "okay");
@@ -174,14 +181,14 @@ export class AttendanceComponent{
     }
 
     subsequentTimeIn() {
+        this.loadPageService.openLoad(); //dagdag ko
         const currentDateTime = moment().tz("Asia/Manila");
         const date = currentDateTime.format("YYYY-MM-DD");
         const time = currentDateTime.format("HH:mm:ss.sss");
         const dateTime = `${date}T${time}Z`;
-
         const user = this.encrypt.getItem("id");
-        // console.log(user);
 
+        // console.log(user);
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const latitude = position.coords.latitude;
@@ -192,6 +199,8 @@ export class AttendanceComponent{
                 fetch(nominatimUrl)
                     .then((response) => response.json())
                     .then((data) => {
+                       
+
                         // console.log("Reverse Geocoding Result:", data.display_name);
 
                         const dataAttendance = {
@@ -201,11 +210,14 @@ export class AttendanceComponent{
                             time_in: dateTime,
                             time_in_location: data.display_name,
                         };
+                        // this.loadPageService.closeLoad();
+
                         // console.log(data);
                         this.attendanceService.postAllDataTimeIn(dataAttendance).subscribe({
                             next: (response: any) => {
                                 this._snackBarService.openSnackBar("Time In Successfully", "okay");
                                 this.loadAttendance();
+                                this.loadPageService.closeLoad(); //dagdag ko
                             },
                             error: (error: any) => {
                                 this._snackBarService.openSnackBar("Error", "okay");
@@ -220,7 +232,7 @@ export class AttendanceComponent{
             (error) => {
                 console.error("Error getting location", error);
             },
-
+                
             {
                 enableHighAccuracy: true, // Request high accuracy
                 timeout: 40000, // Timeout after 10 seconds
@@ -233,17 +245,20 @@ export class AttendanceComponent{
         const dateString = this.datePipe.transform(currentDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", "Asia/Manila");
         return dateString || "";
     }
+    
     // time in click end
 
     InitialTimeOut() {
+        this.loadPageService.openLoad(); //dagdag ko
         const currentDateTime = moment().tz("Asia/Manila");
         const statuses = "Initial";
         const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
-
         const formattedDateTime = moment(currentDateTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
+
         navigator.geolocation.getCurrentPosition(
+            
             (position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
@@ -259,12 +274,15 @@ export class AttendanceComponent{
                             time_out: formattedDateTime,
                             time_out_location: location,
                         };
+                       
+
                         // console.log(data);
 
                         this.attendanceService.updateAllDataInitialTimeOut(user, date, statuses, dataAttendance).subscribe({
                             next: (response: any) => {
                                 this._snackBarService.openSnackBar("Time out Successfully", "okay");
                                 this.loadAttendance();
+                                this.loadPageService.closeLoad();
                             },
                             error: (error: any) => {
                                 // Log the error to the console for debugging purposes
@@ -290,12 +308,14 @@ export class AttendanceComponent{
     }
 
     subsequentTimeOut() {
+        this.loadPageService.openLoad(); //dagdag ko
         const currentDateTime = moment().tz("Asia/Manila");
         const statuses = "Field";
         const date = currentDateTime.format("YYYY-MM-DD");
         const user = this.encrypt.getItem("id");
-
         const formattedDateTime = moment(currentDateTime).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+        this.loadPageService.openLoad();
+
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -307,12 +327,16 @@ export class AttendanceComponent{
                 fetch(nominatimUrl)
                     .then((response) => response.json())
                     .then((data) => {
+                        this.loadPageService.closeLoad(); //dagdag ko
+
                         // console.log('Reverse Geocoding Result:', data.display_name);
                         const location = data.display_name;
                         const dataAttendance = {
                             time_out: formattedDateTime,
                             time_out_location: location,
                         };
+                        this.loadPageService.closeLoad();
+
                         // console.log(data);
 
                         this.attendanceService.updateAllDataInitialTimeOut(user, date, statuses, dataAttendance).subscribe({
