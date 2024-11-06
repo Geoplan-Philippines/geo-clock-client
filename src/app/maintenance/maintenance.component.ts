@@ -163,7 +163,7 @@ export class MaintenanceComponent {
                 },
                 error: (error) => {
                     console.error("Error creating holiday:", error);
-                    // this.openSnackBar("User already exist", "okay");
+                    // this.openSnackBar("User already exist", "Ok");
                 },
             });
         } else {
@@ -189,7 +189,7 @@ export class MaintenanceComponent {
                 },
                 error: (error) => {
                     console.error("Error creating department:", error);
-                    // this.openSnackBar("User already exist", "okay");
+                    // this.openSnackBar("User already exist", "Ok");
                 },
             });
         } else {
@@ -213,7 +213,7 @@ export class MaintenanceComponent {
                 },
                 error: (error) => {
                     console.error("Error creating Classificatrio:", error);
-                    // this.openSnackBar("User already exist", "okay");
+                    // this.openSnackBar("User already exist", "Ok");
                 },
             });
         } else {

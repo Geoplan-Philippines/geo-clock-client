@@ -57,7 +57,7 @@ export class TimeOutValidationComponent implements OnInit {
     //       this.attendanceService.updateAlreadyDataAttenadance(user, date, type, data).subscribe({
     //           next: (response: any) => {
     //               // console.log("Time In updated successfully:", response);
-    //               this._snackBarService.openSnackBar("Time Out Update Successfully", "okay");
+    //               this._snackBarService.openSnackBar("Time Out Update Successfully", "Ok");
     //               this.dialogRef.close();
     //           },
     //           error: (error: any) => {

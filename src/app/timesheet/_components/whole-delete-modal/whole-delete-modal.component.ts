@@ -41,7 +41,7 @@ export class WholeDeleteModalComponent {
                 (response) => {
                     console.log('Deletion successful:', response);
                     this.dialogRef.close();
-                    this.snackBarService.openSnackBar('Entry has been whole week deleted', 'okay');
+                    this.snackBarService.openSnackBar('Entry has been whole week deleted', 'Ok');
                 },
                 (error) => {
                     console.error('Deletion error:', error);

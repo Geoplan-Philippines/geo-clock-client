@@ -120,12 +120,12 @@ export class TimesheetComponent {
         // if (this.dateFromFilter !== undefined) {
         //     // Variable is defined
         //     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-        //     // this._snackBarService.openSnackBar("Delete Canceled", "okay");
+        //     // this._snackBarService.openSnackBar("Delete Canceled", "Ok");
         // } else {
         //     // Variable is undefined
         //     const latestStartDate = new Date(this.latest_start_date);
         //     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-        //     // this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+        //     // this._snackBarService.openSnackBar("Succesfully delete entry", "Ok");
         // }
 
         this.getDataHoliday();
@@ -357,7 +357,7 @@ export class TimesheetComponent {
         if (projectNameValue === "") {
             //kapag pareho ng projectname at date wag mo payagan mag lagay
             // console.log("pogi walang laman"); //snackbar jv
-            this._snackBarService.openSnackBar("Creating Project Failed", "okay");
+            this._snackBarService.openSnackBar("Creating Project Failed", "Ok");
         } else {
             this.validateProjectInput(projectNameValue);
         }
@@ -408,7 +408,7 @@ export class TimesheetComponent {
             } else {
                 this.isLoading = false;
                 //console.log("bawal mema dito");
-                this._snackBarService.openSnackBar("The project name is not whitelisted", "okay");
+                this._snackBarService.openSnackBar("The project name is not whitelisted", "Ok");
             }
         });
     }
@@ -448,7 +448,7 @@ export class TimesheetComponent {
 
                 this.getTimesheetApproved(weekNum, valueDate);
 
-                this._snackBarService.openSnackBar("Project name has been created", "okay");
+                this._snackBarService.openSnackBar("Project name has been created", "Ok");
 
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
@@ -469,7 +469,7 @@ export class TimesheetComponent {
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
                 }
-                this._snackBarService.openSnackBar("Project name exist", "okay");
+                this._snackBarService.openSnackBar("Project name exist", "Ok");
             },
         });
     }
@@ -588,7 +588,7 @@ export class TimesheetComponent {
                 console.log("Approval found:", approval);
                 if (approval.approved_check === true) {
                     console.log("Timesheet is approved. Cannot be changed.");
-                    this._snackBarService.openSnackBar("Approved Timesheet cannot be changed", "okay");
+                    this._snackBarService.openSnackBar("Approved Timesheet cannot be changed", "Ok");
                     this.dateRefresher();
                 } else if (approval.approved_check === false) {
                     console.log("Timesheet is not approved.");
@@ -638,7 +638,7 @@ export class TimesheetComponent {
                             this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                         }
                     }else{
-                        this._snackBarService.openSnackBar("Cannot exceed 20hours", "okay");
+                        this._snackBarService.openSnackBar("Cannot exceed 20hours", "Ok");
                         this.dateRefresher();
 
                  }
@@ -690,13 +690,13 @@ export class TimesheetComponent {
                         this.isHaveEntries(timesheetEntries, selectedDate, postParams, editParams);
                     }
                 }else{
-                    this._snackBarService.openSnackBar("Cannot exceed 20hours", "okay");
+                    this._snackBarService.openSnackBar("Cannot exceed 20hours", "Ok");
                     this.dateRefresher();
                     
                 }
             }
             
-            // this._snackBarService.openSnackBar("Approved Timesheet cannot be change", "okay");
+            // this._snackBarService.openSnackBar("Approved Timesheet cannot be change", "Ok");
             // this.dateRefresher();
 
             // if (value <= 20) {
@@ -747,7 +747,7 @@ export class TimesheetComponent {
         this.timesheetService.postTimesheetEntry(params).subscribe({
             next: (response) => {
                 console.log("Entry successfully:", response);
-                this._snackBarService.openSnackBar("Time entry has been created", "okay");
+                this._snackBarService.openSnackBar("Time entry has been created", "Ok");
 
                 //console.log(params);
 
@@ -776,7 +776,7 @@ export class TimesheetComponent {
         this.timesheetService.editTimesheetEntry(id, params).subscribe({
             next: (response) => {
                 console.log("Edit successfully:", response);
-                this._snackBarService.openSnackBar("Succesfully updated 1 time entries", "okay");
+                this._snackBarService.openSnackBar("Succesfully updated 1 time entries", "Ok");
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
@@ -784,7 +784,7 @@ export class TimesheetComponent {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                    this._snackBarService.openSnackBar("Succesfully enter a task description", "Ok");
                 }
             },
             error: (error) => {
@@ -812,12 +812,12 @@ export class TimesheetComponent {
                     if (this.dateFromFilter !== undefined) {
                         // Variable is defined
                         this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                        this._snackBarService.openSnackBar("Delete Canceled", "okay");
+                        this._snackBarService.openSnackBar("Delete Canceled", "Ok");
                     } else {
                         // Variable is undefined
                         const latestStartDate = new Date(this.latest_start_date);
                         this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                        this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                        this._snackBarService.openSnackBar("Succesfully delete entry", "Ok");
                     }
                     // this.loadTimesheet();
                 });
@@ -825,14 +825,14 @@ export class TimesheetComponent {
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Delete Canceled", "okay");
+                    this._snackBarService.openSnackBar("Delete Canceled", "Ok");
                 } else {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "Ok");
                 }
-                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
+                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "Ok");
             } else if (
                 editParams.actual_hours === matchingEntry.actual_hours &&
                 editParams.ot_number === matchingEntry.ot_number
@@ -841,12 +841,12 @@ export class TimesheetComponent {
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Entries Updated", "okay");
+                    this._snackBarService.openSnackBar("Entries Updated", "Ok");
                 } else {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Entries Updated", "okay");
+                    this._snackBarService.openSnackBar("Entries Updated", "Ok");
                 }
             } else {
                 this.editTimesheetEntry(matchingEntry.id, editParams);
@@ -855,14 +855,14 @@ export class TimesheetComponent {
             if (this.dateFromFilter !== undefined) {
                 // Variable is defined
                 this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                this._snackBarService.openSnackBar("Succesfully delete entry", "Ok");
             } else {
                 // Variable is undefined
                 const latestStartDate = new Date(this.latest_start_date);
                 this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                this._snackBarService.openSnackBar("Succesfully delete entry", "Ok");
             }
-            this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
+            this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "Ok");
         } else {
             // console.log(matchingEntry);
             if (postParams.actual_hours === 0) {
@@ -870,14 +870,14 @@ export class TimesheetComponent {
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "Ok");
                 } else {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    this._snackBarService.openSnackBar("Succesfully delete entry", "okay");
+                    this._snackBarService.openSnackBar("Succesfully delete entry", "Ok");
                 }
-                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "okay");
+                this._snackBarService.openSnackBar("20 Hours max and 1 hours minimum", "Ok");
             } else {
                 this.postTimesheetEntry(postParams);
             }
@@ -903,7 +903,7 @@ export class TimesheetComponent {
         console.log(matchEntry.approved_check);
         // console.log(date);
         if (matchEntry.approved_check == true) {
-            this._snackBarService.openSnackBar("Already approved, update info disabled", "okay");
+            this._snackBarService.openSnackBar("Already approved, update info disabled", "Ok");
         } else {
             console.log("false puwede pa palitan");
             this.dialogService.openTimesheetEntryDescription(entryData).subscribe((result) => {
@@ -911,12 +911,12 @@ export class TimesheetComponent {
                 if (this.dateFromFilter !== undefined) {
                     // Variable is defined
                     this.onStartDateChange({ value: this.dateFromFilter }); // Adjusted call to pass the date object
-                    // this._snackBarService.openSnackBar("Action revert", "okay");
+                    // this._snackBarService.openSnackBar("Action revert", "Ok");
                 } else {
                     // Variable is undefined
                     const latestStartDate = new Date(this.latest_start_date);
                     this.onStartDateChange({ value: latestStartDate }); // Adjusted call to pass the date object
-                    // this._snackBarService.openSnackBar("Succesfully enter a task description", "okay");
+                    // this._snackBarService.openSnackBar("Succesfully enter a task description", "Ok");
                 }
             });
         }

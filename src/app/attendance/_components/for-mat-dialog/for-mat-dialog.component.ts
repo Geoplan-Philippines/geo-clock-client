@@ -58,12 +58,12 @@ export class ForMatDialogComponent implements OnInit{
       this.attendanceService.updateAllDataAttendanceComment(this.data.id, this.formData.value).subscribe({
         next: (response) => {
           // console.log("Data patched successfully:", response);
-          this.snackbar.openSnackBar('Successfully Commented', 'okay');
+          this.snackbar.openSnackBar('Successfully Commented', 'Ok');
           this.updatedialogRef.close(); 
       },
       error: (error) => {
           console.error("Error patching data:", error);
-          this.snackbar.openSnackBar('Your Comment has a Limit', 'okay');
+          this.snackbar.openSnackBar('Your Comment has a Limit', 'Ok');
       },
       })
     }

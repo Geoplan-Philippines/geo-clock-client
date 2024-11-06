@@ -121,7 +121,7 @@ export class LoginComponent {
                     // alert("email not exist");
                     this.openSnackBar(
                         'The account is not authorized please contact the Administrator',
-                        'okey'
+                        'Ok'
                     );
                 })
                 .catch((error) => {
@@ -132,7 +132,7 @@ export class LoginComponent {
                 .signOut()
                 .then(() => {
                     // alert("email not exist");
-                    this.openSnackBar('Your Account has been Deactivated', 'okey');
+                    this.openSnackBar('Your Account has been Deactivated', 'Ok');
                 })
                 .catch((error) => {
                     console.log(error);

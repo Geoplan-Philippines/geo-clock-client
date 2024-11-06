@@ -70,11 +70,11 @@ export class DescriptionComponent implements OnInit {
             this.timesheet.editTimesheetEntry(id, params).subscribe({
                 next: (response: any) => {
                     // console.log("Edit successfully:", response);
-                    this.snackbarService.openSnackBar("Succesfully updated 1 time entries", "okay");
+                    this.snackbarService.openSnackBar("Succesfully updated 1 time entries", "Ok");
                     this.dialogRef.close();
                 },
                 error: (error: any) => {
-                    this.snackbarService.openSnackBar("Unsuccesfully updated. Please check your input", "okay");
+                    this.snackbarService.openSnackBar("Unsuccesfully updated. Please check your input", "Ok");
                     console.error("Error creating entry:", error);
                 },
             });

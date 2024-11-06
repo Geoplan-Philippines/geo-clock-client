@@ -53,7 +53,7 @@ export class TimeInValidationComponent implements OnInit {
     //     this.attendanceService.updateTimeInAttenadance(user, date, type, dataTimeIn).subscribe({
     //         next: (response: any) => {
     //             // console.log("Time In updated successfully:", response);
-    //             this._snackBarService.openSnackBar("Time In Update Successfully", "okay");
+    //             this._snackBarService.openSnackBar("Time In Update Successfully", "Ok");
     //             this.dialogRef.close();
     //         },
     //         error: (error: any) => {

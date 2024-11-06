@@ -153,11 +153,11 @@ export class AttendanceComponent{
                         // console.log(data);
                         this.attendanceService.postAllDataInitialTimeIn(dataAttendance).subscribe({
                             next: (response: any) => {
-                                this._snackBarService.openSnackBar("Time In Successfully", "okay");
+                                this._snackBarService.openSnackBar("Time In Successfully", "Ok");
                                 this.loadAttendance();
                             },
                             error: (error: any) => {
-                                this._snackBarService.openSnackBar("Error", "okay");
+                                this._snackBarService.openSnackBar("Error", "Ok");
                             },
                         });
                         // }
@@ -212,11 +212,11 @@ export class AttendanceComponent{
                         // console.log(data);
                         this.attendanceService.postAllDataTimeIn(dataAttendance).subscribe({
                             next: (response: any) => {
-                                this._snackBarService.openSnackBar("Time In Successfully", "okay");
+                                this._snackBarService.openSnackBar("Time In Successfully", "Ok");
                                 this.loadAttendance();
                             },
                             error: (error: any) => {
-                                this._snackBarService.openSnackBar("Error", "okay");
+                                this._snackBarService.openSnackBar("Error", "Ok");
                             },
                         });
                     })
@@ -275,12 +275,12 @@ export class AttendanceComponent{
 
                         this.attendanceService.updateAllDataInitialTimeOut(user, date, statuses, dataAttendance).subscribe({
                             next: (response: any) => {
-                                this._snackBarService.openSnackBar("Time out Successfully", "okay");
+                                this._snackBarService.openSnackBar("Time out Successfully", "Ok");
                                 this.loadAttendance();
                             },
                             error: (error: any) => {
                                 // Log the error to the console for debugging purposes
-                                this._snackBarService.openSnackBar("Error", "okay");
+                                this._snackBarService.openSnackBar("Error", "Ok");
                                 console.error("Error from server:", error);
                             },
                         });
@@ -332,12 +332,12 @@ export class AttendanceComponent{
 
                         this.attendanceService.updateAllDataInitialTimeOut(user, date, statuses, dataAttendance).subscribe({
                             next: (response: any) => {
-                                this._snackBarService.openSnackBar("Time Out Successfully", "okay");
+                                this._snackBarService.openSnackBar("Time Out Successfully", "Ok");
                                 this.loadAttendance();
                             },
                             error: (error: any) => {
                                 // Log the error to the console for debugging purposes
-                                this._snackBarService.openSnackBar("Error", "okay");
+                                this._snackBarService.openSnackBar("Error", "Ok");
                                 console.error("Error from server:", error);
                             },
                         });

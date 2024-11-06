@@ -55,7 +55,7 @@ export class AttendanceTypeComponent implements OnInit {
         //   this.attendanceService.updateAlreadyDataAttenadance(user, date, type, data).subscribe({
         //     next: (response: any) => {
         //         // console.log("Time out successfully:", response);
-        //         this._snackBarService.openSnackBar("Time Out Update Successfully", "okay");
+        //         this._snackBarService.openSnackBar("Time Out Update Successfully", "Ok");
         //         this.dialog.closeAll();
         //     },
         //     error: (error: any) => {

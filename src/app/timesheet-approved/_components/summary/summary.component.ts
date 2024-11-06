@@ -184,7 +184,7 @@ export class SummaryComponent implements OnInit {
             this.updateTimesheetEntry(entryId, updateValueApproved);
         } else if (field === "is_nd") {
             if (element.approved_check === true) {
-                this._snackBarService.openSnackBar("Cannot Update", "okay");
+                this._snackBarService.openSnackBar("Cannot Update", "Ok");
                 return;
             }
 
@@ -194,7 +194,7 @@ export class SummaryComponent implements OnInit {
 
         } else if (field === "is_ot") {
             if (element.approved_check === true) {
-                this._snackBarService.openSnackBar("Cannot Update", "okay");
+                this._snackBarService.openSnackBar("Cannot Update", "Ok");
                 return;
             }
 
@@ -207,7 +207,7 @@ export class SummaryComponent implements OnInit {
     updateOverTime(entryId: number, entriesValue: any) {
         this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
             next: (response) => {
-                this._snackBarService.openSnackBar("Update successfully", "okay");
+                this._snackBarService.openSnackBar("Update successfully", "Ok");
                 this.loadTimesheetForLength();
             },
             error: (error) => {
@@ -219,7 +219,7 @@ export class SummaryComponent implements OnInit {
     updateNightDiff(entryId: number, entriesValue: any) {
         this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
             next: (response) => {
-                this._snackBarService.openSnackBar("Update successfully", "okay");
+                this._snackBarService.openSnackBar("Update successfully", "Ok");
                 this.loadTimesheetForLength();
             },
             error: (error) => {
@@ -231,7 +231,7 @@ export class SummaryComponent implements OnInit {
     updateTimesheetEntry(entryId: number, entriesValue: any) {
         this.SummaryService.patchTimesheetEntry(entryId, entriesValue).subscribe({
             next: (response) => {
-                this._snackBarService.openSnackBar("Update successfully", "okay");
+                this._snackBarService.openSnackBar("Update successfully", "Ok");
                 this.loadTimesheetForLength();
                 this.timesheetApprovedData(response);
             },

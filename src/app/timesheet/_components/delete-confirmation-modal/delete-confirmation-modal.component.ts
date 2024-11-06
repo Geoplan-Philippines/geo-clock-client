@@ -25,7 +25,7 @@ export class DeleteConfirmationModalComponent {
             next: (response) => {
                 console.log('Entry successfully:', response);
                 this.dialogRef.close();
-                this.snackBarService.openSnackBar('Entry has been deleted', 'okay');
+                this.snackBarService.openSnackBar('Entry has been deleted', 'Ok');
             },
             error: (error) => {
                 console.error('Error creating entry:', error);

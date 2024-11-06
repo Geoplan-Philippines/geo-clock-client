@@ -77,7 +77,7 @@ export class AddComponent implements OnInit {
                 },
                 error: (error) => {
                     console.error('Error creating user:', error);
-                    this.openSnackBar('User already exist', 'okay');
+                    this.openSnackBar('User already exist', 'Ok');
                 },
             });
         } else {

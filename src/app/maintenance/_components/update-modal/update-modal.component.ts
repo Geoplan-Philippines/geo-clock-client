@@ -61,12 +61,12 @@ export class UpdateModalComponent {
 
             this.maintenanceService.updateAllDifferentialData(id, time).subscribe({
                 next: (response) => {
-                    this.snackBarService.openSnackBar('Successfully Updated', 'Okay');
+                    this.snackBarService.openSnackBar('Successfully Updated', 'Ok');
                     this.dialog.closeAll();
                 },
                 error: (error) => {
                     console.error('Error patching data:', error);
-                    this.snackBarService.openSnackBar('Existing Time', 'Okay');
+                    this.snackBarService.openSnackBar('Existing Time', 'Ok');
                     this.dialog.closeAll();
                 },
             });

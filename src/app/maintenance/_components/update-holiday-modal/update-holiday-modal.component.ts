@@ -64,7 +64,7 @@ export class UpdateHolidayModalComponent implements OnInit {
                 },
                 error: (error) => {
                     console.error("Error patching data:", error);
-                    this.openSnackBar("Error updating data", "Okay");
+                    this.openSnackBar("Error updating data", "Ok");
                 },
             });
         } else {
